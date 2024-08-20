@@ -10,6 +10,8 @@ import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import ElementPlus from 'unplugin-element-plus/vite';
 
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
@@ -32,6 +34,13 @@ export default defineConfig({
         app: FileSystemIconLoader('./src/assets/svg-icons'),
       },
     }),
+    createSvgIconsPlugin({
+      // 图标文件夹中，所有的svg文件将被转换为svg精灵
+      iconDirs: [path.resolve(process.cwd(), './src/icons/svg')],
+      // 指定symbolId格式
+      symbolId: 'icon-[name]',
+    }),
+
     ElementPlus({
       useSource: true,
     }),
@@ -40,9 +49,8 @@ export default defineConfig({
     port: 80,
     proxy: {
       '/api/': {
-        target: 'http://159.138.58.253:8080',
+        target: 'https://clasign.test.osinfra.cn/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
