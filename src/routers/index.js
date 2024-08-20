@@ -1,291 +1,336 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 
 export const routes = [
   {
-    path: "/",
-    name: "Index",
-    redirect: "/index",
+    path: '/',
+    name: 'Index',
+    redirect: '/index',
     meta: {
-      title: "index",
+      title: 'index',
     },
   },
 
   {
-    path: "/index",
-    component: () => import("../views/Index.vue"),
+    path: '/index',
+    component: () => import('../views/Index.vue'),
     meta: {
-      title: "index",
+      title: 'index',
     },
     children: [
       {
-        path: "/",
-        name: "LoginTypeSelect",
+        path: '/',
+        name: 'LoginTypeSelect',
         meta: {
-          title: "index",
+          title: 'index',
         },
-        component: () => import("../views/LoginTypeSelect.vue"),
+        component: () => import('../views/LoginTypeSelect.vue'),
       },
       {
-        path: "/platformSelect",
-        name: "PlatformSelect",
-        component: () => import("../views/PlatformSelect.vue"),
+        path: '/platformSelect',
+        name: 'PlatformSelect',
+        component: () => import('../views/PlatformSelect.vue'),
         meta: {
-          title: "platformSelect",
-        },
-      },
-      {
-        path: "/corporationManagerLogin",
-        name: "CorporationManagerLogin",
-        component: () => import("../views/CorporationManagerLogin.vue"),
-        meta: {
-          title: "corporationManagerLogin",
+          title: 'platformSelect',
         },
       },
       {
-        path: "/orgSelect",
-        name: "OrgSelect",
+        path: '/corporationManagerLogin',
+        name: 'CorporationManagerLogin',
+        component: () => import('../views/CorporationManagerLogin.vue'),
         meta: {
-          title: "orgSelect",
+          title: 'corporationManagerLogin',
         },
-        component: () => import("../views/OrgSelect.vue"),
+      },
+      {
+        path: '/orgSelect',
+        name: 'OrgSelect',
+        meta: {
+          title: 'orgSelect',
+        },
+        component: () => import('../views/OrgSelect.vue'),
       },
     ],
-  },
-  /*
-  {
-    path: "/home",
-    component: () => import("../views/Home.vue"),
-    meta: {
-      title: "home",
-    },
-    children: [
-      {
-        path: "/",
-        meta: {
-          title: "linkedRepo",
-        },
-        redirect: "/linkedRepo",
-      },
-      {
-        path: "/linkedRepo",
-        name: "LinkedRepo",
-        meta: {
-          title: "linkedRepo",
-        },
-        component: () => import("../views/LinkedRepo.vue"),
-      },
-      {
-        path: "/corporationList",
-        name: "CorporationList",
-        meta: {
-          title: "corporationList",
-        },
-        component: () => import("../views/CorporationList.vue"),
-      },
-      {
-        path: "/bind-cla",
-        component: () => import("../views/ConfigCla.vue"),
-        meta: {
-          title: "bind-cla",
-        },
-        children: [
-          {
-            path: "/",
-            redirect: "/config-org",
-            meta: {
-              title: "bind-cla",
-            },
-          },
-          {
-            path: "/config-org",
-            name: "ConfigOrg",
-            meta: {
-              title: "bind-cla",
-            },
-            component: () => import("../views/ConfigOrg.vue"),
-          },
-          {
-            path: "/config-cla-link",
-            name: "ConfigClaLink",
-            component: () => import("../views/ConfigClaLink.vue"),
-          },
-          {
-            path: "/config-fields",
-            name: "ConfigFields",
-            component: () => import("../views/ConfigFields.vue"),
-          },
-          {
-            path: "/config-email",
-            name: "ConfigEmail",
-            component: () => import("../views/ConfigEmail.vue"),
-          },
-          {
-            path: "/config-check",
-            name: "ConfigCheck",
-            component: () => import("../views/ConfigCheck.vue"),
-          },
-        ],
-      },
-      {
-        path: "/addIndividualCla",
-        component: () => import("../views/AddIndividualCla.vue"),
-        children: [
-          {
-            path: "/",
-            redirect: "/addIndividualUrl",
-          },
-          {
-            path: "/addIndividualUrl",
-            name: "AddIndividualUrl",
-            meta: {
-              title: "addIndividualCla",
-            },
-            component: () => import("../views/AddIndividualUrl.vue"),
-          },
-        ],
-      },
-      {
-        path: "/addCorpCla",
-        component: () => import("../views/AddCorpCla.vue"),
-        children: [
-          {
-            path: "/",
-            redirect: "/addCorpUrl",
-          },
-          {
-            path: "/addCorpUrl",
-            name: "AddCorpUrl",
-            meta: {
-              title: "addCorpCla",
-            },
-            component: () => import("../views/AddCorpUrl.vue"),
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: "/signedRepo",
-    component: () => import("../views/SignedRepo.vue"),
-    children: [
-      {
-        path: "/",
-        redirect: "/employeeList",
-      },
-      {
-        path: "/employeeList",
-        name: "EmployeeList",
-        meta: {
-          title: "employeeList",
-        },
-        component: () => import("../views/EmployeeList.vue"),
-      },
-    ],
-  },
-  {
-    path: "/rootManager",
-    component: () => import("../views/RootManager.vue"),
-    children: [
-      {
-        path: "/",
-        redirect: "/managerList",
-      },
-      {
-        path: "/managerList",
-        name: "ManagerList",
-        meta: {
-          title: "managerList",
-        },
-        component: () => import("../views/ManagerList.vue"),
-      },
-      {
-        path: "/createManager",
-        name: "CreateManager",
-        meta: {
-          title: "createManager",
-        },
-        component: () => import("../views/CreateManager.vue"),
-      },
-      {
-        path: "/resetPassword",
-        name: "resetPassword",
-        meta: {
-          title: "resetPassword",
-        },
-        component: () => import("../views/ResetPassword.vue"),
-      },
-    ],
-  },
-  {
-    path: "/sign/:params",
-    name: "SignType",
-    meta: {
-      title: "sign",
-    },
-    component: () => import("../views/SignType.vue"),
-  },
-  {
-    path: "/privacy",
-    name: "Privacy",
-    meta: {
-      title: "privacy",
-    },
-    component: () => import("../views/Privacy.vue"),
   },
 
   {
-    path: "/sign-cla",
-    name: "SignCla",
+    path: '/home',
+    component: () => import('../views/Home.vue'),
     meta: {
-      title: "sign-cla",
+      title: 'home',
+      pageType: 'org',
     },
-    component: () => import("../views/SignCla.vue"),
-  },
-  {
-    path: "/password",
-    meta: {
-      title: "password",
-    },
-    component: () => import("../views/ForgetPassword.vue"),
     children: [
       {
-        path: "/",
-        redirect: "/verify-email",
+        path: '/',
+        meta: {
+          title: 'linkedRepo',
+        },
+        redirect: '/linkedRepo',
+      },
+
+      {
+        path: '/linkedRepo',
+        name: 'LinkedRepo',
+        meta: {
+          title: 'linkedRepo',
+        },
+        component: () => import('../views/LinkedRepo.vue'),
       },
       {
-        path: "/verify-email",
-        name: "VerifyEmail",
+        path: '/corporationList',
+        name: 'CorporationList',
         meta: {
-          title: "verify email",
+          title: 'corporationList',
         },
-        component: () => import("../views/VerifyEmail.vue"),
+        component: () => import('../views/CorporationList.vue'),
       },
       {
-        path: "/reset-password",
-        name: "FindPassword",
+        path: '/bind-cla',
+        component: () => import('../views/ConfigCla.vue'),
         meta: {
-          title: "find password",
+          title: 'bind-cla',
         },
-        component: () => import("../views/FindPassword.vue"),
+        redirect: '/config-org',
+        children: [
+          {
+            path: '/',
+            redirect: '/config-org',
+            meta: {
+              title: 'bind-cla',
+            },
+          },
+          {
+            path: '/config-org',
+            name: 'ConfigOrg',
+            meta: {
+              title: 'bind-cla',
+            },
+            component: () => import('../views/ConfigOrg.vue'),
+          },
+          {
+            path: '/config-cla-link',
+            name: 'ConfigClaLink',
+            component: () => import('../views/ConfigClaLink.vue'),
+          },
+          {
+            path: '/config-fields',
+            name: 'ConfigFields',
+            component: () => import('../views/ConfigFields.vue'),
+          },
+          {
+            path: '/config-email',
+            name: 'ConfigEmail',
+            component: () => import('../views/ConfigEmail.vue'),
+          },
+          {
+            path: '/config-check',
+            name: 'ConfigCheck',
+            component: () => import('../views/ConfigCheck.vue'),
+          },
+        ],
       },
       {
-        path: "/reset-done",
-        name: "ResetDone",
+        path: '/addIndividualCla',
+        component: () => import('../views/AddIndividualCla.vue'),
+        redirect: '/addIndividualUrl',
+        children: [
+          {
+            path: '/',
+            redirect: '/addIndividualUrl',
+          },
+          {
+            path: '/addIndividualUrl',
+            name: 'AddIndividualUrl',
+            meta: {
+              title: 'addIndividualCla',
+            },
+            component: () => import('../views/AddIndividualUrl.vue'),
+          },
+        ],
+      },
+      {
+        path: '/addCorpCla',
+        component: () => import('../views/AddCorpCla.vue'),
+        redirect: '/addCorpUrl',
+        children: [
+          {
+            path: '/',
+            redirect: '/addCorpUrl',
+          },
+          {
+            path: '/addCorpUrl',
+            name: 'AddCorpUrl',
+            meta: {
+              title: 'addCorpCla',
+            },
+            component: () => import('../views/AddCorpUrl.vue'),
+          },
+        ],
+      },
+    ],
+  },
+  // {
+  //   path: "/signedRepo",
+  //   component: () => import("../views/SignedRepo.vue"),
+  //   children: [
+  //     {
+  //       path: "/",
+  //       redirect: "/employeeList",
+  //     },
+  //     {
+  //       path: "/employeeList",
+  //       name: "EmployeeList",
+  //       meta: {
+  //         title: "employeeList",
+  //       },
+  //       component: () => import("../views/EmployeeList.vue"),
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: "/rootManager",
+  //   component: () => import("../views/RootManager.vue"),
+  //   children: [
+  //     {
+  //       path: "/",
+  //       redirect: "/managerList",
+  //     },
+  //     {
+  //       path: "/managerList",
+  //       name: "ManagerList",
+  //       meta: {
+  //         title: "managerList",
+  //       },
+  //       component: () => import("../views/ManagerList.vue"),
+  //     },
+  //     {
+  //       path: "/createManager",
+  //       name: "CreateManager",
+  //       meta: {
+  //         title: "createManager",
+  //       },
+  //       component: () => import("../views/CreateManager.vue"),
+  //     },
+  //     {
+  //       path: "/resetPassword",
+  //       name: "resetPassword",
+  //       meta: {
+  //         title: "resetPassword",
+  //       },
+  //       component: () => import("../views/ResetPassword.vue"),
+  //     },
+  //   ],
+  // },
+  {
+    path: '/sign/:params',
+    name: 'SignType',
+    meta: {
+      title: 'sign',
+    },
+    component: () => import('../views/SignType.vue'),
+  },
+  {
+    path: '/sign/:params/:orgAddress',
+    name: 'SignType_back',
+    meta: {
+      title: 'sign',
+      pageType: 'notLogin',
+    },
+    component: () => import('../views/SignType.vue'),
+  },
+  // {
+  //   path: "/privacy",
+  //   name: "Privacy",
+  //   meta: {
+  //     title: "privacy",
+  //   },
+  //   component: () => import("../views/Privacy.vue"),
+  // },
+
+  {
+    path: '/sign-page',
+    meta: {
+      title: 'sign-page',
+      pageType: 'notLogin',
+    },
+    redirect: '/sign-cla',
+    component: () => import('../views/SignPage.vue'),
+
+    children: [
+      {
+        path: '/sign-cla',
+        name: 'SignCla',
         meta: {
-          title: "reset done",
+          title: 'sign-cla',
+          pageType: 'notLogin',
         },
-        component: () => import("../views/ResetPwdDone.vue"),
+        component: () => import('../views/SignCla.vue'),
+      },
+      {
+        path: '/privacy',
+        name: 'Privacy',
+        meta: {
+          title: 'privacy',
+          pageType: 'notLogin',
+        },
+        component: () => import('../views/Privacy.vue'),
       },
     ],
   },
   {
-    path: "*",
-    name: "ErrorPath",
+    path: '/cla-pdf',
+    name: 'ClaPdf',
     meta: {
-      title: "ErrorPath",
+      title: 'cla-pdf',
+      pageType: 'notLogin',
     },
-    component: () => import("../views/ErrorPath.vue"),
-  },*/
+    component: () => import('../views/ClaPdf.vue'),
+  },
+  // {
+  //   path: "/password",
+  //   meta: {
+  //     title: "password",
+  //   },
+  //   component: () => import("../views/ForgetPassword.vue"),
+  //   children: [
+  //     {
+  //       path: "/",
+  //       redirect: "/verify-email",
+  //     },
+  //     {
+  //       path: "/verify-email",
+  //       name: "VerifyEmail",
+  //       meta: {
+  //         title: "verify email",
+  //       },
+  //       component: () => import("../views/VerifyEmail.vue"),
+  //     },
+  //     {
+  //       path: "/reset-password",
+  //       name: "FindPassword",
+  //       meta: {
+  //         title: "find password",
+  //       },
+  //       component: () => import("../views/FindPassword.vue"),
+  //     },
+  //     {
+  //       path: "/reset-done",
+  //       name: "ResetDone",
+  //       meta: {
+  //         title: "reset done",
+  //       },
+  //       component: () => import("../views/ResetPwdDone.vue"),
+  //     },
+  //   ],
+  // },
+  {
+    path: '/:catchAll(.*)',
+    name: 'ErrorPath',
+    meta: {
+      title: 'ErrorPath',
+    },
+    component: () => import('../views/ErrorPath.vue'),
+  },
 ];
 
 export const router = createRouter({
@@ -296,16 +341,15 @@ export const router = createRouter({
   },
 });
 
-/*
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title;
   }
-  if (from.path === "/resetPassword") {
-    if (to.path === "/corporationManagerLogin") {
+  if (from.path === '/resetPassword') {
+    if (to.path === '/corporationManagerLogin') {
       next();
     } else {
-      if (sessionStorage.getItem("pwdIsChanged") === "true") {
+      if (sessionStorage.getItem('pwdIsChanged') === 'true') {
         next();
       } else {
       }
@@ -314,36 +358,36 @@ router.beforeEach((to, from, next) => {
     next();
   }
   if (
-    to.name === "SignType" ||
-    to.name === "SignType_back" ||
-    to.path === "/sign-cla" ||
-    to.path === "/index" ||
-    to.path === "/platformSelect" ||
-    to.path === "/corporationManagerLogin" ||
-    to.path === "/orgSelect" ||
-    to.path === "/verify-email" ||
-    to.path === "/reset-password"
+    to.name === 'SignType' ||
+    to.name === 'SignType_back' ||
+    to.path === '/sign-cla' ||
+    to.path === '/index' ||
+    to.path === '/platformSelect' ||
+    to.path === '/corporationManagerLogin' ||
+    to.path === '/orgSelect' ||
+    to.path === '/verify-email' ||
+    to.path === '/reset-password'
   ) {
-    sessionStorage.setItem("showHeaderMenu", "false");
+    sessionStorage.setItem('showHeaderMenu', 'false');
   } else if (
-    to.path === "/home" ||
-    to.path === "/linkedRepo" ||
-    to.path === "/corporationList" ||
-    to.path === "/bind-cla" ||
-    to.path === "/config-org" ||
-    to.path === "/config-cla-link" ||
-    to.path === "/config-fields" ||
-    to.path === "/config-email" ||
-    to.path === "/config-check" ||
-    to.path === "/addIndividualUrl" ||
-    to.path === "/addCorpUrl"
+    to.path === '/home' ||
+    to.path === '/linkedRepo' ||
+    to.path === '/corporationList' ||
+    to.path === '/bind-cla' ||
+    to.path === '/config-org' ||
+    to.path === '/config-cla-link' ||
+    to.path === '/config-fields' ||
+    to.path === '/config-email' ||
+    to.path === '/config-check' ||
+    to.path === '/addIndividualUrl' ||
+    to.path === '/addCorpUrl'
   ) {
-    sessionStorage.setItem("showHeaderMenu", "org");
+    sessionStorage.setItem('showHeaderMenu', 'org');
   } else {
-    sessionStorage.setItem("showHeaderMenu", "corp");
+    sessionStorage.setItem('showHeaderMenu', 'corp');
   }
 });
-*/
+
 // router.onError((error) => {
 //   const pattern = /Loading chunk (\d)+ failed/g;
 //   const isChunkLoadFailed = error.message.match(pattern);
