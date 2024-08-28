@@ -29,10 +29,18 @@ const options = ref([
   { value: 1, label: 'Chinese' },
 ]);
 const communityInfo = computed(() => {
-  if (commonStore.loginInfo && commonStore.loginInfo.userInfo[0].repo_id) {
+  if (
+    commonStore.loginInfo &&
+    commonStore.loginInfo.userInfo &&
+    commonStore.loginInfo.userInfo[0].repo_id
+  ) {
     return `${commonStore.loginInfo.userInfo[0].org_id}/${commonStore.loginInfo.userInfo[0].repo_id}`;
   }
-  return commonStore.loginInfo && commonStore.loginInfo.userInfo[0].org_id;
+  return (
+    commonStore.loginInfo &&
+    commonStore.loginInfo.userInfo &&
+    commonStore.loginInfo.userInfo[0].org_id
+  );
 });
 
 const updateLangOptions = (data) => {
@@ -182,7 +190,8 @@ const chooseLng = (id) => {
   if (value.value !== id) {
     value.value = id;
     language.value = options.value[id].label;
-    localStorage.setItem('lang', language.value);
+
+    commonStore.setLang(language.value);
     changeI18N(language.value);
   }
   isActive.value = true;
@@ -215,27 +224,28 @@ const init = (value) => {
   if (value !== '' && value !== undefined) {
     language.value = value;
   } else {
-    let lang = localStorage.getItem('lang');
+    let lang = commonStore.lang;
     switch (lang) {
       case '0':
       case 'English':
         language.value = 'English';
-        localStorage.setItem('lang', 'English');
+        commonStore.setLang(language.value);
         break;
       case '1':
       case 'Chinese':
         language.value = 'Chinese';
-        localStorage.setItem('lang', 'Chinese');
+        commonStore.setLang(language.value);
         break;
       default:
-        language.value = 'English';
-        localStorage.setItem('lang', 'English');
+        language.value = 'Chinese';
+        commonStore.setLang(language.value);
         break;
     }
   }
   changeI18N(language.value);
   setLangValue(language.value);
-  if (commonStore.loginInfo) {
+  if (commonStore.loginInfo.userInfo) {
+    console.log(commonStore.loginInfo);
     role.value = commonStore.loginInfo.userInfo[0].role;
   }
   showHeaderMenu.value = util.getMenuState(route);
@@ -263,7 +273,6 @@ onMounted(() => {
 </script>
 
 <template>
-  222222222222
   <div class="parentBox">
     <el-row class="headerBox">
       <el-col class="header">

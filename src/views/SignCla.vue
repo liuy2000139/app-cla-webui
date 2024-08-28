@@ -33,11 +33,11 @@
           </el-row>
           <el-row class="marginTop3rem form">
             <el-col>
-              <el-form
-                v-if="this.IS_MOBILE"
+              <!-- <el-form
+                v-if="IS_MOBILE"
                 :model="ruleForm"
                 :rules="rules"
-                ref="ruleForm"
+                ref="ruleFormRef"
                 label-position="left"
                 label-width="25%"
                 class="demo-ruleForm"
@@ -143,12 +143,11 @@
                     {{ $t('signPage.sign') }}
                   </button>
                 </el-form-item>
-              </el-form>
+              </el-form> -->
               <el-form
-                v-else
                 :model="ruleForm"
                 :rules="rules"
-                ref="ruleForm"
+                ref="ruleFormRef"
                 label-position="left"
                 label-width="25%"
                 class="demo-ruleForm"
@@ -215,17 +214,18 @@
                     :placeholder="$t('signPage.verifyCodeHolder')"
                     size="small"
                   >
-                    <el-tooltip
-                      slot="append"
-                      :content="$t('signPage.sendCodeTip')"
-                      placement="top"
-                      effect="light"
-                      popper-class="my_tooltip"
-                    >
-                      <el-button :disabled="sendBtDisable" @click="sendCode()"
-                        >{{ sendBtTextFromLang }}
-                      </el-button>
-                    </el-tooltip>
+                    <template #append>
+                      <el-tooltip
+                        :content="$t('signPage.sendCodeTip')"
+                        placement="top"
+                        effect="light"
+                        popper-class="my_tooltip"
+                      >
+                        <el-button :disabled="sendBtDisable" @click="sendCode">
+                          {{ sendBtTextFromLang }}
+                        </el-button>
+                      </el-tooltip>
+                    </template>
                   </el-input>
                 </el-form-item>
                 <div class="borderClass fontSize12">
@@ -296,6 +296,7 @@ import SignSuccessDialog from '../components/SignSuccessDialog.vue';
 import SignReLoginDialog from '../components/SignReLoginDialog.vue';
 import HttpButton from '../components/HttpButton.vue';
 import cla from '../lang/global';
+import { useIsMobile } from '@/util/useIsMobile';
 import {
   ref,
   computed,
@@ -311,6 +312,7 @@ import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
+const IS_MOBILE = useIsMobile();
 const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
@@ -372,15 +374,15 @@ watch(
       return;
     }
     cla_lang.value = '';
-    lang.value = localStorage.getItem('lang');
+    lang.value = commonStore.lang;
     signPageData.value.forEach((item, index) => {
       if (item.language === lang.value) {
         cla_lang.value = item.language;
         value.value = index;
         cla_hash.value = item.cla_id;
         cla_id.value = item.cla_id;
-        sessionStorage.setItem('cla_id', item.cla_id);
-        console.log('aaa');
+        commonStore.setClaId(item.cla_id);
+
         pdf_iframe.value?.contentWindow.postMessage(
           {
             link_id: link_id.value,
@@ -400,14 +402,14 @@ watch(
     ruleForm.value &&
       ruleForm.value.fields.forEach((item) => {
         if (item.validateState === 'error') {
-          ruleForm.value.validateField(item.labelFor);
+          ruleFormRef.value.validateField(item.labelFor);
         }
       });
   }
 );
 
 const setClientHeight = inject('setClientHeight');
-console.log(setClientHeight);
+
 const sendBtDisable = ref(false);
 const signText = ref('sign');
 const signButtonDisable = ref(false);
@@ -446,10 +448,11 @@ const cla_lang = ref('');
 const signingData = ref([]);
 const orgValue = ref('');
 const cla_id = ref('');
-const showInput = ref(sessionStorage.getItem('loginType'));
+const showInput = ref(commonStore.loginType);
 const getOrg = ref(true);
 const companyName = ref('');
 const communityName = ref('');
+const ruleFormRef = ref();
 
 const getCompany = (val) => {
   companyName.value = val;
@@ -537,6 +540,7 @@ const verifyName = async (rule, value, callback) => {
   }
 };
 const verifyCorpName = async (rule, value, callback) => {
+  console.log(111144441111);
   if (!value) {
     callback(new Error($t('tips.fill_corp_name')));
   } else {
@@ -544,6 +548,7 @@ const verifyCorpName = async (rule, value, callback) => {
   }
 };
 const verifyTitle = async (rule, value, callback) => {
+  console.log(11111111);
   if (!value) {
     callback(new Error($t('tips.fill_representative_title')));
   } else {
@@ -551,6 +556,10 @@ const verifyTitle = async (rule, value, callback) => {
   }
 };
 const verifyAuthorized = async (rule, value, callback) => {
+  console.log(rule);
+  console.log(value);
+  console.log(callback);
+
   if (!value) {
     callback(new Error($t('tips.fill_representative_name')));
   } else {
@@ -581,14 +590,14 @@ const setMyForm = (type, value) => {
 const sendCode = () => {
   let email = myForm.value.email;
   let _url = '';
-  if (sessionStorage.getItem('loginType') === 'corporation') {
+  if (commonStore.loginType === 'corporation') {
     _url = `${url.sendCorporationCode}/${link_id.value}/code`;
-  } else if (sessionStorage.getItem('loginType') === 'individual') {
+  } else if (commonStore.loginType === 'individual') {
     _url = `${url.sendVerifyCode}/${link_id.value}/code`;
-  } else if (sessionStorage.getItem('loginType') === 'employee') {
+  } else if (commonStore.loginType === 'employee') {
     _url = `${url.sendEmployeeCode}/${link_id.value}/${orgValue.value}/code`;
   }
-  if (email && EMAIL_REG.test(email)) {
+  if (email && cla.EMAIL_REG.test(email)) {
     sendBtDisable.value = true;
     axios({
       url: _url,
@@ -620,7 +629,7 @@ const sendCode = () => {
       });
   } else {
     ElMessage.closeAll();
-    if (EMAIL_REG.test(email) && !orgValue.value) {
+    if (cla.EMAIL_REG.test(email) && !orgValue.value) {
       ElMessage.error($t('tips.not_fill_org'));
     } else {
       ElMessage.error($t('tips.not_fill_email'));
@@ -649,8 +658,8 @@ const setData = (res, resolve) => {
   if (res && res.data.data) {
     if (res.data.data && res.data.data.length) {
       signPageData.value = res.data.data;
-      if (localStorage.getItem('lang') !== undefined) {
-        lang.value = localStorage.getItem('lang');
+      if (commonStore.lang !== undefined) {
+        lang.value = commonStore.lang;
       }
       let langOptions = [];
       let langLabel = '';
@@ -659,7 +668,7 @@ const setData = (res, resolve) => {
         langOptions.push({ value: index, label: langLabel });
         if (item.language === lang.value) {
           cla_lang.value = item.language;
-          sessionStorage.setItem('cla_id', item.cla_id);
+          commonStore.setClaId(item.cla_id);
           value.value = index;
           cla_hash.value = item.cla_hash;
         }
@@ -670,7 +679,7 @@ const setData = (res, resolve) => {
         cla_lang.value = signPageData.value[0].language;
         value.value = 0;
         cla_hash.value = signPageData.value[0].cla_hash;
-        localStorage.setItem('lang', util.upperFirstCase(lang.value));
+        commonStore.setLang(util.upperFirstCase(lang.value));
       }
       setClaText({
         link_id: link_id.value,
@@ -711,9 +720,6 @@ const getSignPage = (resolve) => {
     });
     return;
   }
-  console.log(url.getSignPage);
-  console.log(commonStore.linkId);
-  console.log(applyTo);
 
   axios({
     url: `${url.getSignPage}/${commonStore.linkId}/${applyTo}`,
@@ -729,9 +735,6 @@ const setClaText = (obj) => {
   nextTick(() => {
     pdf_iframe.value.contentWindow.onload = () => {
       pdf_iframe.value.contentWindow.postMessage(obj, '*');
-      console.log('ddd');
-      console.log(claTextUrl.value);
-      console.log(obj);
     };
   });
 };
@@ -752,13 +755,13 @@ const setFields = (key) => {
 };
 const setFieldsData = () => {
   let form = {};
-  let rules = {};
+  let rulesTemp = {};
   fields.value.forEach((item) => {
     Object.assign(form, { [item.id]: '' });
     if (item.type === 'name') {
       Object.assign(myForm.value, { name: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -770,7 +773,7 @@ const setFieldsData = () => {
     } else if (item.type === 'corporationName') {
       Object.assign(myForm.value, { corporationName: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -782,7 +785,7 @@ const setFieldsData = () => {
     } else if (item.type === 'title') {
       Object.assign(myForm.value, { title: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -794,7 +797,7 @@ const setFieldsData = () => {
     } else if (item.type === 'authorized') {
       Object.assign(myForm.value, { authorized: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -806,7 +809,7 @@ const setFieldsData = () => {
     } else if (item.type === 'date') {
       Object.assign(myForm.value, { date: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -818,7 +821,7 @@ const setFieldsData = () => {
     } else if (item.type === 'email') {
       Object.assign(myForm.value, { email: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -830,7 +833,7 @@ const setFieldsData = () => {
     } else if (item.type === 'telephone') {
       Object.assign(myForm.value, { telephone: '' });
       if (item.required) {
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -840,7 +843,7 @@ const setFieldsData = () => {
           ],
         });
       } else {
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               validator: verifyTel,
@@ -852,7 +855,7 @@ const setFieldsData = () => {
     } else if (item.type === 'address') {
       Object.assign(myForm.value, { address: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -864,7 +867,7 @@ const setFieldsData = () => {
     } else if (item.type === 'fax') {
       Object.assign(myForm.value, { fax: '' });
       item.required &&
-        Object.assign(rules, {
+        Object.assign(rulesTemp, {
           [item.id]: [
             {
               required: item.required,
@@ -877,7 +880,7 @@ const setFieldsData = () => {
   });
   Object.assign(form, { code: '' });
   Object.assign(myForm.value, { code: '' });
-  Object.assign(rules, {
+  Object.assign(rulesTemp, {
     code: [
       {
         required: true,
@@ -887,7 +890,7 @@ const setFieldsData = () => {
     ],
   });
   ruleForm.value = form;
-  rules.value = rules;
+  rules.value = rulesTemp;
 };
 //签署
 const signCla = () => {
@@ -909,7 +912,7 @@ const signCla = () => {
       info: info,
       verification_code: ruleForm.value.code,
       corp_signing_id: orgValue.value,
-      cla_id: sessionStorage.getItem('cla_id'),
+      cla_id: commonStore.cla_id,
       cla_language: cla_lang.value,
       privacy_checked: isRead.value,
     };
@@ -920,7 +923,7 @@ const signCla = () => {
         email: myForm.value.email,
         verification_code: ruleForm.value.code,
         info: info,
-        cla_id: sessionStorage.getItem('cla_id'),
+        cla_id: commonStore.cla_id,
         cla_language: cla_lang.value,
         corp_signing_id: orgValue.value,
         privacy_checked: isRead.value,
@@ -931,7 +934,7 @@ const signCla = () => {
         email: myForm.value.email,
         verification_code: ruleForm.value.code,
         info: info,
-        cla_id: sessionStorage.getItem('cla_id'),
+        cla_id: commonStore.cla_id,
         cla_language: cla_lang.value,
         privacy_checked: isRead.value,
       };
@@ -978,7 +981,7 @@ const sign = (myUrl, obj) => {
     });
 };
 const submitForm = (formName) => {
-  formName.value.validate((valid) => {
+  ruleFormRef.value.validate((valid) => {
     if (valid) {
       if (isRead.value) {
         signCla();
@@ -1030,9 +1033,6 @@ const getOrgsInfo = () => {
 
 //获取社区名字
 const getCommunity = () => {
-  console.log(url.getCommunity);
-  console.log(link_id.value);
-
   axios({
     url: `${url.getCommunity}/${link_id.value}`,
     method: 'get',
@@ -1044,8 +1044,8 @@ const getCommunity = () => {
 const activated = () => {
   if (signPageData.value) {
     setClientHeight();
-    if (localStorage.getItem('lang') !== undefined) {
-      lang.value = localStorage.getItem('lang');
+    if (commonStore.lang !== undefined) {
+      lang.value = commonStore.lang;
     }
     let langOptions = [];
     let langLabel = '';
@@ -1078,7 +1078,7 @@ const activated = () => {
         pdfData: pdfData.value,
       });
       setFields(value.value);
-      localStorage.setItem('lang', util.upperFirstCase(lang.value));
+      commonStore.setLang(util.upperFirstCase(lang.value));
     }
     emit('initHeader', util.upperFirstCase(lang.value));
     pdf_iframe.value.contentWindow.onload = () => {
@@ -1091,7 +1091,6 @@ const activated = () => {
         },
         claTextUrl.value
       );
-      console.log('ccc');
     };
     setSendBtText();
   }

@@ -37,12 +37,12 @@ body {
 }
 
 *,
-:after,
-:before {
-  box-sizing: inherit;
-  margin: 0;
-  padding: 0;
-}
+// :after,
+// :before {
+//   box-sizing: inherit;
+//   margin: 0;
+//   padding: 0;
+// }
 
 img {
   vertical-align: top;
@@ -64,18 +64,18 @@ a {
   }
 }
 
-blockquote,
-figure,
-form,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin: 0;
-}
+// blockquote,
+// figure,
+// form,
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6,
+// p {
+//   margin: 0;
+// }
 dd,
 dl,
 li,

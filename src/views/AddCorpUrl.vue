@@ -328,11 +328,8 @@ const initMetadata = (lang) => {
 const corpInit = () => {
   commonStore.setCorpLanguage('');
   commonStore.setClaLinkCorp('');
-  sessionStorage.removeItem('corpLanguage');
-  sessionStorage.removeItem('claLinkCorp');
+
   commonStore.setCorpMetadata(corporationMetadataArr.value);
-  sessionStorage.removeItem('corporationMetadata');
-  sessionStorage.removeItem('corporationCustomMetadataArr');
 };
 const toNextPage = () => {
   if (cla_link_corporation.value && corpClaLanguageValue.value) {

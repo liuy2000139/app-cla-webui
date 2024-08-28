@@ -2,7 +2,7 @@
   <el-row id="privacyBox">
     <el-col>
       <div class="margin-top-3rem" id="contentBox">
-        <!-- <VueMarkdown :source="privacyText"> </VueMarkdown> -->11111111111111111111111111
+        <div v-dompurify-html="statementHtml"></div>
       </div>
     </el-col>
     <ReTryDialog
@@ -15,20 +15,28 @@
 <script setup lang="ts">
 import _axios from '../util/_axios';
 import * as util from '../util/util';
-// import VueMarkdown from 'vue-markdown';
 import ReTryDialog from '../components/ReTryDialog.vue';
 import claConfig from '../lang/global';
 
-import { ref, computed, inject, onUpdated, onMounted, watch ,defineEmits} from 'vue';
+import { ref, computed, inject, onMounted, watch, defineEmits } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import Markdown from 'markdown-it';
+import { Base64 } from 'js-base64';
+
+const mkit = new Markdown({ html: true });
+
+const privacyData = ref(claConfig.PRIVACY_POLICY_DATA);
+const value = ref(0);
+const langOptions = ref([]);
+const privacyText = ref('');
+const lang = ref('English');
+
+let statementHtml = ref();
 
 const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
-const router = useRouter();
 
 const setClientHeight = inject('setClientHeight');
 
@@ -44,7 +52,7 @@ const reLoginMsg = computed(() => {
 
 watch(
   () => {
-    '$i18n.locale';
+    locale.value;
   },
   () => {
     getLanguage();
@@ -52,23 +60,18 @@ watch(
   }
 );
 
-const privacyData = ref(claConfig.PRIVACY_POLICY_DATA);
-const value = ref(0);
-const langOptions = ref([]);
-const privacyText = ref('');
-const lang = ref('English');
-
 const getPrivacy = (obj) => {
   if (checkPrivacyConf()) {
     return;
   }
-  if (localStorage.getItem('lang') !== undefined) {
-    lang.value = localStorage.getItem('lang');
+  if (commonStore.lang !== undefined) {
+    lang.value = commonStore.lang;
   }
   let notExistPrivacy = true;
   for (let key in privacyTextObj.value) {
     if (key === lang.value) {
       privacyText.value = privacyTextObj.value[key];
+    
       notExistPrivacy = false;
       break;
     }
@@ -99,8 +102,10 @@ const getPrivacy = (obj) => {
           return;
         }
         let privacyObj = privacyTextObj.value;
-        let Base64 = require('js-base64').Base64;
         privacyText.value = Base64.decode(res.data.content);
+        
+        statementHtml.value = mkit.render(privacyText.value);
+        
         Object.assign(privacyObj, { [lang.value]: privacyText.value });
         commonStore.setPrivacyData(privacyObj);
       })
@@ -135,7 +140,6 @@ const checkPrivacyConf = () => {
 };
 const emit = defineEmits(['getLangOptions', 'initHeader']);
 const getLangOption = () => {
-  console.log(454)
   if (checkPrivacyConf()) {
     return;
   }
@@ -146,17 +150,17 @@ const getLangOption = () => {
     langOptions.push({ value: index, label: langLabel });
   });
   lang.valueOptions = langOptions;
-  console.log(666)
-    console.log(lang.valueOptions)
+ 
 
   emit('getLangOptions', lang.valueOptions);
-  localStorage.setItem('lang', lang.valueOptions[value.value].label);
+ 
+  commonStore.setLang(lang.valueOptions[value.value].label);
   emit('initHeader', lang.valueOptions[value.value].label);
 };
 
 const getLanguage = () => {
-  if (localStorage.getItem('lang') !== undefined) {
-    lang.value = localStorage.getItem('lang');
+  if (commonStore.lang !== undefined) {
+    lang.value = commonStore.lang;
   }
   let langLabel = '';
   privacyData.value.forEach((item, index) => {

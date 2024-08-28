@@ -7,7 +7,7 @@
             :model="ruleForm"
             status-icon
             :rules="rules"
-            ref="ruleForm"
+            ref="ruleFormRef"
             label-width="0"
           >
             <el-form-item :required="true" prop="userName">
@@ -29,17 +29,17 @@
                 @keydown.native="pressEnter"
               ></el-input>
             </el-form-item>
-            <el-form-item style="text-align: right">
+            <el-form-item style="text-align: right" class="forgetPwd">
               <span @click="findPwd" class="pointer" id="forgetPwd">{{
                 $t('corp.forget_pwd')
               }}</span>
             </el-form-item>
-            <el-form-item style="text-align: center">
+            <el-form-item style="text-align: center" class="loginBtn">
               <HttpButton
                 :text="$t(`corp.${loginText}`)"
                 :width="loginBtWidth"
                 :buttonDisable="loginButtonDisable"
-                @httpSubmit="submitForm('ruleForm')"
+                @httpSubmit="submitForm('ruleFormRef')"
               >
               </HttpButton>
             </el-form-item>
@@ -71,14 +71,14 @@ const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
 const router = useRouter();
+const ruleFormRef = ref();
 
-
-const corpReLoginMsg = () => {
+const corpReLoginMsg = computed(() => {
   return commonStore.dialogMessage;
-};
-const corpReTryDialogVisible = () => {
+});
+const corpReTryDialogVisible = computed(() => {
   return commonStore.reTryDialogVisible;
-};
+});
 
 var validateAccount = (rule, value, callback) => {
   if (value === '') {
@@ -127,7 +127,7 @@ const setClientHeight = inject('setClientHeight');
 
 const pressEnter = () => {
   if (event.keyCode === 13) {
-    submitForm('ruleForm');
+    submitForm('ruleFormRef');
   }
 };
 const findPwd = () => {
@@ -169,6 +169,7 @@ const login = (userName, pwd) => {
           let userInfo = { userInfo: data };
           Object.assign(userInfo, { userName: userName });
           commonStore.setLoginInfo(userInfo);
+          console.log(data);
           if (data.length > 1) {
             router.push('/orgSelect');
           } else {
@@ -206,7 +207,7 @@ const login = (userName, pwd) => {
     });
 };
 const submitForm = (formName) => {
-  formName.value.validate((valid) => {
+  ruleFormRef.value.validate((valid) => {
     if (valid) {
       login(ruleForm.value.userName, ruleForm.value.pwd);
     } else {
@@ -252,7 +253,7 @@ onMounted(() => {
       background-color: #f3f3f3;
       border-radius: 1.5rem;
       border: 1px solid #f3f3f3;
-      font-size: 1.2rem;
+      font-size: 1.2rem!important;
     }
 
     & .el-form-item:not(:last-child) {
@@ -306,6 +307,12 @@ onMounted(() => {
 
   .el-form-item__error {
     font-size: 0.8rem;
+  }
+  :deep(.loginBtn .el-form-item__content) {
+    justify-content: center;
+  }
+  :deep(.forgetPwd .el-form-item__content) {
+    justify-content: flex-end;
   }
 }
 </style>

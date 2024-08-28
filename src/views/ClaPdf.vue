@@ -32,7 +32,6 @@ const claTextUrl = computed(() => {
   return commonStore.domain;
 });
 
-console.log(11111);
 const getNumPages = (url) => {};
 const setClaText = (obj) => {
   let dataFromParent = obj;
@@ -58,9 +57,7 @@ const setClaText = (obj) => {
   }
 
   http({
-    url: `${url.getCLAPdf}/${dataFromParent.link_id}/${sessionStorage.getItem(
-      'cla_id'
-    )}`,
+    url: `${url.getCLAPdf}/${dataFromParent.link_id}/${commonStore.cla_id}`,
     responseType: 'blob',
   })
     .then((res) => {
@@ -82,8 +79,6 @@ const getData = () => {
   window.addEventListener(
     'message',
     (event) => {
-      console.log(111112)
-
       if (event.data) {
         setClaText(event.data);
       }

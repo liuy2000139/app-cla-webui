@@ -438,7 +438,7 @@
         </el-col>
       </el-row>
     </div>
-    <div v-else>
+    <div v-else style="width: 100%">
       <el-row id="section">
         <el-col>
           <el-row class="actionBox">
@@ -857,7 +857,7 @@ import * as url from '../util/api';
 import _axios from '../util/_axios';
 import ReTryDialog from '../components/ReTryDialog.vue';
 import claConfig from '../lang/global';
-import { useIsMobile } from '@/util/useIsMobile';  
+import { useIsMobile } from '@/util/useIsMobile';
 
 import {
   ref,
@@ -873,7 +873,7 @@ import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
-const { IS_MOBILE } = useIsMobile(); 
+const { IS_MOBILE } = useIsMobile();
 const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
@@ -940,8 +940,8 @@ const toCorpLogin = () => {
 };
 const setLangLocale = () => {
   let lang;
-  if (parseInt(localStorage.getItem('lang'))) {
-    lang = parseInt(localStorage.getItem('lang'));
+  if (parseInt(commonStore.lang)) {
+    lang = parseInt(commonStore.lang);
   }
   switch (lang) {
     case 0:

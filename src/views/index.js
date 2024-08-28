@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-import { useCommonStore } from '../stores/common';
+Vue.use(VueRouter);
 
-export const routes = [
+const routes = [
   {
     path: '/',
     name: 'Index',
@@ -12,7 +13,6 @@ export const routes = [
       pageType: 'notLogin',
     },
   },
-
   {
     path: '/index',
     component: () => import('../views/Index.vue'),
@@ -22,7 +22,7 @@ export const routes = [
     },
     children: [
       {
-        path: '',
+        path: '/',
         name: 'PlatformSelect',
         component: () => import('../views/PlatformSelect.vue'),
         meta: {
@@ -50,7 +50,6 @@ export const routes = [
       },
     ],
   },
-
   {
     path: '/home',
     component: () => import('../views/Home.vue'),
@@ -60,7 +59,7 @@ export const routes = [
     },
     children: [
       {
-        path: '',
+        path: '/',
         meta: {
           title: 'linked repo',
           pageType: 'org',
@@ -94,7 +93,7 @@ export const routes = [
         },
         children: [
           {
-            path: '',
+            path: '/',
             redirect: '/config-org',
             meta: {
               title: 'config org',
@@ -153,7 +152,7 @@ export const routes = [
         component: () => import('../views/AddIndividualCla.vue'),
         children: [
           {
-            path: '',
+            path: '/',
             redirect: '/addIndividualUrl',
           },
           {
@@ -172,7 +171,7 @@ export const routes = [
         component: () => import('../views/AddCorpCla.vue'),
         children: [
           {
-            path: '',
+            path: '/',
             redirect: '/addCorpUrl',
           },
           {
@@ -193,7 +192,7 @@ export const routes = [
     component: () => import('../views/SignedRepo.vue'),
     children: [
       {
-        path: '',
+        path: '/',
         redirect: '/employeeList',
       },
       {
@@ -212,7 +211,7 @@ export const routes = [
     component: () => import('../views/RootManager.vue'),
     children: [
       {
-        path: '',
+        path: '/',
         redirect: '/managerList',
       },
       {
@@ -263,6 +262,15 @@ export const routes = [
     ],
   },
   {
+    path: '/sign',
+    name: 'SignTypeLookeng',
+    meta: {
+      title: 'sign',
+      pageType: 'notLogin',
+    },
+    component: () => import('../views/SignType.vue'),
+  },
+  {
     path: '/sign/:params',
     name: 'SignType',
     meta: {
@@ -290,7 +298,7 @@ export const routes = [
     component: () => import('../views/SignPage.vue'),
     children: [
       {
-        path: '',
+        path: '/',
         redirect: '/sign-cla',
       },
       {
@@ -314,15 +322,6 @@ export const routes = [
     ],
   },
   {
-    path: '/cla-pdf',
-    name: 'ClaPdf',
-    meta: {
-      title: 'cla-pdf',
-      pageType: 'notLogin',
-    },
-    component: () => import('../views/ClaPdf.vue'),
-  },
-  {
     path: '/password/:link_id',
     meta: {
       title: 'password',
@@ -331,14 +330,8 @@ export const routes = [
     component: () => import('../views/ForgetPassword.vue'),
     children: [
       {
-        path: '',
-        redirect: (to) => {
-          // 'to' 是一个路由位置对象，包含了很多有用的信息，比如 params, query, name, path 等
-          // 但对于动态段，我们需要从 parent 中获取
-          return { path: `/retrieve-password/${to.params.link_id}` };
-          // 注意：在某些情况下，你可能需要使用 to.match.params 而不是 to.params
-          // 这取决于你的路由配置和 Vue Router 的版本
-        },
+        path: '/',
+        redirect: '/retrieve-password/:link_id',
       },
       {
         path: '/retrieve-password/:link_id',
@@ -361,25 +354,33 @@ export const routes = [
     ],
   },
   {
-    path: '/:catchAll(.*)',
+    path: '/cla-pdf',
+    name: 'ClaPdf',
+    meta: {
+      title: 'cla-pdf',
+      pageType: 'notLogin',
+    },
+    component: () => import('../views/ClaPdf.vue'),
+  },
+  {
+    path: '*',
     name: 'ErrorPath',
     meta: {
       title: 'ErrorPath',
+      pageType: 'notLogin',
     },
     component: () => import('../views/ErrorPath.vue'),
   },
 ];
 
-export const router = createRouter({
-  history: createWebHistory(),
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes,
-  scrollBehavior() {
-    return { top: 0 };
-  },
 });
 
 router.beforeEach((to, from, next) => {
-  const commonStore = useCommonStore();
+  window.scrollTo(0, 0);
   if (to.meta.title) {
     document.title = to.meta.title;
   }
@@ -387,50 +388,23 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/corporationManagerLogin') {
       next();
     } else {
-      if (commonStore.pwdIsChanged === true) {
+      if (commonStore.pwdIsChanged === 'true') {
         next();
-      } else {
       }
     }
   } else {
     next();
   }
-  if (
-    to.name === 'SignType' ||
-    to.name === 'SignType_back' ||
-    to.path === '/sign-cla' ||
-    to.path === '/index' ||
-    to.path === '/platformSelect' ||
-    to.path === '/corporationManagerLogin' ||
-    to.path === '/orgSelect' ||
-    to.path === '/verify-email' ||
-    to.path === '/reset-password'
-  ) {
-    commonStore.setShowHeaderMenu('false');
-  } else if (
-    to.path === '/home' ||
-    to.path === '/linkedRepo' ||
-    to.path === '/corporationList' ||
-    to.path === '/bind-cla' ||
-    to.path === '/config-org' ||
-    to.path === '/config-cla-link' ||
-    to.path === '/config-fields' ||
-    to.path === '/config-email' ||
-    to.path === '/config-check' ||
-    to.path === '/addIndividualUrl' ||
-    to.path === '/addCorpUrl'
-  ) {
-    commonStore.setShowHeaderMenu('org');
-  } else {
-    commonStore.setShowHeaderMenu('corp');
+});
+router.afterEach((to, from, next) => {
+  window.scrollTo(0, 0);
+});
+router.onError((error) => {
+  const pattern = /Loading chunk (\d)+ failed/g;
+  const isChunkLoadFailed = error.message.match(pattern);
+  const targetPath = router.history.pending.fullPath;
+  if (isChunkLoadFailed) {
+    router.replace(targetPath);
   }
 });
-
-// router.onError((error) => {
-//   const pattern = /Loading chunk (\d)+ failed/g;
-//   const isChunkLoadFailed = error.message.match(pattern);
-//   const targetPath = router.history.pending.fullPath;
-//   if (isChunkLoadFailed) {
-//     router.replace(targetPath);
-//   }
-// });
+export default router;

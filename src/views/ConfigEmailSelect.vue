@@ -187,7 +187,7 @@ const props = defineProps({
     required: false,
   },
 });
-console.log(props.emailDialogVisible);
+
 const labelWidth = computed(() => {
   return lang.value === 'Chinese' ? '100px' : '188px';
 });
@@ -210,7 +210,7 @@ const emailTypeArr = computed(() => {
 // 修改时暂不支持gmail
 
 function open() {
-  lang.value = localStorage.getItem('lang');
+  lang.value = commonStore.lang;
 }
 function clear() {
   emailType.value = '';
@@ -236,7 +236,7 @@ function sendVerifyCode() {
   let count = 0;
   validArr.forEach((item) => {
     emailFormRef.value.validateField(item, (valid) => {
-      console.log(valid);
+      
       if (valid) {
         count++;
       }
