@@ -287,7 +287,6 @@ const init = () => {
 const flashInit = () => {
   init();
   commonStore.setCorporationCustomMetadataArr(initCorpCustomMetadata.value);
-  sessionStorage.removeItem('corporationCustomMetadataArr');
 };
 const toConfigClaLink = () => {
   commonStore.setIndividualCustomMetadataArr(individualCustomMetadataArr.value);

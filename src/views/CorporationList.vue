@@ -792,7 +792,7 @@ const getIndividualClaInfo = () => {
     });
 };
 const getCorporationInfo = () => {
-  console.log(commonStore.corpItem);
+ 
   http({
     url: `${url.getCorporationSigning}/${commonStore.corpItem.link_id}`,
   })

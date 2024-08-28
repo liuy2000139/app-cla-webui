@@ -47,9 +47,9 @@ const dialogWidth = computed(() => {
   }
 });
 const dialogMessage = computed(() => {
-  if (localStorage.getItem('lang') === english.value) {
+  if (commonStore.lang === english.value) {
     return 'dialogMessageEn';
-  } else if (localStorage.getItem('lang') === chinese.value) {
+  } else if (commonStore.lang === chinese.value) {
     return 'dialogMessage';
   }
 });

@@ -1,6 +1,6 @@
 import { nextTick, ref } from 'vue';
 import claConfig from '../lang/global';
-import { useRoute, useRouter } from 'vue-router';
+
 import { useCommonStore } from '../stores/common';
 import i18n from '../i18n';
 import { ElLoading, ElMessage } from 'element-plus';
@@ -8,8 +8,6 @@ import { ElLoading, ElMessage } from 'element-plus';
 const $t = i18n.global.t;
 
 const commonStore = useCommonStore();
-const route = useRoute();
-const router = useRouter();
 
 export const getClientHeight = () => window.innerHeight;
 export const setMinHeight = (box, inner) => {
@@ -60,35 +58,11 @@ export const clearSession = () => {
   commonStore.setAddLang('');
   commonStore.setRepo('');
   commonStore.setAddBindFirst('');
-  sessionStorage.removeItem('orgOptions');
-  sessionStorage.removeItem('orgValue');
-  sessionStorage.removeItem('orgChoose');
-  sessionStorage.removeItem('orgAlias');
-  sessionStorage.removeItem('repositoryOptions');
-  sessionStorage.removeItem('repositoryChoose');
-  sessionStorage.removeItem('repositoryValue');
-  sessionStorage.removeItem('individualLanguage');
-  sessionStorage.removeItem('corpLanguage');
-  sessionStorage.removeItem('claLinkIndividual');
-  sessionStorage.removeItem('claLinkCorp');
-  sessionStorage.removeItem('corpFDName');
-  sessionStorage.removeItem('corpFD');
-  sessionStorage.removeItem('individualMetadata');
-  sessionStorage.removeItem('corporationMetadata');
-  sessionStorage.removeItem('individualCustomMetadataArr');
-  sessionStorage.removeItem('corporationCustomMetadataArr');
-  sessionStorage.removeItem('email');
-  sessionStorage.removeItem('chooseOrg');
-  sessionStorage.removeItem('chooseRepo');
-  sessionStorage.removeItem('bindType');
-  sessionStorage.removeItem('addLang');
-  sessionStorage.removeItem('repo');
-  sessionStorage.removeItem('add_bind_first');
 };
 export const setI18nLang = () => {
-  let lang = localStorage.getItem('lang');
+  let lang = commonStore.lang;
   if (lang === null) {
-    localStorage.setItem('lang', 'English');
+    commonStore.setLang('English');
     return 'en-us';
   } else {
     if (lang === 'Chinese') {
@@ -104,18 +78,14 @@ export const clearManagerSession = (_this) => {
   commonStore.setCorpToken('');
   commonStore.setLoginInfo('');
   commonStore.setPwdIsChanged('');
-  sessionStorage.removeItem('managerList');
-  sessionStorage.removeItem('userLimit');
+
   sessionStorage.removeItem('token');
-  sessionStorage.removeItem('loginInfo');
-  sessionStorage.removeItem('pwdIsChanged');
 };
 export const successMessage = (_this) => {
   ElMessage.closeAll();
   ElMessage.success($t('tips.successTitle'));
 };
 export const getMenuState = (route) => {
-  console.log(route);
   let pageType = route.meta.pageType;
   if (pageType === 'notLogin') {
     return false;
@@ -123,7 +93,7 @@ export const getMenuState = (route) => {
     return pageType;
   }
 };
-export const catchErr = (err, commit, _this) => {
+export const catchErr = (err, commit, route) => {
   if (
     err.response?.data &&
     Object.prototype.hasOwnProperty.call(err.response?.data, 'data')
@@ -141,12 +111,14 @@ export const catchErr = (err, commit, _this) => {
           dialogVisible: true,
           dialogMessage: $t('tips.invalid_token'),
         });
+
         break;
       case 'cla.missing_token':
         commonStore[commit]({
           dialogVisible: true,
           dialogMessage: $t('tips.missing_token'),
         });
+        console.log(commonStore.dialogMessage);
         break;
       case 'cla.unknown_token':
         commonStore[commit]({

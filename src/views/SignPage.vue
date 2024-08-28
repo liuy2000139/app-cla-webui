@@ -25,9 +25,6 @@ const initHeader = (value) => {
   });
 };
 const getLangOptions = (data) => {
-  // console.log(header.value);
-  // console.log(23434);
-  //
   nextTick(() => {
     header.value.updateLangOptions(data);
   });
@@ -81,3 +78,8 @@ onUnmounted(() => {
   window.onresize = null;
 });
 </script>
+<style lang="scss" scoped>
+#content {
+  margin: 0 auto;
+}
+</style>

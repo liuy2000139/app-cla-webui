@@ -203,10 +203,6 @@ const init = () => {
   commonStore.setCorpLanguage('');
   commonStore.setClaLinkIndividual('');
   commonStore.setClaLinkCorp('');
-  sessionStorage.removeItem('individualLanguage');
-  sessionStorage.removeItem('corpLanguage');
-  sessionStorage.removeItem('claLinkIndividual');
-  sessionStorage.removeItem('claLinkCorp');
 };
 const changeIndividualLanguage = (value) => {
   commonStore.setIndividualLanguage(value);

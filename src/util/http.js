@@ -8,7 +8,7 @@ instance.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
     const token = Cookies.get('csrf_token');
-    console.log(token);
+
     if (token) {
       config.headers['token'] = token;
     }

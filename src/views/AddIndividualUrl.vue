@@ -281,11 +281,8 @@ const initMetadata = (lang) => {
 const individualInit = () => {
   commonStore.setIndividualLanguage('');
   commonStore.setClaLinkIndividual('');
-  sessionStorage.removeItem('individualLanguage');
-  sessionStorage.removeItem('claLinkIndividual');
+
   commonStore.setIndividualMetadata(individualMetadataArr.value);
-  sessionStorage.removeItem('individualMetadata');
-  sessionStorage.removeItem('individualCustomMetadataArr');
 };
 const toNextPage = () => {
   if (cla_link_individual.value && individualClaLanguageValue.value) {

@@ -27,7 +27,7 @@
     </div>
     <ConfigEmailSelect
       :emailDialogVisible="emailDialogVisible"
-      @closeEmailDialog="(emailDialogVisible = false)"
+      @closeEmailDialog="emailDialogVisible = false"
     ></ConfigEmailSelect>
     <ReLoginDialog
       :dialogVisible="reLoginDialogVisible"
@@ -117,13 +117,11 @@ const getCookieData = () => {
   }
 };
 const toAuthorizedEmail = () => {
-  console.log(2222);
   emailDialogVisible.value = true;
 };
 const init = () => {
   commonStore.setEmail('');
   commonStore.setIsEmail(false);
-  sessionStorage.removeItem('email');
 };
 getCookieData();
 

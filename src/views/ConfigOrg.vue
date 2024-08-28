@@ -102,14 +102,13 @@ const customVisible = computed(() => {
 });
 
 const orgOptions = computed(() => {
-  console.log(commonStore.orgOptions);
   try {
     return JSON.parse(commonStore.orgOptions);
   } catch (e) {
     return commonStore.orgOptions;
   }
 });
-console.log(orgOptions.value);
+
 const orgChoose = computed(() => {
   return `${commonStore.orgChoose}` === 'true';
 });
@@ -139,7 +138,7 @@ const org_alias = computed({
     return commonStore.orgAlias;
   },
   set(value) {
-    commonStore('setOrgAlias', value);
+    commonStore.setOrgAlias(value);
   },
 });
 const repo = computed({
@@ -147,7 +146,7 @@ const repo = computed({
     return commonStore.repo;
   },
   set(value) {
-    commonStore('setRepo', value);
+    commonStore.setRepo(value);
   },
 });
 
@@ -212,8 +211,6 @@ const checkRepo = (org, repo) => {
     });
 };
 const toConfigClaLink = () => {
-  console.log(1111);
-  console.log(orgValue.value);
   if (orgValue.value) {
     if (repo.value) {
       checkRepo(org.value, repo.value);
@@ -303,7 +300,6 @@ const getOrgsInfo = () => {
         });
 
         commonStore.setOrgOption(orgOptions);
-        console.log(commonStore.orgOptions);
       }
     })
     .catch((err) => {
@@ -340,16 +336,6 @@ const init = () => {
   commonStore.setRepo('');
   commonStore.setChooseOrg('');
   commonStore.setChooseRepo('');
-  sessionStorage.removeItem('orgOptions');
-  sessionStorage.removeItem('orgValue');
-  sessionStorage.removeItem('orgChoose');
-  sessionStorage.removeItem('orgAlias');
-  sessionStorage.removeItem('repo');
-  sessionStorage.removeItem('repositoryOptions');
-  sessionStorage.removeItem('repositoryChoose');
-  sessionStorage.removeItem('repositoryValue');
-  sessionStorage.removeItem('chooseOrg');
-  sessionStorage.removeItem('chooseRepo');
 };
 
 // onBeforeRouteEnter((to, from, next) => {

@@ -1,5 +1,5 @@
 <template>
-  <el-row id="customDialog">
+  <el-row id="corpReLoginDialog">
     <el-dialog
       title=""
       v-model="props.dialogVisible"
@@ -9,24 +9,15 @@
       :width="dialogWidth"
     >
       <div class="titleBox">
-        <svg-icon icon-class="warning" class="dialogIcon"></svg-icon>
-        <span>{{ $t('tips.warningTitle') }}</span>
+        <svg-icon icon-class="fail_icon" class="dialogIcon"></svg-icon>
+        <span>{{ $t('tips.failedTitle') }}</span>
       </div>
       <el-row>
         <el-col align="center">
           <p :class="dialogMessage">{{ props.message }}</p>
-          <el-row>
-            <el-col align="center" :span="12">
-              <button class="cancelBt" @click="cancel()">
-                {{ $t('corp.cancel') }}
-              </button>
-            </el-col>
-            <el-col align="center" :span="12">
-              <button class="dialogBt" @click="toNext()">
-                {{ $t('tips.dialogBt') }}
-              </button>
-            </el-col>
-          </el-row>
+          <button class="dialogBt" @click="clickGoHome()">
+            {{ $t('tips.dialogBt') }}
+          </button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -34,29 +25,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, inject, onUpdated, onMounted } from 'vue';
+import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useCommonStore } from '@/stores/common';
 import { useRouter } from 'vue-router';
-
-const commonStore = useCommonStore();
-const { t } = useI18n();
-const $t = t;
-const router = useRouter();
-const chinese = ref('Chinese');
-const english = ref('English');
+import { ElMessage } from 'element-plus';
+import { useIsMobile } from '@/util/useIsMobile';
 
 const props = defineProps({
-  dialogVisible: {
-    type: Boolean,
-  },
   message: {
     type: String,
+    default: '',
+  },
+  dialogVisible: {
+    type: Boolean,
+    default: false,
   },
 });
-const IS_MOBILE = computed(() => {
-  return commonStore.isMobile;
-});
+
+const { t, locale } = useI18n();
+const $t = t;
+const commonStore = useCommonStore();
+const router = useRouter();
+const IS_MOBILE = useIsMobile();
+
 const dialogWidth = computed(() => {
   if (IS_MOBILE.value) {
     return '80%';
@@ -72,32 +64,20 @@ const dialogMessage = computed(() => {
   }
 });
 
-const cancel = () => {
-  commonStore.setCustomVisible({
+const chinese = ref('Chinese');
+const english = ref('English');
+
+const clickGoHome = () => {
+  commonStore.errorSet({
     dialogVisible: false,
     dialogMessage: '',
   });
-};
-const toNext = () => {
-  cancel();
-  router.replace('/config-email');
+  router.replace('/corporationManagerLogin');
 };
 </script>
 
-<style lang="scss" scoped>
-#customDialog {
-  .cancelBt {
-    margin-top: 3rem;
-    width: 8rem;
-    height: 3rem;
-    background: white;
-    border-radius: 1.5rem;
-    border: 1px solid black;
-    color: black;
-    cursor: pointer;
-    outline: none;
-  }
-
+<style lang="scss">
+#corpReLoginDialog {
   .dialogBt {
     margin-top: 3rem;
     width: 8rem;
@@ -121,7 +101,7 @@ const toNext = () => {
   .titleBox {
     text-align: left;
     font-size: 1.5rem;
-    color: #e6a23c;
+    color: #e22424;
     margin-bottom: 1rem;
 
     .dialogIcon {

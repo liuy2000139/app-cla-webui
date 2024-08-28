@@ -273,7 +273,7 @@ const address = computed(() => {
 });
 
 const setClientHeight = inject('setClientHeight');
-console.log(setClientHeight);
+
 onUpdated(() => {
   setClientHeight();
 });
@@ -304,7 +304,6 @@ const modifyEmail = (row) => {
 const clearConfigSession = () => {
   util.clearSession();
   commonStore.setCorpItem('');
-  sessionStorage.removeItem('corpItem');
 };
 const configCla = () => {
   router.push('/bind-cla');
@@ -321,11 +320,6 @@ const tableRowClassName = ({ row, rowIndex }) => {
   return '';
 };
 const getBoundTableData = () => {
-  console.log(orgTableData.value);
-
-  console.log(tableData.value);
-  console.log(organization.value);
-
   let newData = [];
   tableData.value.forEach((item, index) => {
     if (item.org_id === organization.value) {
@@ -333,7 +327,6 @@ const getBoundTableData = () => {
     }
   });
   boundTableData.value = newData;
-  console.log(boundTableData.value);
 };
 const clickOrg = (row, column, cell, event) => {
   organization.value = row.Organization;
@@ -485,8 +478,6 @@ const unlinkHandleClick = (scope) => {
 };
 const checkCorporationList = (item) => {
   commonStore.setCorpItem({});
-  sessionStorage.removeItem('corpItem');
-
   commonStore.setCorpItem(item);
   router.push('/corporationList');
 };
