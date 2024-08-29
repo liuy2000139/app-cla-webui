@@ -91,4 +91,8 @@ const getEmails = () => {
 getEmails();
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-table .el-table__cell) {
+  padding: 12px 0;
+}
+</style>

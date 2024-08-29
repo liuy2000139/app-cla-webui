@@ -2,7 +2,7 @@
   <el-row id="createUser">
     <el-col>
       <p id="tabName">{{ $t('header.createManager') }}</p>
-      <el-row class="createUserBack">
+      <div class="createUserBack">
         <el-row type="flex" align="middle" class="emailRow" gutter="20">
           <el-col align="left" :span="6">
             <span class="requireText">{{ $t('corp.managerName') }}</span>
@@ -69,7 +69,7 @@
             </button>
           </el-col>
         </el-row>
-      </el-row>
+      </div>
 
       <corpReLoginDialog
         :message="corpReLoginMsg"

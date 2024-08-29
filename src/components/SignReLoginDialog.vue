@@ -2,7 +2,7 @@
   <el-row id="signReLoginDialog">
     <el-dialog
       title=""
-      :visible.sync="props.dialogVisible"
+      v-model="props.dialogVisible"
       :close-on-press-escape="false"
       :show-close="false"
       :close-on-click-modal="false"
