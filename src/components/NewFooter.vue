@@ -3,6 +3,10 @@ import { ref } from 'vue';
 import * as util from '../util/util';
 import cla from '../lang/global';
 import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 
 const { t } = useI18n();
 const $t = t;
@@ -13,7 +17,7 @@ const policeRecord = ref(cla.POLICE_RECORD);
 const policeRecordLink = ref(cla.POLICE_RECORD_LINK);
 
 const previewPrivacy = () => {
-  util.toPrivacy();
+  util.toPrivacy(route, router);
 };
 const checkIcp = () => {
   open(icpLink.value);

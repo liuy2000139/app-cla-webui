@@ -451,7 +451,7 @@
     <el-dialog
       :title="$t('org.upload_file')"
       top="5vh"
-      :visible.sync="uploadDialogVisible"
+      v-model="uploadDialogVisible"
       width="35%"
     >
       <div>
@@ -498,7 +498,7 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog top="5vh" :visible.sync="resendEmailDialogVisible" width="20%">
+    <el-dialog top="5vh" v-model="resendEmailDialogVisible" width="20%">
       <div class="dialogContent">
         {{ $t('org.resend_email_message') }}
         <div class="dialogBtBox">

@@ -249,11 +249,11 @@ onMounted(() => {
       font-size: 1.2rem;
     }
 
-    & .el-input__inner {
+    & :deep(.el-input__inner) {
       background-color: #f3f3f3;
       border-radius: 1.5rem;
       border: 1px solid #f3f3f3;
-      font-size: 1.2rem!important;
+      font-size: 1.2rem;
     }
 
     & .el-form-item:not(:last-child) {

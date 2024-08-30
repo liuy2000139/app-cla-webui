@@ -7,7 +7,7 @@
       :show-close="false"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
-      :visible.sync="props.deleteVisible"
+      v-model="props.deleteVisible"
     >
       <el-row align="center">
         {{ props.deleteMessage }}
@@ -21,6 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t, locale } = useI18n();
+const $t = t;
 const props = defineProps({
   deleteVisible: {
     type: Boolean,
@@ -38,4 +42,8 @@ const cancel = () => {
 };
 </script>
 
-<style scoped></style>
+<style  lang='scss' scoped>
+.el-row {
+  justify-content: center;
+}
+</style>

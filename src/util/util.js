@@ -425,7 +425,7 @@ export const catchErr = (err, commit, route) => {
     });
   }
 };
-export const toPrivacy = () => {
+export const toPrivacy = (route, router) => {
   if (route.path !== '/privacy') {
     router.push('/privacy');
   }

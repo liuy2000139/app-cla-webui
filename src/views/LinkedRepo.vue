@@ -129,7 +129,7 @@
     <el-dialog
       title=""
       top="5vh"
-      :visible.sync="unLinkDialogVisible"
+      v-model="unLinkDialogVisible"
       width="35%"
     >
       <div>
@@ -154,7 +154,7 @@
     <el-dialog
       title="upload"
       top="5vh"
-      :visible.sync="uploadOrgDialogVisible"
+      v-model="uploadOrgDialogVisible"
       width="35%"
     >
       <div>

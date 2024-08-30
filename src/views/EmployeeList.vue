@@ -9,14 +9,16 @@
       >
         <div style="margin-bottom: 1rem" class="tableStyle">
           <el-row :gutter="10">
-            <el-col :offset="15" :span="6">
+            <el-col :offset="15" :span="6" style="margin-bottom: 1rem">
               <el-input
                 clearable
                 :placeholder="$t('corp.email_input_holder')"
                 @input="searchEmail(inactiveSearchValue, inactiveOriginData)"
                 v-model="inactiveSearchValue"
               >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <template #prefix>
+                  <el-icon><Search /></el-icon>
+                </template>
               </el-input>
             </el-col>
             <el-col :span="3">
@@ -40,7 +42,7 @@
             <el-table-column prop="email" :label="$t('corp.email')">
             </el-table-column>
             <el-table-column :label="$t('corp.operation')" align="center">
-              <template slot-scope="scope">
+              <template #default="scope">
                 <el-row class="mySwitch">
                   <el-col :offset="4" :span="8">
                     <el-switch
@@ -107,7 +109,9 @@
                 @input="searchEmail(activeSearchValue, activeOriginData)"
                 v-model="activeSearchValue"
               >
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <template #prefix>
+                  <el-icon><Search /></el-icon>
+                </template>
               </el-input>
             </el-col>
             <el-col :span="3">
@@ -197,6 +201,7 @@ import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { Search } from '@element-plus/icons-vue';
 
 const { t, locale } = useI18n();
 const $t = t;
@@ -347,7 +352,7 @@ const getEmployee = () => {
     url: url.queryEmployee,
   })
     .then((res) => {
-      console.log(res)
+      console.log(res);
       let inactiveArr = [],
         activeArr = [];
       let data = res.data.data;
@@ -362,7 +367,6 @@ const getEmployee = () => {
       activePageData.value = getActivePageData();
     })
     .catch((err) => {
-      
       util.catchErr(err, 'errorSet', this);
     });
 };
@@ -370,9 +374,8 @@ const getEmployee = () => {
 getEmployee();
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../assets/font/css/Roboto-Regular.css';
-
 #employeeList {
   & .el-dialog {
     border-radius: 1rem;
@@ -385,11 +388,11 @@ getEmployee();
     text-align: left;
   }
 
-  .el-tabs__active-bar {
+  :deep(.el-tabs__active-bar) {
     background-color: #319e55;
   }
 
-  .el-tabs__item.is-active {
+  :deep(.el-tabs__item.is-active) {
     color: #319e55;
   }
 
@@ -397,7 +400,7 @@ getEmployee();
     color: #319e55;
   }
 
-  .el-tabs__item {
+  :deep(.el-tabs__item) {
     font-size: 1.5rem;
   }
 
@@ -578,6 +581,14 @@ getEmployee();
     background: linear-gradient(to right, #97db30, #319e55);
     margin-bottom: 1rem;
     user-select: none;
+    height: 40px;
   }
+}
+:deep(.el-input__wrapper) {
+  padding: 0 11px;
+  border: none;
+}
+:deep(.el-table .el-table__cell) {
+  padding: 12px 0 !important;
 }
 </style>

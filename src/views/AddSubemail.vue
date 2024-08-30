@@ -132,7 +132,6 @@ const second = ref('');
 const sendBtText = ref($t('signPage.sendCode'));
 const ruleForm = ref({ email: '', code: '' });
 
-
 const verifyFormEmail = async (rule, value, callback) => {
   let email = value.trim();
   if (claConfig.EMAIL_REG.test(email)) {
@@ -187,7 +186,7 @@ const submitSubEmail = () => {
       subEmailSplit[subEmailSplit.length - 1]
     )
   ) {
-    commonStoreerrorCodeSet({
+    commonStore.errorCodeSet({
       dialogVisible: true,
       dialogMessage: $t('tips.sameEmailSuffix'),
     });
@@ -218,7 +217,7 @@ const submitForm = (formName) => {
           ruleForm.value.email.trim()
         )
       ) {
-        commonStoreerrorCodeSet({
+        commonStore.errorCodeSet({
           dialogVisible: true,
           dialogMessage: $t('tips.subemailErr'),
         });
@@ -266,7 +265,7 @@ const sendCode = () => {
   let email = ruleForm.value.email.trim();
   if (email && claConfig.EMAIL_REG.test(email)) {
     if (!compareEmailSuffix(commonStore.loginInfo.userName, email)) {
-      commonStoreerrorCodeSet({
+      commonStore.errorCodeSet({
         dialogVisible: true,
         dialogMessage: $t('tips.subemailErr'),
       });
@@ -306,7 +305,7 @@ const sendCode = () => {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #addSubemail {
   .addSubemailForm {
     box-shadow: 0 0 20px 10px #f3f3f3;
@@ -327,7 +326,7 @@ const sendCode = () => {
     position: relative;
   }
 
-  .el-button.el-button--default {
+  .el-button {
     top: 0;
     left: 0;
     width: 100%;
@@ -362,16 +361,15 @@ const sendCode = () => {
   .el-input__inner {
     background-color: #f3f3f3;
     border-radius: 1.25rem;
-    border: 1px solid #f3f3f3;
-    font-size: 1rem;
-  }
 
-  .el-input__inner:focus {
-    border-color: #319e55;
+    font-size: 1rem;
   }
 
   .el-form-item {
     margin-bottom: 28px;
   }
+}
+:deep(.el-form-item__content) {
+  display: block;
 }
 </style>

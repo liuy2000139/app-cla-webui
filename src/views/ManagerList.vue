@@ -34,7 +34,7 @@
                 align="center"
                 width="200"
               >
-                <template slot-scope="scope">
+                <template #default="scope">
                   <button class="deleteBt" @click="deleteUser(scope.row)">
                     {{ $t('corp.delete') }}
                   </button>
@@ -127,7 +127,6 @@ const deleteUserVisible = ref(false);
 const tableData = ref([]);
 const multipleTable = ref();
 
-
 const submitDeleteManager = () => {
   deleteUserVisible.value = false;
   deleteManager();
@@ -146,6 +145,7 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
 const deleteUser = (row) => {
+  console.log(row)
   ids.value = [];
   if (multipleChoice.value) {
     multipleSelection.value.forEach((item) => {
@@ -189,7 +189,7 @@ const deleteManager = () => {
 getEmployeeManager();
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../assets/font/css/Roboto-Regular.css';
 
 #userList {
@@ -242,6 +242,9 @@ getEmployeeManager();
     border-bottom: 1px solid black;
     border-radius: 1.5rem;
     padding: 0 1rem;
+  }
+  :deep(.el-table .el-table__cell) {
+    padding: 12px 0;
   }
 }
 </style>
