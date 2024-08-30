@@ -165,4 +165,23 @@ onMounted(() => {
     }
   }
 }
+.el-row {
+  display: block;
+}
+:deep(.el-input__inner) {
+  height: 36px;
+}
+:deep(.el-dialog) {
+  border-radius: 1rem;
+  ul {
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+  .el-form-item__label {
+    width: 100px !important;
+  }
+}
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-input-border-color) inset !important;
+}
 </style>

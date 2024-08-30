@@ -213,8 +213,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import ReTryDialog from '../components/ReTryDialog';
-import ReLoginDialog from '../components/ReLoginDialog';
+import ReTryDialog from '../components/ReTryDialog.vue';
+import ReLoginDialog from '../components/ReLoginDialog.vue';
 import * as util from '../util/util';
 import claConfig from '../lang/global';
 import { ref, computed, inject, onUpdated, onMounted } from 'vue';
@@ -400,5 +400,29 @@ initMetadata(commonStore.individualLanguage);
 
 .add_button:focus {
   outline: none;
+}
+:deep(.el-input__wrapper) {
+  .el-input__inner {
+    height: 36px;
+  }
+}
+.itemBox:nth-child(2) :deep(.el-input__wrapper) {
+  background-color: #f5f7fa !important;
+}
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: none !important;
+}
+:deep(.el-select .el-input .el-input__wrapper.is-focus) {
+  box-shadow: none !important;
+}
+:deep(.el-input__wrapper) {
+  &.is-focus {
+    border-color: #319e55 !important;
+  }
+}
+</style>
+<style>
+.el-select-dropdown__item.selected {
+  color: #319e55 !important;
 }
 </style>

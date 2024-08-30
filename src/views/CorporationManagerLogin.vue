@@ -169,7 +169,7 @@ const login = (userName, pwd) => {
           let userInfo = { userInfo: data };
           Object.assign(userInfo, { userName: userName });
           commonStore.setLoginInfo(userInfo);
-          console.log(data);
+
           if (data.length > 1) {
             router.push('/orgSelect');
           } else {

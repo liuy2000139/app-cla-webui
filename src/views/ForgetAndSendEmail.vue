@@ -2,7 +2,12 @@
   <div id="forgetAndSendEmail" class="margin-top-3rem margin-bottom-3rem">
     <Step class="margin-top-5rem margin-bottom-2rem" :steping="0"></Step>
     <div class="findPwdBox">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleFormRef" label-width="0">
+      <el-form
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleFormRef"
+        label-width="0"
+      >
         <el-form-item prop="email">
           <el-input
             :placeholder="$t('corp.email_input_holder')"
@@ -67,7 +72,6 @@ const ruleForm = ref({ email: '' });
 const ruleFormRef = ref();
 
 const getLinkId = () => {
-  console.log(route)
   commonStore.setLinkId(route.params.link_id);
 };
 const verifyFormEmail = async (rule, value, callback) => {
@@ -108,7 +112,7 @@ const sendEmail = () => {
     });
     return;
   }
-  console.log(commonStore.linkId)
+
   http({
     url: _url,
     method: 'post',

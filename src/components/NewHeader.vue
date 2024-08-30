@@ -245,7 +245,6 @@ const init = (value) => {
   changeI18N(language.value);
   setLangValue(language.value);
   if (commonStore.loginInfo.userInfo) {
-    console.log(commonStore.loginInfo);
     role.value = commonStore.loginInfo.userInfo[0].role;
   }
   showHeaderMenu.value = util.getMenuState(route);

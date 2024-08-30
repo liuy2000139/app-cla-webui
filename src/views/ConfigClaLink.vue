@@ -303,4 +303,28 @@ onUpdated(() => {
     }
   }
 }
+.el-row {
+  display: block;
+}
+:deep(.el-input__inner) {
+  height: 36px;
+  &:hover {
+    border-color: red;
+  }
+}
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-input-border-color) inset !important;
+}
+:deep(.el-input__wrapper.is-focus) {
+  border-color: #319e55 !important;
+  box-shadow: none !important;
+}
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: none !important;
+}
+</style>
+<style>
+.el-select-dropdown__item.selected {
+  color: #319e55;
+}
 </style>

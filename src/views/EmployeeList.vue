@@ -237,8 +237,6 @@ const corpReLoginDialogVisible = computed(() => {
   return commonStore.dialogVisible;
 });
 const corpReLoginMsg = computed(() => {
-  console.log(corpReLoginDialogVisible.value);
-  console.log(commonStore.dialogMessage);
   return commonStore.dialogMessage;
 });
 const corpReTryDialogVisible = computed(() => {
@@ -352,7 +350,6 @@ const getEmployee = () => {
     url: url.queryEmployee,
   })
     .then((res) => {
-      console.log(res);
       let inactiveArr = [],
         activeArr = [];
       let data = res.data.data;

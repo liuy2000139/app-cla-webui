@@ -126,12 +126,7 @@
       >
       </el-pagination>
     </div>
-    <el-dialog
-      title=""
-      top="5vh"
-      v-model="unLinkDialogVisible"
-      width="35%"
-    >
+    <el-dialog title="" top="5vh" v-model="unLinkDialogVisible" width="35%">
       <div>
         <p class="dialogDesc">{{ $t('org.unlink_p') }}</p>
         <div style="padding: 0 6rem; text-align: left; font-size: 1.3rem">
@@ -525,7 +520,9 @@ new Promise((resolve, reject) => {
 @import '../assets/font/css/Roboto-Black.css';
 @import '../assets/font/css/Roboto-Light.css';
 @import '../assets/font/css/Roboto-Regular.css';
-
+:deep(.el-dropdown-menu__item:not(.is-disabled):focus) {
+  color: #319e55;
+}
 .el-popover {
   min-width: 6rem;
 
@@ -580,11 +577,11 @@ new Promise((resolve, reject) => {
   padding: 0 1rem;
 }
 
-.el-tabs__active-bar {
+:deep(.el-tabs__active-bar) {
   background-color: #319e55;
 }
 
-.el-tabs__item.is-active {
+:deep(.el-tabs__item.is-active) {
   color: #319e55;
 }
 
@@ -592,7 +589,7 @@ new Promise((resolve, reject) => {
   color: #319e55;
 }
 
-.el-tabs__item {
+:deep(.el-tabs__item) {
   font-size: 1rem;
 }
 
@@ -618,7 +615,7 @@ new Promise((resolve, reject) => {
     outline: none;
   }
 
-  .el-table .warning-row {
+  :deep(.el-table .warning-row) {
     color: #319e55;
     font-weight: bold;
   }
@@ -730,5 +727,25 @@ new Promise((resolve, reject) => {
     padding-top: 3rem;
     margin-bottom: 2rem;
   }
+}
+:deep(.el-table .el-table__cell) {
+  padding: 12px 0;
+}
+:deep(.el-dialog) {
+  border-radius: 1rem;
+  li {
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+  .el-button {
+    padding: 15px 20px;
+  }
+}
+:deep(.el-table__header-wrapper) {
+  width: auto;
+}
+:deep(.el-table--fit) {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
 }
 </style>

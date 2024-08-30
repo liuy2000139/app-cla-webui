@@ -373,4 +373,10 @@ onUpdated(() => {
     }
   }
 }
+.el-row {
+  display: block;
+}
+:deep(.el-input__inner) {
+  height: 36px;
+}
 </style>

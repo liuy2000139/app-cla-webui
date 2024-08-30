@@ -365,6 +365,7 @@ onUpdated(() => {
 
 <style lang="scss" scoped>
 #configFields {
+  display: block;
   .deleteBt {
     width: 3rem;
     height: 3rem;
@@ -402,6 +403,12 @@ onUpdated(() => {
     box-shadow: 0 0 20px 10px #f3f3f3;
     padding: 2rem;
     margin-bottom: 2rem;
+  }
+}
+:deep(.el-input__wrapper) {
+  background-color: #f5f7fa!important;
+  .el-input__inner {
+    height: 36px;
   }
 }
 </style>
