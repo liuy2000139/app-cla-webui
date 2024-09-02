@@ -5,6 +5,7 @@
       ref="pdf"
       :source="claText"
       :page="null"
+      :width="clientWidth"
     ></VuePdfEmbed>
   </el-row>
 </template>
@@ -16,11 +17,14 @@ import * as url from '../util/api';
 import * as util from '../util/util';
 import { useCommonStore } from '../stores/common';
 
-import { ref, computed } from 'vue';
-
+import { ref, computed, onMounted } from 'vue';
 const claText = ref('');
 const numPages = ref(null);
 const commonStore = useCommonStore();
+
+const clientWidth = computed(() => {
+  return Math.min(document.documentElement.clientWidth, 1200)
+})
 
 const apply_to = computed(() => {
   if (commonStore.loginType === 'corporation') {
@@ -79,8 +83,10 @@ const getData = () => {
   window.addEventListener(
     'message',
     (event) => {
-      if (event.data) {
-        setClaText(event.data);
+      if (event.origin === commonStore.domain) {
+        if (event.data && event.data.from === 'sign-cla') {
+          setClaText(event.data);
+        }
       }
     },
     false
@@ -93,6 +99,9 @@ const getData = () => {
   // });
 };
 getData();
+onMounted(() => {
+  window.parent.postMessage({loaded: true}, commonStore.domain);
+})
 </script>
 
 <style scoped lang="scss">

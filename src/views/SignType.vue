@@ -990,7 +990,7 @@ const submit = (loginType) => {
   if (loginType === 'corporationManager') {
     router.push('/corporationManagerLogin');
   } else {
-    router.push('/sign-cla');
+    router.push(`/sign-cla/${route.params.params}/${loginType}`);
   }
 };
 const clickSignTypeGuide = (type) => {
@@ -1013,12 +1013,8 @@ const setClientHeight = () => {
   });
 };
 provide('setClientHeight', setClientHeight);
-const setDomain = () => {
-  commonStore.setDomain(window.location.href.split('/sign')[0]);
-};
 
 commonStore.setPdfData('');
-setDomain();
 getRepoInfo();
 
 onMounted(() => {

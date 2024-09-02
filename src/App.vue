@@ -3,6 +3,15 @@
     <router-view />
   </div>
 </template>
+<script setup>
+import { onMounted } from 'vue'
+import { useCommonStore } from './stores/common';
+const commonStore = useCommonStore();
+
+onMounted(() => {
+  commonStore.setDomain(window.location.origin);
+})
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

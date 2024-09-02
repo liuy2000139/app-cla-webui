@@ -88,13 +88,18 @@ function reTry() {
     cursor: pointer;
     outline: none;
   }
+ 
 
-  .el-dialog__header {
-    padding: 0;
-  }
+  :deep(.el-dialog) {
+    border-radius: 1rem;
 
-  .el-dialog__body {
-    padding: 20px;
+    .el-dialog__header {
+      padding: 0;
+    }
+
+    .el-dialog__body {
+      padding: 20px;
+    }
   }
 
   .titleBox {
@@ -102,6 +107,8 @@ function reTry() {
     font-size: 1.5rem;
     color: #e22424;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
 
     .dialogIcon {
       width: 1.5rem;
