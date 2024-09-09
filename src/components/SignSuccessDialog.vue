@@ -101,12 +101,16 @@ const clickGoHome = () => {
     outline: none;
   }
 
-  .el-dialog__header {
-    padding: 0;
-  }
+  :deep(.el-dialog) {
+    border-radius: 1rem;
+    
+    .el-dialog__header {
+      padding: 0;
+    }
 
-  .el-dialog__body {
-    padding: 20px;
+    .el-dialog__body {
+      padding: 20px;
+    }
   }
 
   .titleBox {
@@ -114,6 +118,8 @@ const clickGoHome = () => {
     font-size: 1.5rem;
     color: #319e55;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
 
     .dialogIcon {
       width: 1.5rem;

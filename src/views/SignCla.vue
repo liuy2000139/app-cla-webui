@@ -1,10 +1,10 @@
 <template>
-  <el-row id="signCla">
+  <el-row id="signCla" class="signCla">
     <div id="singCla_section">
       <el-row class="content">
         <el-col>
           <p class="contentTitle" v-if="showInput === 'employee'">
-            {{ $t('signPage.claContentTitle') }}111
+            {{ $t('signPage.claContentTitle') }}
           </p>
           <p class="contentTitle" v-else>{{ $t('signPage.claTitle') }}</p>
           <el-row class="marginTop3rem form" v-if="showInput === 'employee'">
@@ -303,6 +303,7 @@ import {
   inject,
   onUpdated,
   onMounted,
+  onUnmounted,
   watch,
   nextTick,
   defineEmits,
@@ -328,8 +329,12 @@ const pdfData = computed(() => {
   return [];
 });
 const loginType = computed(() => {
-  return commonStore.loginType;
+  return route.params.loginType
 });
+const linkId = computed(() => {
+  return route.params.linkId
+});
+commonStore.setLoginType(loginType.value);
 const org = computed(() => {
   let org = commonStore.repoInfo.org_id;
   if (org.length > 1) {
@@ -383,15 +388,12 @@ watch(
         cla_id.value = item.cla_id;
         commonStore.setClaId(item.cla_id);
 
-        pdf_iframe.value?.contentWindow.postMessage(
-          {
-            link_id: link_id.value,
-            lang: lang.value,
-            hash: cla_hash.value,
-            pdfData: pdfData.value,
-          },
-          claTextUrl.value
-        );
+        postIframeMessage({
+          link_id: linkId.value,
+          lang: lang.value,
+          hash: cla_hash.value,
+          pdfData: pdfData.value,
+        })
         fields.value = signPageData.value[value.value].fields;
         if (Object.keys(rules.value).length === 0) {
           setFieldsData();
@@ -430,7 +432,6 @@ const tipsTitle = ref('');
 const tipsMessage = ref($t('tips.individual_sign'));
 const tipsDialogVisible = ref(false);
 const signPageData = ref('');
-const link_id = ref(commonStore.linkId);
 const claOrgIdArr = ref([]);
 const fields = ref([]);
 const claIdArr = ref([]);
@@ -448,7 +449,9 @@ const cla_lang = ref('');
 const signingData = ref([]);
 const orgValue = ref('');
 const cla_id = ref('');
-const showInput = ref(commonStore.loginType);
+const showInput = computed(() => {
+  commonStore.loginType
+})
 const getOrg = ref(true);
 const companyName = ref('');
 const communityName = ref('');
@@ -540,7 +543,6 @@ const verifyName = async (rule, value, callback) => {
   }
 };
 const verifyCorpName = async (rule, value, callback) => {
-  console.log(111144441111);
   if (!value) {
     callback(new Error($t('tips.fill_corp_name')));
   } else {
@@ -548,7 +550,6 @@ const verifyCorpName = async (rule, value, callback) => {
   }
 };
 const verifyTitle = async (rule, value, callback) => {
-  console.log(11111111);
   if (!value) {
     callback(new Error($t('tips.fill_representative_title')));
   } else {
@@ -556,10 +557,6 @@ const verifyTitle = async (rule, value, callback) => {
   }
 };
 const verifyAuthorized = async (rule, value, callback) => {
-  console.log(rule);
-  console.log(value);
-  console.log(callback);
-
   if (!value) {
     callback(new Error($t('tips.fill_representative_name')));
   } else {
@@ -591,11 +588,11 @@ const sendCode = () => {
   let email = myForm.value.email;
   let _url = '';
   if (commonStore.loginType === 'corporation') {
-    _url = `${url.sendCorporationCode}/${link_id.value}/code`;
+    _url = `${url.sendCorporationCode}/${linkId.value}/code`;
   } else if (commonStore.loginType === 'individual') {
-    _url = `${url.sendVerifyCode}/${link_id.value}/code`;
+    _url = `${url.sendVerifyCode}/${linkId.value}/code`;
   } else if (commonStore.loginType === 'employee') {
-    _url = `${url.sendEmployeeCode}/${link_id.value}/${orgValue.value}/code`;
+    _url = `${url.sendEmployeeCode}/${linkId.value}/${orgValue.value}/code`;
   }
   if (email && cla.EMAIL_REG.test(email)) {
     sendBtDisable.value = true;
@@ -682,7 +679,7 @@ const setData = (res, resolve) => {
         commonStore.setLang(util.upperFirstCase(lang.value));
       }
       setClaText({
-        link_id: link_id.value,
+        link_id: linkId.value,
         lang: lang.value,
         hash: cla_hash.value,
         pdfData: pdfData.value,
@@ -713,7 +710,7 @@ const getSignPage = (resolve) => {
   loginType.value === corporation.value
     ? (applyTo = loginType.value)
     : (applyTo = individual.value);
-  if (!commonStore.linkId) {
+  if (!linkId.value) {
     commonStore.errorCodeSet({
       dialogVisible: true,
       dialogMessage: $t('tips.page_error'),
@@ -722,7 +719,7 @@ const getSignPage = (resolve) => {
   }
 
   axios({
-    url: `${url.getSignPage}/${commonStore.linkId}/${applyTo}`,
+    url: `${url.getSignPage}/${linkId.value}/${applyTo}`,
   })
     .then((res) => {
       setData(res, resolve);
@@ -733,9 +730,7 @@ const getSignPage = (resolve) => {
 };
 const setClaText = (obj) => {
   nextTick(() => {
-    pdf_iframe.value.contentWindow.onload = () => {
-      pdf_iframe.value.contentWindow.postMessage(obj, '*');
-    };
+    postIframeMessage(obj)
   });
 };
 const setFields = (key) => {
@@ -903,7 +898,7 @@ const signCla = () => {
     }
   }
   if (commonStore.loginType === corporation.value) {
-    myUrl = `${url.corporation_signing}/${link_id.value}`;
+    myUrl = `${url.corporation_signing}/${linkId.value}`;
     obj = {
       corporation_name: myForm.value.corporationName,
       admin_name: myForm.value.authorized,
@@ -941,9 +936,9 @@ const signCla = () => {
     }
 
     if (commonStore.loginType === individual.value) {
-      myUrl = `${url.individual_signing}/${link_id.value}`;
+      myUrl = `${url.individual_signing}/${linkId.value}`;
     } else if (commonStore.loginType === employee.value) {
-      myUrl = `${url.employee_signing}/${link_id.value}`;
+      myUrl = `${url.employee_signing}/${linkId.value}`;
     }
   }
   sign(myUrl, obj);
@@ -1002,7 +997,7 @@ const orgVisibleChange = (visible) => {
 };
 const getOrgsInfo = () => {
   axios({
-    url: `${url.getCorporationSigning}/${link_id.value}/corps/${myForm.value.email}`,
+    url: `${url.getCorporationSigning}/${linkId.value}/corps/${myForm.value.email}`,
     method: 'get',
   })
     .then((res) => {
@@ -1034,7 +1029,7 @@ const getOrgsInfo = () => {
 //获取社区名字
 const getCommunity = () => {
   axios({
-    url: `${url.getCommunity}/${link_id.value}`,
+    url: `${url.getCommunity}/${linkId.value}`,
     method: 'get',
   }).then((res) => {
     communityName.value = res.data.data.org_alias;
@@ -1058,7 +1053,7 @@ const activated = () => {
         value.value = index;
         cla_hash.value = item.cla_hash;
         setClaText({
-          link_id: link_id.value,
+          link_id: linkId.value,
           lang: lang.value,
           hash: cla_hash.value,
           pdfData: pdfData.value,
@@ -1072,7 +1067,7 @@ const activated = () => {
       value.value = 0;
       cla_hash.value = signPageData.value[0].cla_hash;
       setClaText({
-        link_id: link_id.value,
+        link_id: linkId.value,
         lang: lang.value,
         hash: cla_hash.value,
         pdfData: pdfData.value,
@@ -1082,15 +1077,12 @@ const activated = () => {
     }
     emit('initHeader', util.upperFirstCase(lang.value));
     pdf_iframe.value.contentWindow.onload = () => {
-      pdf_iframe.value.contentWindow.postMessage(
-        {
-          link_id: link_id.value,
-          lang: lang.value,
-          hash: cla_hash.value,
-          pdfData: pdfData.value,
-        },
-        claTextUrl.value
-      );
+      postIframeMessage({
+        link_id: linkId.value,
+        lang: lang.value,
+        hash: cla_hash.value,
+        pdfData: pdfData.value,
+      })
     };
     setSendBtText();
   }
@@ -1102,10 +1094,36 @@ new Promise((resolve, reject) => {
   getNowDate();
 });
 
+const iframeLoaded = ref(false)
+const iframePostData = ref({})
+const postIframeMessage = (data) => {
+  iframePostData.value = data
+  if (iframeLoaded.value) {
+    pdf_iframe.value?.contentWindow.postMessage({...JSON.parse(JSON.stringify(iframePostData.value)), from: 'sign-cla'}, commonStore.domain)
+  }
+}
+
+watch(() => iframeLoaded.value, () => {
+  if (iframeLoaded.value) {
+    postIframeMessage(iframePostData.value)
+  }
+})
+
+const attachIframeLoaded = (event) => {
+    iframeLoaded.value = event.data.loaded
+  }
+const attachIframeLoadedEvent = () => {
+  window.addEventListener('message', attachIframeLoaded)
+}
 onMounted(() => {
   setClientHeight();
   getCommunity();
+  attachIframeLoadedEvent()
 });
+
+onUnmounted(() => {
+  window.removeEventListener('message', attachIframeLoaded)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -1120,14 +1138,17 @@ onMounted(() => {
   }
 }
 
+
+
 .signBtBox {
   display: flex;
   justify-content: center;
   width: 100%;
 
-  .el-form-item__content {
-    width: 100%;
-    text-align: center;
+  :deep {
+    button {
+      margin: 0 auto;
+    }
   }
 }
 
@@ -1187,105 +1208,10 @@ onMounted(() => {
   margin-bottom: 2rem;
   font-size: 1.2rem;
 
-  .sendCodeClass {
-    & .el-input.el-input--small.el-input-group.el-input-group--append {
-      position: relative;
-    }
-
-    & .el-button.el-button--default {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 11rem;
-      height: 2.5rem;
-      border-radius: 1.25rem;
-      font-size: 1.2rem;
-      color: white;
-      margin: 0;
-      font-family: Roboto-Light, sans-serif;
-    }
-
-    & .el-input-group__append {
-      position: absolute;
-      right: 0;
-      top: 0;
-      background: linear-gradient(to right, #97db30, #319e55);
-      width: 11rem;
-      height: 2.5rem;
-      border-radius: 1.25rem;
-      padding: 0;
-    }
-  }
-
-  & .fontSize12 {
+  .fontSize12 {
     font-size: 1.2rem;
   }
-
-  & .el-input--small .el-input__inner {
-    height: 2.5rem;
-  }
-
-  & .el-form-item__label {
-    font-size: 1.2rem;
-  }
-
-  & .el-input__inner {
-    background-color: #f3f3f3;
-    border-radius: 1.25rem;
-    border: 1px solid #f3f3f3;
-    font-size: 1.2rem;
-  }
-
-  .el-input__inner:focus {
-    border-color: #319e55;
-  }
-
-  & .el-form-item {
-    margin-bottom: 28px;
-  }
-
-  & .el-checkbox__label {
-    display: inline-grid;
-    white-space: pre-line;
-    font-size: 1.2rem;
-  }
-
-  & .el-checkbox__input.is-checked + .el-checkbox__label {
-    display: inline-grid;
-    white-space: pre-line;
-    color: #606266;
-    font-size: 1.2rem;
-  }
-
-  & .el-checkbox__input.is-checked .el-checkbox__inner,
-  .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-    background-color: #3ea650;
-    border-color: #3ea650;
-  }
-
-  & .el-checkbox__input.is-focus .el-checkbox__inner {
-    border-color: #3ea650;
-  }
-
-  & .el-checkbox__inner {
-    border: 1px solid #3ea650;
-    width: 20px;
-    height: 20px;
-  }
-
-  & .el-checkbox__inner:hover {
-    border: 1px solid #3ea650;
-  }
-
-  & .el-checkbox__inner:focus {
-    border: 1px solid #3ea650;
-  }
-
-  & .el-checkbox__inner:after {
-    height: 10px;
-    left: 7px;
-    top: 2px;
-  }
+ 
 }
 
 .marginTop3rem {
@@ -1328,9 +1254,6 @@ onMounted(() => {
     color: #f56c6c;
   }
 
-  & .el-dialog {
-    border-radius: 1rem;
-  }
 
   .mobileBt {
     font-family: Roboto-Light, sans-serif;
@@ -1354,23 +1277,6 @@ onMounted(() => {
     font-family: Roboto-Light, sans-serif;
     padding: 0 1rem;
 
-    & .button {
-      font-family: Roboto-Light, sans-serif;
-      width: 15rem;
-      height: 3rem;
-      border-radius: 1.5rem;
-      border: none;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      background: linear-gradient(to right, #97db30, #319e55);
-      margin: 1rem 0;
-    }
-
-    & .button:focus {
-      outline: none;
-    }
-
     & > .content {
       padding: 1rem 0;
       text-align: left;
@@ -1386,4 +1292,161 @@ onMounted(() => {
   text-align: center;
   margin: 0 5px;
 }
+
+
+:deep(#singCla_section) {
+  .form {
+    .sendCodeClass {
+      .el-input.el-input--small.el-input-group.el-input-group--append {
+        position: relative;
+      }
+
+     .el-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11rem;
+        height: 2.5rem;
+        border-radius: 1.25rem;
+        font-size: 1.2rem;
+        color: white;
+        margin: 0;
+        font-family: Roboto-Light, sans-serif;
+      }
+
+      .el-input-group__append {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: linear-gradient(to right, #97db30, #319e55);
+        width: 11rem;
+        height: 2.5rem;
+        border-radius: 1.25rem;
+        padding: 0;
+      }
+    }
+
+    .el-input--small .el-input__inner {
+      height: 2.5rem;
+      padding: 0 15px
+    }
+
+    .el-form-item__label {
+      font-size: 1.2rem;
+      height: 40px;
+      line-height: 40px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .el-form-item__error {
+      padding-top: 4px;
+    }
+
+    .el-input__wrapper {
+      padding: 0;
+    }
+
+    .el-input__inner {
+      background-color: #f3f3f3;
+      border-radius: 1.25rem;
+      border: 1px solid #f3f3f3;
+      font-size: 1.2rem;
+      color: #606266;
+    }
+
+    & .el-form-item {
+      margin-bottom: 28px;
+    }
+
+    & .el-checkbox {
+      height: 24px;
+    }
+
+    & .el-checkbox__label {
+      display: inline-grid;
+      white-space: pre-line;
+      font-size: 1.2rem;
+    }
+
+    & .el-checkbox__input.is-checked + .el-checkbox__label {
+      display: inline-grid;
+      white-space: pre-line;
+      color: #606266;
+      font-size: 1.2rem;
+    }
+
+    & .el-checkbox__input.is-checked .el-checkbox__inner,
+    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+      background-color: #3ea650;
+      border-color: #3ea650;
+    }
+
+    & .el-checkbox__input.is-focus .el-checkbox__inner {
+      border-color: #3ea650;
+    }
+
+    & .el-checkbox__inner {
+      border: 1px solid #3ea650;
+      width: 20px;
+      height: 20px;
+    }
+
+    & .el-checkbox__inner:hover {
+      border: 1px solid #3ea650;
+    }
+
+    & .el-checkbox__inner:focus {
+      border: 1px solid #3ea650;
+    }
+
+    & .el-checkbox__inner:after {
+      height: 10px;
+      left: 7px;
+      top: 2px;
+    }
+  }
+
+  #signCla {
+    #singCla_section {
+      & .button {
+      font-family: Roboto-Light, sans-serif;
+      width: 15rem;
+      height: 3rem;
+      border-radius: 1.5rem;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      background: linear-gradient(to right, #97db30, #319e55);
+      margin: 1rem 0;
+    }
+
+    & .button:focus {
+      outline: none;
+    }
+    }
+  }
+}
+
+</style>
+<style lang="scss">
+.el-popper.is-light {
+  padding: 10px;
+  
+  &.my_tooltip {
+    font-size: 1rem;
+    width: 30rem;
+    line-height: 2rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid #303133;
+
+    .el-popper__arrow::before {
+      border-color: #303133;
+    }
+
+  }
+}
+
 </style>

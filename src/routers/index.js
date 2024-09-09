@@ -294,7 +294,7 @@ export const routes = [
         redirect: '/sign-cla',
       },
       {
-        path: '/sign-cla',
+        path: '/sign-cla/:linkId/:loginType',
         name: 'SignCla',
         meta: {
           title: 'sign-cla',
