@@ -55,6 +55,7 @@
               :model="emailForm"
               :rules="rules"
               ref="emailFormRef"
+              class="form-other"
             >
               <el-form-item prop="email">
                 <template #label>
@@ -64,7 +65,7 @@
                 </template>
                 <el-input v-model="emailForm.email"></el-input>
               </el-form-item>
-              <el-form-item prop="authorizeCode">
+              <el-form-item prop="authorizeCode" class="authorizeCodeInp">
                 <template #label>
                   <div class="mailboxType">
                     {{ $t('org.config_cla_authorize_code') }}
@@ -231,12 +232,10 @@ function goToHelp() {
   );
 }
 function sendVerifyCode() {
-  
   const validArr = ['email', 'authorizeCode'];
   let count = 0;
   validArr.forEach((item) => {
     emailFormRef.value.validateField(item, (valid) => {
-      
       if (valid) {
         count++;
       }
@@ -428,11 +427,56 @@ function authorizeEmail() {
     font-size: 1rem;
     cursor: pointer;
     background-color: white;
+    margin: 1.2rem 0;
     margin-left: 3rem;
   }
 
   .email_cancel:focus {
     outline: none;
   }
+}
+
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: none !important;
+}
+:deep(.el-select .el-input .el-input__wrapper.is-focus) {
+  box-shadow: none !important;
+}
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--el-input-border-color) inset !important;
+}
+.form-other {
+  :deep(.el-form-item__label::before) {
+    content: '' !important;
+    margin-right: 0 !important;
+  }
+  :deep(.el-input__wrapper) {
+    background-color: #fff !important;
+    border: 1px solid #333;
+    &.is-focus {
+      border-color: #333 !important;
+    }
+  }
+  :deep(.el-form-item:nth-child(2)) {
+    .el-input__wrapper {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+    .el-input-group__append {
+      border-top-right-radius: 1.25rem;
+      border-bottom-right-radius: 1.25rem;
+      border: 1px solid #333;
+      border-left: none;
+      .el-button {
+        height: 40px;
+        padding: 12px 20px;
+      }
+    }
+  }
+}
+</style>
+<style>
+.el-select-dropdown__item.selected {
+  color: #319e55 !important;
 }
 </style>

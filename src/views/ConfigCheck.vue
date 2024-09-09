@@ -594,4 +594,10 @@ onUpdated(() => {
 li {
   margin: 1rem 0;
 }
+:deep(.el-input__wrapper) {
+  background-color: #f5f7fa !important;
+  .el-input__inner {
+    height: 36px;
+  }
+}
 </style>

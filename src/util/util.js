@@ -118,7 +118,7 @@ export const catchErr = (err, commit, route) => {
           dialogVisible: true,
           dialogMessage: $t('tips.missing_token'),
         });
-        console.log(commonStore.dialogMessage);
+
         break;
       case 'cla.unknown_token':
         commonStore[commit]({

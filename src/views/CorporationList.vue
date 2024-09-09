@@ -180,7 +180,7 @@
                   :label="$t('org.date')"
                 >
                 </el-table-column>
-                <el-table-column min-width="10" >
+                <el-table-column min-width="10">
                   <template #header>
                     <el-tooltip
                       effect="dark"
@@ -474,24 +474,28 @@
                 :on-exceed="handleExceed"
                 :file-list="fileList"
               >
-                <el-button slot="trigger" size="small" type="primary">{{
-                  $t('org.select')
-                }}</el-button>
+                <template #trigger>
+                  <el-button size="medium" type="primary">{{
+                    $t('org.select')
+                  }}</el-button></template
+                >
                 <el-button
                   style="margin-left: 10px"
-                  size="small"
+                  size="medium"
                   type="success"
                   @click="submitUpload"
                 >
                   {{ $t('org.upload') }}
                 </el-button>
-                <div slot="tip" class="el-upload__tip">
-                  {{
-                    $t('org.signature_file_size', {
-                      max_size_m: file_size,
-                    })
-                  }}
-                </div>
+                <template #tip>
+                  <div class="el-upload__tip">
+                    {{
+                      $t('org.signature_file_size', {
+                        max_size_m: file_size,
+                      })
+                    }}
+                  </div></template
+                >
               </el-upload>
             </el-form-item>
           </el-form>
@@ -792,7 +796,6 @@ const getIndividualClaInfo = () => {
     });
 };
 const getCorporationInfo = () => {
- 
   http({
     url: `${url.getCorporationSigning}/${commonStore.corpItem.link_id}`,
   })
@@ -884,7 +887,7 @@ const upload = (fileObj) => {
     data: formData,
   })
     .then((res) => {
-      uploadPdf.clearFiles();
+      uploadPdf.value.clearFiles();
       clearFileList();
       uploadLoading.value.close();
       uploadDialogVisible.value = false;
@@ -900,20 +903,20 @@ const upload = (fileObj) => {
 const submitUpload = () => {
   if (fileList.value.length) {
     uploadLoading.value = util.getLoading(this, 'org.upload_loading_text');
-    uploadPdf.submit();
+    uploadPdf.value.submit();
   } else {
     ElMessage.closeAll();
     ElMessage.error($t('tips.select_file'));
   }
 };
-const handleChange = (file, fileList) => {
+const handleChange = (file, fileLists) => {
   let max_size = file_size.value * 1024 * 1024;
   if (/.(PDF|pdf)$/.test(file.name)) {
     if (file.size < max_size) {
       fileList.value.push(file);
     } else {
-      for (let i = 0; i < fileList.length; i++) {
-        fileList.splice(i, 1);
+      for (let i = 0; i < fileLists.length; i++) {
+        fileLists.splice(i, 1);
         i--;
       }
       commonStore.errorCodeSet({
@@ -922,8 +925,8 @@ const handleChange = (file, fileList) => {
       });
     }
   } else {
-    for (let i = 0; i < fileList.length; i++) {
-      fileList.splice(i, 1);
+    for (let i = 0; i < fileLists.length; i++) {
+      fileLists.splice(i, 1);
       i--;
     }
     commonStore.errorCodeSet({
@@ -932,7 +935,7 @@ const handleChange = (file, fileList) => {
     });
   }
 };
-const handleRemove = (file, fileList) => {
+const handleRemove = (file, fileLists) => {
   fileList.value.splice(0, 1);
 };
 const clearFileList = () => {
@@ -941,10 +944,10 @@ const clearFileList = () => {
     i--;
   }
 };
-const handleExceed = (files, fileList) => {
+const handleExceed = (files, fileLists) => {
   ElMessage.warning($t('org.file_limit_tips'));
 };
-const beforeRemove = (file, fileList) => {
+const beforeRemove = (file, fileLists) => {
   return ElMessageBox.confirm(
     $t('org.remove_file_tips', { fileName: file.name }),
     {
@@ -1178,5 +1181,45 @@ onUpdated(() => {
       text-align: center;
     }
   }
+}
+:deep(.el-table .el-table__cell) {
+  padding: 12px 0;
+}
+:deep(.el-tabs__item.is-active),
+:deep(.el-tabs__item:hover) {
+  color: #319e55;
+}
+:deep(.el-tabs__active-bar) {
+  background-color: #319e55;
+}
+:deep(.el-tabs__item) {
+  font-size: 1rem;
+}
+:deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active) {
+  border-top-color: #dcdfe6;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  color: #319e55;
+}
+:deep(.el-tabs--border-card > .el-tabs__header .el-tabs__item:hover) {
+  color: #319e55;
+}
+:deep(.el-table__header-wrapper) {
+  width: auto;
+}
+:deep(.el-table--fit) {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+.el-button:focus,
+.el-button:hover {
+  color: #319e55;
+}
+
+:deep(.el-dialog) {
+  --el-dialog-border-radius: 1rem !important;
+}
+:deep(.el-dropdown-menu__item:not(.is-disabled):focus) {
+  color: #319e55;
 }
 </style>

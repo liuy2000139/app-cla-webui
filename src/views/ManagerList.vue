@@ -145,7 +145,6 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
 const deleteUser = (row) => {
-  console.log(row)
   ids.value = [];
   if (multipleChoice.value) {
     multipleSelection.value.forEach((item) => {
@@ -246,5 +245,12 @@ getEmployeeManager();
   :deep(.el-table .el-table__cell) {
     padding: 12px 0;
   }
+}
+:deep(.el-table__header-wrapper) {
+  width: auto;
+}
+:deep(.el-table--fit) {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
 }
 </style>
