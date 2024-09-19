@@ -390,13 +390,6 @@ const changeCorpLanguage = (value) => {
 };
 
 initMetadata(commonStore.individualLanguage);
-// beforeRouteEnter(to, from, next) {
-//   next((vm) => {
-//     if (from.path === '/') {
-//       vm.corpInit();
-//     }
-//   });
-// },
 </script>
 
 <style lang="scss" scoped>

@@ -403,12 +403,17 @@ onUpdated(() => {
     box-shadow: 0 0 20px 10px #f3f3f3;
     padding: 2rem;
     margin-bottom: 2rem;
-  }
-}
-:deep(.el-input__wrapper) {
-  background-color: #f5f7fa!important;
-  .el-input__inner {
-    height: 36px;
+    
+    :deep(.el-input) {
+      .el-input__wrapper {
+        border: 1px solid #e4e7ed;
+        background-color: #f5f7fa !important;
+        padding: 1px 15px;
+      }
+      .el-input__inner {
+        height: 32px;
+      }
+    }
   }
 }
 </style>

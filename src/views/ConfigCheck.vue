@@ -411,7 +411,7 @@ const addBinding = () => {
   let _url = '';
   if (commonStore.claLinkCorp) {
     obj = {
-      url: cla_link_corporation.value.trim(),
+      url: cla_link_corporation.value?.trim(),
       language: corpClaLanguageValue.value,
       fields: editMetadata(corporationMetadata.value),
       type: 'corporation',
@@ -556,6 +556,12 @@ onUpdated(() => {
     .emailInput {
       cursor: pointer;
     }
+
+    :deep(.el-input) {
+      .el-input__wrapper {
+        border: 1px solid #e4e7ed;
+      }
+    }
   }
 
   .typeCol {
@@ -598,6 +604,7 @@ li {
   background-color: #f5f7fa !important;
   .el-input__inner {
     height: 36px;
+    border-color: #e4e7ed;
   }
 }
 </style>

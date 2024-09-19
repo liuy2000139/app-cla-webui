@@ -55,6 +55,7 @@ window.onresize = () => {
   flex-direction: column;
   box-sizing: border-box;
   overflow: hidden;
+  min-height: 100vh;
 
   & > div:nth-of-type(2) {
     flex-grow: 1;

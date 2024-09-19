@@ -95,11 +95,9 @@ const clickGoHome = () => {
     outline: none;
   }
 
-  :deep {
-    .el-dialog {
-      border-radius: 1rem;
-    }
-
+  :deep(.el-dialog) {
+    border-radius: 1rem;
+    
     .el-dialog__header {
       padding: 0;
     }

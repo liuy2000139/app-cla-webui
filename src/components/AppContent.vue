@@ -22,7 +22,9 @@ const pcPaddingTop = computed(() => {
 </script>
 
 <template>
-  <div class="app-content"><slot></slot></div>
+  <div class="app-content">
+    <slot></slot>
+  </div>
 </template>
 
 <style lang="scss" scoped>

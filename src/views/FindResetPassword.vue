@@ -185,9 +185,18 @@ const submitReset = () => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-input__wrapper) {
-  .el-input__inner {
-    font-size: 1rem;
+:deep(.el-input) {
+  .el-input__wrapper {
+    .el-input__inner {
+      font-size: 1rem;
+    }
+  }
+  &.is-disabled {
+    .el-input__wrapper {
+      background-color: #f5f7fa !important;
+    }
   }
 }
+
+
 </style>

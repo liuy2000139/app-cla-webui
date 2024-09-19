@@ -27,21 +27,18 @@ const loginRole = ref("corp");
 const role = ref("admin");
 
 const toIndex = () => {
-  if (
-    route.path === "/corporationManagerLogin" ||
-    route.path === " /platformSelect"
-  ) {
+  if (["/corporationManagerLogin", "/platformSelect"].includes(route.path)) {
     router.push("/");
-  } else if (
-    route.path === "/corporationList" ||
-    route.path === "/addCorpUrl" ||
-    route.path === "/config-check" ||
-    route.path === "/addIndividualUrl" ||
-    route.path === "/config-org" ||
-    route.path === "/config-email" ||
-    route.path === "/config-cla-link" ||
-    route.path === "/config-fields"
-  ) {
+  } else if ([
+    "/corporationList",
+    "/addCorpUrl",
+    "/config-check",
+    "/addIndividualUrl",
+    "/config-org",
+    "/config-email",
+    "/config-cla-link",
+    "/config-fields"
+  ].includes(route.path)) {
     router.push("/linkedRepo");
   } else if (route.path === "/createManager") {
     router.push("/managerList");

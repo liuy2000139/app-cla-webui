@@ -62,7 +62,6 @@
           <el-table-column min-width="10" :label="$t('org.unlink')" width="100">
             <template #default="scope">
               <el-tooltip
-                slot="reference"
                 effect="dark"
                 :content="$t('org.unlink')"
                 placement="bottom"
@@ -474,7 +473,7 @@ const unlinkHandleClick = (scope) => {
 const checkCorporationList = (item) => {
   commonStore.setCorpItem({});
   commonStore.setCorpItem(item);
-  router.push('/corporationList');
+  router.push('/corporationList/' + item.link_id);
 };
 const newWindow = (repo) => {
   window.open(`https://gitee.com/${repo}`);
@@ -719,7 +718,7 @@ new Promise((resolve, reject) => {
   }
 
   li {
-    margin: 1rem 0;
+    margin: 1rem 0 1rem 30px;
   }
 
   #configBtDiv {
@@ -736,6 +735,7 @@ new Promise((resolve, reject) => {
   li {
     list-style-type: disc;
     list-style-position: inside;
+    text-indent: -30px;
   }
   .el-button {
     padding: 15px 20px;

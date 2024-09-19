@@ -285,7 +285,7 @@ const createUser = () => {
   }
 
   & .el-input__inner {
-    height: 3rem;
+    height: 44px;
     background-color: #f3f3f3;
     border-radius: 1.5rem;
     border: 1px solid #f3f3f3;

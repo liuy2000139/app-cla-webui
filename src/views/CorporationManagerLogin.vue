@@ -308,6 +308,14 @@ onMounted(() => {
   .el-form-item__error {
     font-size: 0.8rem;
   }
+  :deep(.el-input) {
+    .el-input__wrapper {
+      border-color: #f3f3f3;
+    }
+    .el-input__inner {
+      height: 44px;
+    }
+  }
   :deep(.loginBtn .el-form-item__content) {
     justify-content: center;
   }

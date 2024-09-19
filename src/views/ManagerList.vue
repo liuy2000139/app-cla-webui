@@ -244,6 +244,9 @@ getEmployeeManager();
   }
   :deep(.el-table .el-table__cell) {
     padding: 12px 0;
+    &:first-child {
+      padding-left: 1rem;
+    }
   }
 }
 :deep(.el-table__header-wrapper) {

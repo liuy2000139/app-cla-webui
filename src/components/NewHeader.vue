@@ -3,7 +3,7 @@ import http from '../util/http';
 import * as url from '../util/api';
 import * as util from '../util/util';
 import cla from '../lang/global';
-import { computed, onMounted, ref, defineExpose } from 'vue';
+import { computed, onMounted, ref, defineExpose, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useCommonStore } from '@/stores/common';
@@ -254,21 +254,23 @@ const init = (value) => {
 };
 init();
 defineExpose({ updateLangOptions, init });
-onMounted(() => {
-  document.addEventListener('click', (e) => {
-    if (
-      e.target.id !== 'my_select' &&
-      e.target.id !== 'select_content' &&
-      e.target.id !== 'select_icon_box' &&
-      e.target.id !== 'select_icon'
-    ) {
+
+const documentClick = (e) => {
+    if (!['my_select', 'select_content', 'select_icon_box', 'select_icon'].includes(e.target.id)) {
       isActive.value = true;
     }
     if (e.target.id !== 'svgCover') {
       menuVisible.value = false;
     }
-  });
+  }
+onMounted(() => {
+  document.addEventListener('click', documentClick);
 });
+
+onUnmounted(() => {
+  document.removeEventListener('click', documentClick);
+})
+
 </script>
 
 <template>

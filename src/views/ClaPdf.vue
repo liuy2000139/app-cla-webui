@@ -91,12 +91,6 @@ const getData = () => {
     },
     false
   );
-  // setClaText({
-  //   hash: undefined,
-  //   lang: 'Chinese',
-  //   link_id: 'gitee_clahhy-1722565300256643981',
-  //   pdfData: [],
-  // });
 };
 getData();
 onMounted(() => {

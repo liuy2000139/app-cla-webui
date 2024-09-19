@@ -221,7 +221,7 @@
 }
 
 .el-table__body-wrapper {
-  margin: 0 1rem;
+  /* margin: 0 1rem; */
 }
 
 .el-table__body tr:not(:last-of-type) td {
@@ -243,7 +243,7 @@
 .el-table__header-wrapper {
   border-bottom: 1px solid black;
   border-radius: 1.5rem;
-  padding: 0 1rem;
+  /* padding: 0 1rem; */
 }
 
 .el-tabs__active-bar {

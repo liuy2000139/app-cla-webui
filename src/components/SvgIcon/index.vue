@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, defineProps } from 'vue';
+const emits = defineEmits(['click']);
 const props = defineProps({
   iconClass: {
     type: String,
@@ -14,17 +15,14 @@ const props = defineProps({
 const iconName = computed(() => {
   return `#icon-${props.iconClass}`;
 });
-const svgClass = computed(() => {
-  if (props.className) {
-    return 'svg-icon ' + props.className;
-  } else {
-    return 'svg-icon';
-  }
-});
+
+const click = (e: MouseEvent) => {
+  emits('click', e)
+}
 </script>
 
 <template>
-  <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
+  <svg :class="`svg-icon ${props.className}`" aria-hidden="true" @click="click">
     <use :xlink:href="iconName"></use>
   </svg>
 </template>
@@ -36,5 +34,8 @@ const svgClass = computed(() => {
   vertical-align: -0.15rem;
   fill: currentColor;
   overflow: hidden;
+  &:focus {
+    outline: none;
+  }
 }
 </style>

@@ -4,6 +4,7 @@
       v-model="activeName"
       type="border-card"
       @tab-click="tabsHandleClick"
+      class="shadow-tabs"
     >
       <el-tab-pane
         :label="$t('org.signed_corporation')"
@@ -56,7 +57,7 @@
                 >
                 </el-table-column>
                 <el-table-column min-width="10">
-                  <template slot="header" #default="scope">
+                  <template #header>
                     <el-tooltip
                       effect="dark"
                       :content="$t('org.corp_signed_pdf')"
@@ -64,8 +65,8 @@
                     >
                       <span>PDF</span>
                     </el-tooltip>
-
-                    <!-- <template #reference> -->
+                  </template>
+                  <template #default="scope">
                     <el-popover width="80" trigger="hover" placement="right">
                       <div class="menuBT">
                         <el-button
@@ -88,14 +89,10 @@
                           >{{ $t('org.preview') }}
                         </el-button>
                       </div>
-                      <svg-icon
-                        slot="reference"
-                        class="pointer"
-                        icon-class="pdf"
-                        @click=""
-                      />
+                      <template #reference>
+                        <svg-icon class="pointer" icon-class="pdf"/>
+                      </template>
                     </el-popover>
-                    <!-- </template> -->
                   </template>
                 </el-table-column>
                 <el-table-column min-width="10" :label="$t('org.operation')">
@@ -214,7 +211,7 @@
                         </el-button>
                       </div>
                       <template #reference>
-                        <svg-icon class="pointer" icon-class="pdf" @click=""
+                        <svg-icon class="pointer" icon-class="pdf" 
                       /></template>
                     </el-popover>
                   </template>
@@ -257,79 +254,6 @@
               </el-table>
             </div>
           </el-tab-pane>
-          <!-- <el-tab-pane
-            :label="$t('org.invalidSignature')"
-            name="third"
-            class="margin-top-1rem"
-          >
-            <div class="tableStyle">
-              <el-table
-                :empty-text="$t('corp.no_data')"
-                :data="deletedCorpInfo"
-                align="center"
-                class="tableClass"
-                style="width: 100%"
-              >
-                <el-table-column
-                  min-width="25"
-                  prop="corporation_name"
-                  :label="$t('org.corporation_name')"
-                >
-                </el-table-column>
-                <el-table-column
-                  min-width="15"
-                  prop="admin_name"
-                  :label="$t('org.config_cla_field_corp_default_title1')"
-                >
-                </el-table-column>
-                <el-table-column
-                  min-width="25"
-                  prop="admin_email"
-                  :label="$t('org.to_email')"
-                >
-                </el-table-column>
-                <el-table-column
-                  min-width="15"
-                  prop="cla_language"
-                  :label="$t('org.cla_language')"
-                >
-                </el-table-column>
-                <el-table-column
-                  min-width="10"
-                  prop="date"
-                  :label="$t('org.date')"
-                >
-                </el-table-column>
-                <el-table-column min-width="10" :label="$t('org.operation')">
-                  <template slot-scope="scope">
-                    <el-dropdown
-                      placement="bottom-start"
-                      trigger="hover"
-                      @command="menuCommand"
-                    >
-                      <span class="el-dropdown-link">
-                        <svg-icon icon-class="operation"></svg-icon>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item
-                          disabled=""
-                          :command="{ command: 'd', row: scope.row }"
-                        >
-                          {{ $t('org.reduction') }}
-                        </el-dropdown-item>
-                        <el-dropdown-item
-                          disabled=""
-                          :command="{ command: 'e', row: scope.row }"
-                        >
-                          {{ $t('org.deleteCompletely') }}
-                        </el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </el-tab-pane> -->
         </el-tabs>
       </el-tab-pane>
       <el-tab-pane
@@ -388,7 +312,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-button v-else @click="createIndividualCla">{{
+          <el-button size="large" v-else @click="createIndividualCla">{{
             $t('org.addIndividualCla')
           }}</el-button>
         </div>
@@ -442,7 +366,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-button v-else @click="createCorpCla">{{
+          <el-button size="large" v-else @click="createCorpCla">{{
             $t('org.addCorpCla')
           }}</el-button>
         </div>
@@ -560,6 +484,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 
 const route = useRoute();
 const router = useRouter();
+const { linkId } = route.params;
 const commonStore = useCommonStore();
 const { t, locale } = useI18n();
 const $t = t;
@@ -664,7 +589,7 @@ const clickDeleteCla = (row, apply_to) => {
 };
 const deleteCla = (row) => {
   http({
-    url: `${url.delCla}/${commonStore.corpItem.link_id}/${row.cla_id}`,
+    url: `${url.delCla}/${linkId}/${row.cla_id}`,
     method: 'delete',
   })
     .then((res) => {
@@ -768,9 +693,8 @@ const tabsHandleClick = (tab, event) => {
   }
 };
 const getCorpClaInfo = () => {
-  let link_id = commonStore.corpItem.link_id;
   http({
-    url: `${url.getCla}/${link_id}`,
+    url: `${url.getCla}/${linkId}`,
   })
     .then((res) => {
       if (res.data && res.data.data.corp_clas) {
@@ -782,9 +706,8 @@ const getCorpClaInfo = () => {
     });
 };
 const getIndividualClaInfo = () => {
-  let link_id = commonStore.corpItem.link_id;
   http({
-    url: `${url.getCla}/${link_id}`,
+    url: `${url.getCla}/${linkId}`,
   })
     .then((res) => {
       if (res && res.data.data) {
@@ -797,7 +720,7 @@ const getIndividualClaInfo = () => {
 };
 const getCorporationInfo = () => {
   http({
-    url: `${url.getCorporationSigning}/${commonStore.corpItem.link_id}`,
+    url: `${url.getCorporationSigning}/${linkId}`,
   })
     .then((resp) => {
       if (resp.data.data && resp.data.data.length) {
@@ -821,7 +744,7 @@ const getCorporationInfo = () => {
 };
 const getDeletedCorpInfo = () => {
   http({
-    url: `${url.getDeletedCorpInfo}/${commonStore.corpItem.link_id}`,
+    url: `${url.getDeletedCorpInfo}/${linkId}`,
   })
     .then((resp) => {
       deletedCorpInfo.value = resp.data.data;
@@ -833,7 +756,7 @@ const getDeletedCorpInfo = () => {
 };
 const previewClaFile = (row) => {
   http({
-    url: `${url.corporationPdf}/${commonStore.corpItem.link_id}/${row.id}`,
+    url: `${url.corporationPdf}/${linkId}/${row.id}`,
     responseType: 'blob',
   })
     .then((res) => {
@@ -853,7 +776,7 @@ const previewClaFile = (row) => {
 };
 const downloadClaFile = (row) => {
   http({
-    url: `${url.corporationPdf}/${commonStore.corpItem.link_id}/${row.id}`,
+    url: `${url.corporationPdf}/${linkId}/${row.id}`,
     responseType: 'blob',
   })
     .then((res) => {
@@ -873,7 +796,7 @@ const downloadClaFile = (row) => {
     });
 };
 const uploadClaFile = (row) => {
-  uploadUrl.value = `${url.corporationPdf}/${commonStore.corpItem.link_id}/${row.id}`;
+  uploadUrl.value = `${url.corporationPdf}/${linkId}/${row.id}`;
   uploadDialogVisible.value = true;
 };
 const upload = (fileObj) => {
@@ -967,7 +890,7 @@ const openDeleteCorp = (row) => {
 const resendPDF = () => {
   let row = resendEmail.value;
   let resend_url = '';
-  resend_url = `${url.resend_pdf}/${commonStore.corpItem.link_id}/${row.id}`;
+  resend_url = `${url.resend_pdf}/${linkId}/${row.id}`;
   http({
     url: resend_url,
     method: 'put',
@@ -1004,7 +927,7 @@ const deleteCompletely = (email) => {
 };
 const reductionCorp = (row) => {
   http({
-    url: `${url.corporationManager}/${commonStore.corpItem.link_id}/${row.id}`,
+    url: `${url.corporationManager}/${linkId}/${row.id}`,
     method: 'patch',
   })
     .then((res) => {
@@ -1018,7 +941,7 @@ const reductionCorp = (row) => {
 const deleteCorp = (row) => {
   deleteCorpVisible.value = false;
   http({
-    url: `${url.corporation_signing}/${commonStore.corpItem.link_id}/${row.id}`,
+    url: `${url.corporation_signing}/${linkId}/${row.id}`,
     method: 'delete',
   })
     .then((res) => {
@@ -1031,7 +954,7 @@ const deleteCorp = (row) => {
 };
 const createRoot = (row) => {
   http({
-    url: `${url.corporationManager}/${commonStore.corpItem.link_id}/${row.id}`,
+    url: `${url.corporationManager}/${linkId}/${row.id}`,
     method: 'post',
   })
     .then((res) => {
@@ -1091,11 +1014,7 @@ onUpdated(() => {
     margin-top: 2rem;
   }
 
-  .el-button.is-disabled,
-  .el-button.is-disabled:focus,
-  .el-button.is-disabled:hover {
-    cursor: pointer;
-  }
+
 
   .el-popover {
     min-width: 7rem;
@@ -1207,13 +1126,26 @@ onUpdated(() => {
 :deep(.el-table__header-wrapper) {
   width: auto;
 }
+
+:deep(.el-tabs) {
+  &.shadow-tabs {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.12),0 0 6px 0 rgba(0,0,0,.04);
+  }
+}
 :deep(.el-table--fit) {
   border-right: 1px solid;
   border-bottom: 1px solid;
 }
-.el-button:focus,
-.el-button:hover {
-  color: #319e55;
+:deep(.el-button) {
+  &.is-disabled,
+  &.is-disabled:focus,
+  &.is-disabled:hover {
+    cursor: pointer;
+  }
+  &:focus,
+  &:hover {
+    color: #319e55;
+  }
 }
 
 :deep(.el-dialog) {

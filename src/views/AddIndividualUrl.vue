@@ -343,13 +343,6 @@ const changeIndividualLanguage = (value) => {
 };
 initMetadata(commonStore.individualLanguage);
 
-// beforeRouteEnter(to, from, next) {
-//   next((vm) => {
-//     if (from.path === '/') {
-//       vm.individualInit();
-//     }
-//   });
-// },
 </script>
 
 <style lang="scss" scoped>
@@ -424,5 +417,8 @@ initMetadata(commonStore.individualLanguage);
 <style>
 .el-select-dropdown__item.selected {
   color: #319e55 !important;
+}
+.el-tooltip__popper {
+  padding: 10px;
 }
 </style>

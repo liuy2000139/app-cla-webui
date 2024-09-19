@@ -376,7 +376,15 @@ onUpdated(() => {
 .el-row {
   display: block;
 }
-:deep(.el-input__inner) {
-  height: 36px;
+
+:deep(.el-input) {
+  .el-input__wrapper {
+    &:hover {
+      border-color: #c0c4cc;
+    }
+  }
+  .el-input__inner {
+    height: 32px;
+  }
 }
 </style>

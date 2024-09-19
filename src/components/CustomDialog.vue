@@ -110,12 +110,16 @@ const toNext = () => {
     outline: none;
   }
 
-  .el-dialog__header {
-    padding: 0;
-  }
+  :deep(.el-dialog) {
+    border-radius: 1rem;
+    
+    .el-dialog__header {
+      padding: 0;
+    }
 
-  .el-dialog__body {
-    padding: 20px;
+    .el-dialog__body {
+      padding: 20px;
+    }
   }
 
   .titleBox {

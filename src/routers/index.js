@@ -77,7 +77,7 @@ export const routes = [
         component: () => import('../views/LinkedRepo.vue'),
       },
       {
-        path: '/corporationList',
+        path: '/corporationList/:linkId',
         name: 'CorporationList',
         meta: {
           title: 'corporation list',

@@ -25,11 +25,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject, onUpdated, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
 import { useIsMobile } from '@/util/useIsMobile';
 
 const props = defineProps({
@@ -90,13 +89,18 @@ const clickGoHome = () => {
     outline: none;
   }
 
-  .el-dialog__header {
-    padding: 0;
+  :deep(.el-dialog) {
+    border-radius: 1rem;
+    
+    .el-dialog__header {
+      padding: 0;
+    }
+
+    .el-dialog__body {
+      padding: 20px;
+    }
   }
 
-  .el-dialog__body {
-    padding: 20px;
-  }
 
   .titleBox {
     text-align: left;

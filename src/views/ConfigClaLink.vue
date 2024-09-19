@@ -327,4 +327,19 @@ onUpdated(() => {
 .el-select-dropdown__item.selected {
   color: #319e55;
 }
+
+.el-popper {
+  padding: 10px;
+  line-height: 1;
+  &.is-light {
+    border-color: #333;
+    .el-popper__arrow::before {
+      border-color: #333;
+    }
+  }
+  &.el-select__popper {
+    line-height: 20px;
+    border-color: transparent;
+  }
+}
 </style>
