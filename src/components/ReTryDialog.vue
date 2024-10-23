@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed } from 'vue';
 import { useCommonStore } from '@/stores/common';
 import { useI18n } from 'vue-i18n';
 const { t, locale } = useI18n();

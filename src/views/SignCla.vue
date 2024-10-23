@@ -33,11 +33,11 @@
           </el-row>
           <el-row class="marginTop3rem form">
             <el-col>
-              <!-- <el-form
+              <el-form
                 v-if="IS_MOBILE"
                 :model="ruleForm"
                 :rules="rules"
-                ref="ruleFormRef"
+                ref="ruleForm"
                 label-position="left"
                 label-width="25%"
                 class="demo-ruleForm"
@@ -92,7 +92,7 @@
                       :key="item.corp_signing_id"
                       :label="item.corp_name"
                       :value="item.corp_signing_id"
-                      @click.native="getCompany(item.corp_name)"
+                      @click="getCompany(item.corp_name)"
                     >
                     </el-option>
                   </el-select>
@@ -143,8 +143,9 @@
                     {{ $t('signPage.sign') }}
                   </button>
                 </el-form-item>
-              </el-form> -->
+              </el-form>
               <el-form
+                v-else
                 :model="ruleForm"
                 :rules="rules"
                 ref="ruleFormRef"
@@ -198,7 +199,7 @@
                       :key="item.corp_signing_id"
                       :label="item.corp_name"
                       :value="item.corp_signing_id"
-                      @click.native="getCompany(item.corp_name)"
+                      @click="getCompany(item.corp_name)"
                     >
                     </el-option>
                   </el-select>
@@ -401,12 +402,7 @@ watch(
       }
     });
     setSendBtText();
-    ruleForm.value &&
-      ruleForm.value.fields.forEach((item) => {
-        if (item.validateState === 'error') {
-          ruleFormRef.value.validateField(item.labelFor);
-        }
-      });
+    ruleFormRef.value.validate()
   }
 );
 
@@ -431,7 +427,7 @@ const domain = ref(commonStore.domain);
 const tipsTitle = ref('');
 const tipsMessage = ref($t('tips.individual_sign'));
 const tipsDialogVisible = ref(false);
-const signPageData = ref('');
+const signPageData = ref([]);
 const claOrgIdArr = ref([]);
 const fields = ref([]);
 const claIdArr = ref([]);
@@ -444,7 +440,7 @@ const ruleForm = ref({});
 const myForm = ref({});
 const rules = ref({});
 const isRead = ref(false);
-const value = ref('');
+const value = ref<number|string>('');
 const cla_lang = ref('');
 const signingData = ref([]);
 const orgValue = ref('');
@@ -1145,10 +1141,8 @@ onUnmounted(() => {
   justify-content: center;
   width: 100%;
 
-  :deep {
-    button {
-      margin: 0 auto;
-    }
+  :deep(button) {
+    margin: 0 auto;
   }
 }
 
