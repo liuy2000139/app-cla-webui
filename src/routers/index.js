@@ -31,7 +31,7 @@ export const routes = [
         },
       },
       {
-        path: '/corporationManagerLogin',
+        path: '/corporationManagerLogin/:linkId',
         name: 'CorporationManagerLogin',
         component: () => import('../views/CorporationManagerLogin.vue'),
         meta: {
@@ -384,7 +384,7 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
   }
   if (from.path === '/resetPassword') {
-    if (to.path === '/corporationManagerLogin') {
+    if (to.name === 'CorporationManagerLogin') {
       next();
     } else {
       if (commonStore.pwdIsChanged === true) {
@@ -396,29 +396,13 @@ router.beforeEach((to, from, next) => {
     next();
   }
   if (
-    to.name === 'SignType' ||
-    to.name === 'SignType_back' ||
-    to.path === '/sign-cla' ||
-    to.path === '/index' ||
-    to.path === '/platformSelect' ||
-    to.path === '/corporationManagerLogin' ||
-    to.path === '/orgSelect' ||
-    to.path === '/verify-email' ||
-    to.path === '/reset-password'
+    ['SignType', 'SignType_back', 'SignCla', 'CorporationManagerLogin'].includes(to.name) ||
+    ['/index', '/platformSelect', '/orgSelect', '/verify-email', '/reset-password'].inckeys.includes(to.path)
   ) {
     commonStore.setShowHeaderMenu('false');
   } else if (
-    to.path === '/home' ||
-    to.path === '/linkedRepo' ||
-    to.path === '/corporationList' ||
-    to.path === '/bind-cla' ||
-    to.path === '/config-org' ||
-    to.path === '/config-cla-link' ||
-    to.path === '/config-fields' ||
-    to.path === '/config-email' ||
-    to.path === '/config-check' ||
-    to.path === '/addIndividualUrl' ||
-    to.path === '/addCorpUrl'
+    ['CorporationList'].includes(to.name) ||
+    ['/home', '/linkedRepo', '/bind-cla', '/config-org', '/config-cla-link', '/config-fields', '/config-email', '/config-check', '/addIndividualUrl', '/addCorpUrl'].includes(to.path)
   ) {
     commonStore.setShowHeaderMenu('org');
   } else {

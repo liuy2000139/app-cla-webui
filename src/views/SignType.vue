@@ -988,7 +988,7 @@ const getSignPage = (link_id, applyTo) => {
 const submit = (loginType) => {
   commonStore.setLoginType(loginType);
   if (loginType === 'corporationManager') {
-    router.push('/corporationManagerLogin');
+    router.push('/corporationManagerLogin/' + route.params.params);
   } else {
     router.push(`/sign-cla/${route.params.params}/${loginType}`);
   }
@@ -1306,6 +1306,7 @@ onUnmounted(() => {
   .stepIcon {
     width: 5rem;
     height: 5rem;
+    color: #fff;
   }
 }
 
@@ -1379,4 +1380,25 @@ onUnmounted(() => {
   font-family: Roboto-Regular, sans-serif;
   font-size: 1.5rem;
 }
+</style>
+
+<style lang="scss">
+.el-popper.is-light {
+  padding: 10px;
+  
+  &.my_tooltip {
+    font-size: 1rem;
+    width: 30rem;
+    line-height: 2rem;
+    border-radius: 1rem;
+    background: #fff;
+    border: 1px solid #303133;
+
+    .el-popper__arrow::before {
+      border-color: #303133;
+    }
+
+  }
+}
+
 </style>

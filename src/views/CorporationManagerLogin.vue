@@ -64,8 +64,8 @@ import HttpButton from '../components/HttpButton.vue';
 import { ref, computed, inject, onUpdated, onMounted } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { useRouter, useRoute } from 'vue-router';
+const route = useRoute();
 
 const { t, locale } = useI18n();
 const $t = t;
@@ -134,10 +134,8 @@ const findPwd = () => {
   router.push(`/password/${commonStore.linkId}`);
 };
 const login = (userName, pwd) => {
-  let linkId = '';
-  if (commonStore.linkId) {
-    linkId = commonStore.linkId;
-  } else {
+  let linkId = route.params.linkId;
+  if (!linkId) {
     commonStore.errorCodeSet({
       dialogVisible: true,
       dialogMessage: $t('tips.page_error'),
@@ -188,10 +186,7 @@ const login = (userName, pwd) => {
             }
           }
           resolve('completed');
-        }).then(
-          (res) => {},
-          (err) => {}
-        );
+        });
       } else {
         commonStore.errorCodeSet({
           dialogVisible: true,
