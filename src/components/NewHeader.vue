@@ -32,20 +32,52 @@ const communityInfo = computed(() => {
   if (
     commonStore.loginInfo &&
     commonStore.loginInfo.userInfo &&
-    commonStore.loginInfo.userInfo[0].repo_id
+    commonStore.loginInfo.userInfo.repo_id
   ) {
-    return `${commonStore.loginInfo.userInfo[0].org_id}/${commonStore.loginInfo.userInfo[0].repo_id}`;
+    return `${commonStore.loginInfo.userInfo.org_id}/${commonStore.loginInfo.userInfo.repo_id}`;
   }
   return (
     commonStore.loginInfo &&
     commonStore.loginInfo.userInfo &&
-    commonStore.loginInfo.userInfo[0].org_id
+    commonStore.loginInfo.userInfo.org_id
   );
 });
 
 const updateLangOptions = (data) => {
   options.value = data;
 };
+
+onMounted(() => {
+  getUserInfo()
+})
+const getUserInfo= () => {
+  http({
+    url: url.getCorpManagerInfo,
+    method: 'get',
+  }).then((res) => {
+    let data = null;
+    if (res.data) {
+      data = res.data.data;
+    }
+    if (data) {
+      let userInfo = { userInfo: data };
+      Object.assign(userInfo, { userName: 'todo' });
+      commonStore.setLoginInfo(userInfo);
+      Object.assign(userInfo, { orgValue: 0 });
+      commonStore.setPwdIsChanged(data.initial_pw_changed);
+      commonStore.setLoginInfo(userInfo);
+      if (!data.initial_pw_changed) {
+        router.push('/resetPassword');
+      }
+    } else {
+      commonStore.errorCodeSet({
+        dialogVisible: true,
+        dialogMessage: $t('tips.id_pwd_err'),
+      });
+    }
+    init();
+  });
+}
 
 const toIndex = () => {
   if (route.path === '/platformSelect') {
@@ -64,7 +96,7 @@ const toIndex = () => {
   } else if (route.path === '/createManager') {
     router.push('/managerList');
   } else if (route.path === '/resetPassword') {
-    if (commonStore.loginInfo.userInfo[0].role === 'manager') {
+    if (commonStore.loginInfo.userInfo.role === 'manager') {
       router.push('/employeeList');
     } else {
       router.push('/managerList');
@@ -169,13 +201,14 @@ const toCLA = () => {
     });
 };
 const loginOut = () => {
+  const loginUrl = '/corporationManagerLogin/' + commonStore.loginInfo.userInfo.link_id
   util.clearManagerSession(this);
   if (loginRole.value === 'corp') {
     http({
       url: url.corporationManagerAuth,
       method: 'put',
     }).then(() => {
-      router.push('/corporationManagerLogin');
+      router.push(loginUrl);
     });
   } else {
     http({
@@ -245,14 +278,14 @@ const init = (value) => {
   changeI18N(language.value);
   setLangValue(language.value);
   if (commonStore.loginInfo.userInfo) {
-    role.value = commonStore.loginInfo.userInfo[0].role;
+    role.value = commonStore.loginInfo.userInfo.role;
   }
   showHeaderMenu.value = util.getMenuState(route);
   if (showHeaderMenu.value === 'corp' || showHeaderMenu.value === 'org') {
     loginRole.value = showHeaderMenu.value;
   }
 };
-init();
+
 defineExpose({ updateLangOptions, init });
 
 const documentClick = (e) => {

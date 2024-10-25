@@ -45,3 +45,4 @@ export const modifyAuthorizeEmail = '/v1/link/update';                          
 export const logout = '/v1/auth';                                                   //logout退出登录 
 export const sendDomainCode = '/v1/corporation-email-domain';                              //给管理员邮箱发送验证码 
 export const getCommunity = '/v1/link';       
+export const getCorpManagerInfo = '/v1/corporation-manager'

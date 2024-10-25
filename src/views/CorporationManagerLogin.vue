@@ -16,7 +16,7 @@
                 v-model="ruleForm.userName"
                 autocomplete="off"
                 :placeholder="$t('corp.id')"
-                @keydown.native="pressEnter"
+                @keydown.enter="pressEnter"
               ></el-input>
             </el-form-item>
             <el-form-item :required="true" label="" prop="pwd">
@@ -26,7 +26,7 @@
                 v-model="ruleForm.pwd"
                 autocomplete="off"
                 :placeholder="$t('corp.pwd')"
-                @keydown.native="pressEnter"
+                @keydown.enter="pressEnter"
               ></el-input>
             </el-form-item>
             <el-form-item style="text-align: right" class="forgetPwd">
@@ -39,7 +39,7 @@
                 :text="$t(`corp.${loginText}`)"
                 :width="loginBtWidth"
                 :buttonDisable="loginButtonDisable"
-                @httpSubmit="submitForm('ruleFormRef')"
+                @httpSubmit="submitForm"
               >
               </HttpButton>
             </el-form-item>
@@ -126,9 +126,7 @@ const asciiArray = ref([]);
 const setClientHeight = inject('setClientHeight');
 
 const pressEnter = () => {
-  if (event.keyCode === 13) {
-    submitForm('ruleFormRef');
-  }
+  submitForm();
 };
 const findPwd = () => {
   router.push(`/password/${commonStore.linkId}`);
@@ -154,29 +152,28 @@ const login = (userName, pwd) => {
     method: 'post',
     data: obj,
   })
-    .then((res) => {
-      let data = [];
-      asciiArray.value = [];
-      if (res.data) {
-        data = res.data.data;
-      }
-      loginButtonDisable.value = false;
-      loginText.value = 'login_in';
-      if (data.length) {
-        new Promise((resolve, reject) => {
-          let userInfo = { userInfo: data };
-          Object.assign(userInfo, { userName: userName });
-          commonStore.setLoginInfo(userInfo);
-
-          if (data.length > 1) {
-            router.push('/orgSelect');
-          } else {
-            commonStore.setCorpToken(data[0].token);
-            Object.assign(userInfo, { orgValue: 0 });
-            commonStore.setPwdIsChanged(data[0].initial_pw_changed);
+    .then(() => {
+      http({
+        url: url.getCorpManagerInfo,
+        method: 'get',
+      }).then((res) => {
+        let data = null;
+        asciiArray.value = [];
+        if (res.data) {
+          data = res.data.data;
+        }
+        loginButtonDisable.value = false;
+        loginText.value = 'login_in';
+        if (data) {
+          new Promise((resolve, reject) => {
+            let userInfo = { userInfo: data };
+            Object.assign(userInfo, { userName: userName });
             commonStore.setLoginInfo(userInfo);
-            if (data[0].initial_pw_changed) {
-              if (data[0].role === 'admin') {
+            Object.assign(userInfo, { orgValue: 0 });
+            commonStore.setPwdIsChanged(data.initial_pw_changed);
+            commonStore.setLoginInfo(userInfo);
+            if (data.initial_pw_changed) {
+              if (data.role === 'admin') {
                 router.push('/rootManager');
               } else {
                 router.push('/signedRepo');
@@ -184,15 +181,54 @@ const login = (userName, pwd) => {
             } else {
               router.push('/resetPassword');
             }
-          }
-          resolve('completed');
-        });
-      } else {
-        commonStore.errorCodeSet({
-          dialogVisible: true,
-          dialogMessage: $t('tips.id_pwd_err'),
-        });
-      }
+            resolve('completed');
+          });
+        } else {
+          commonStore.errorCodeSet({
+            dialogVisible: true,
+            dialogMessage: $t('tips.id_pwd_err'),
+          });
+        }
+      });
+      //   let data = [];
+      //   asciiArray.value = [];
+      //   if (res.data) {
+      //     data = res.data.data;
+      //   }
+      //   loginButtonDisable.value = false;
+      //   loginText.value = 'login_in';
+      //   if (data.length) {
+      //     new Promise((resolve, reject) => {
+      //       let userInfo = { userInfo: data };
+      //       Object.assign(userInfo, { userName: userName });
+      //       commonStore.setLoginInfo(userInfo);
+
+      //       if (data.length > 1) {
+      //         router.push('/orgSelect');
+      //       } else {
+      //         commonStore.setCorpToken(data[0].token);
+      //         Object.assign(userInfo, { orgValue: 0 });
+      //         commonStore.setPwdIsChanged(data[0].initial_pw_changed);
+      //         commonStore.setLoginInfo(userInfo);
+      //         if (data[0].initial_pw_changed) {
+      //           if (data[0].role === 'admin') {
+      //             router.push('/rootManager');
+      //           } else {
+      //             router.push('/signedRepo');
+      //           }
+      //         } else {
+      //           router.push('/resetPassword');
+      //         }
+      //       }
+      //       resolve('completed');
+      //     });
+      //   } else {
+      //     commonStore.errorCodeSet({
+      //       dialogVisible: true,
+      //       dialogMessage: $t('tips.id_pwd_err'),
+      //     });
+      //   }
+      // });
     })
     .catch((err) => {
       asciiArray.value = [];
@@ -201,7 +237,7 @@ const login = (userName, pwd) => {
       util.catchErr(err, 'errorSet', this);
     });
 };
-const submitForm = (formName) => {
+const submitForm = () => {
   ruleFormRef.value.validate((valid) => {
     if (valid) {
       login(ruleForm.value.userName, ruleForm.value.pwd);
