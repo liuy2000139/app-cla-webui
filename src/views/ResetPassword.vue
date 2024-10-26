@@ -60,23 +60,23 @@
 </template>
 
 <script setup lang="ts">
-import * as url from '../util/api';
-import http from '../util/http';
-import * as util from '../util/util';
+import * as url from '../util/api.js';
+import http from '../util/http.js';
+import * as util from '../util/util.js';
 import corpReLoginDialog from '../components/CorpReLoginDialog.vue';
 import reTryDialog from '../components/ReTryDialog.vue';
-import cla from '../lang/global';
+import cla from '../lang/global.js';
 
-import { ref, computed, inject, onUpdated, onMounted, watch } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { ref, computed, watch } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import { useRouter, useRoute } from 'vue-router';
 
 const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
 const router = useRouter();
+const route = useRoute();
 const ruleFormRef = ref();
 
 watch(
@@ -96,9 +96,6 @@ watch(
 const orgValue = computed(() => {
   return commonStore.loginInfo.orgValue;
 });
-const userInfo = computed(() => {
-  return commonStore.loginInfo.userInfo;
-});
 const corpReLoginDialogVisible = computed(() => {
   return commonStore.dialogVisible;
 });
@@ -109,7 +106,7 @@ const corpReTryDialogVisible = computed(() => {
   return commonStore.reTryDialogVisible;
 });
 
-var validatePass = (rule, value, callback) => {
+const validatePass = (rule, value, callback) => {
   if (value === '') {
     callback(new Error($t('corp.input_old_pwd')));
   } else {
@@ -117,7 +114,7 @@ var validatePass = (rule, value, callback) => {
     callback();
   }
 };
-var validatePass2 = (rule, value, callback) => {
+const validatePass2 = (rule, value, callback) => {
   if (value === '') {
     callback(new Error($t('corp.input_new_pwd')));
   } else if (
@@ -140,7 +137,7 @@ var validatePass2 = (rule, value, callback) => {
     callback();
   }
 };
-var validatePass3 = (rule, value, callback) => {
+const validatePass3 = (rule, value, callback) => {
   if (value === '') {
     callback(new Error($t('corp.input_new_pwd_again')));
   } else if (value !== ruleForm.value.newPassword) {
@@ -189,12 +186,7 @@ const resetPassword = () => {
     .then((res) => {
       commonStore.setPwdIsChanged(true);
       util.successMessage(this);
-      // if (commonStore.loginInfo.userInfo[0].role === 'manager') {
-      //     this.$router.push('/employeeList');
-      // } else {
-      //     this.$router.push('/managerList');
-      // }
-      router.push('/corporationManagerLogin');
+      router.push('corporationManagerLogin/' + route.params.linkId);
       asciiOldArray.value = [];
       asciiArray.value = [];
     })

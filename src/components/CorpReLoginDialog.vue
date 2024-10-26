@@ -28,7 +28,7 @@
 import { ref, computed } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useIsMobile } from '@/util/useIsMobile';
 
 const props = defineProps({
@@ -65,13 +65,13 @@ const dialogMessage = computed(() => {
 
 const chinese = ref('Chinese');
 const english = ref('English');
-
+const route = useRoute();
 const clickGoHome = () => {
   commonStore.errorSet({
     dialogVisible: false,
     dialogMessage: '',
   });
-  router.replace('/corporationManagerLogin');
+  router.replace('/corporationManagerLogin/' + route.params.linkId);
 };
 </script>
 

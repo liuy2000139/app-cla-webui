@@ -17,7 +17,9 @@ const policeRecord = ref(cla.POLICE_RECORD);
 const policeRecordLink = ref(cla.POLICE_RECORD_LINK);
 
 const previewPrivacy = () => {
-  util.toPrivacy(route, router);
+  if (route.name !== 'Privacy') {
+    util.toPrivacy(route, router);
+  }
 };
 const checkIcp = () => {
   open(icpLink.value);

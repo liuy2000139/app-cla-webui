@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import Header from '@/components/NewHeader.vue';
 import Footer from '@/components/NewFooter.vue';
-import * as util from '../util/util';
+import * as util from '../util/util.js';
 
 import { nextTick, onMounted, onUnmounted, provide, ref } from 'vue';
 

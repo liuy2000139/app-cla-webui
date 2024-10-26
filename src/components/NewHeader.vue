@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import http from '../util/http';
-import * as url from '../util/api';
-import * as util from '../util/util';
-import cla from '../lang/global';
-import { computed, onMounted, ref, defineExpose, onUnmounted } from 'vue';
+import http from '../util/http.js';
+import * as url from '../util/api.js';
+import * as util from '../util/util.js';
+import cla from '../lang/global.js';
+import { computed, onMounted, ref, defineExpose, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import { useCommonStore } from '@/stores/common';
@@ -14,9 +14,8 @@ const $t = t;
 const commonStore = useCommonStore();
 const route = useRoute();
 const router = useRouter();
-const role = ref('');
 const loginRole = ref('');
-const showHeaderMenu = ref(true);
+const showHeaderMenu = ref<boolean|'corp'|'org'>(true);
 const menuVisible = ref(false);
 const isActive = ref(true);
 const language = ref('English');
@@ -47,9 +46,7 @@ const updateLangOptions = (data) => {
   options.value = data;
 };
 
-onMounted(() => {
-  getUserInfo()
-})
+
 const getUserInfo= () => {
   http({
     url: url.getCorpManagerInfo,
@@ -61,7 +58,7 @@ const getUserInfo= () => {
     }
     if (data) {
       let userInfo = { userInfo: data };
-      Object.assign(userInfo, { userName: 'todo' });
+      Object.assign(userInfo, { userName: data?.account || '' });
       commonStore.setLoginInfo(userInfo);
       Object.assign(userInfo, { orgValue: 0 });
       commonStore.setPwdIsChanged(data.initial_pw_changed);
@@ -75,51 +72,48 @@ const getUserInfo= () => {
         dialogMessage: $t('tips.id_pwd_err'),
       });
     }
+  }).finally(() => {
     init();
   });
 }
 
+onMounted(() => {
+  getUserInfo()
+})
+
+const role = computed(() => commonStore.loginInfo?.userInfo?.role)
 const toIndex = () => {
-  if (route.path === '/platformSelect') {
-    router.push('/');
-  } else if (
-    route.path === '/corporationList' ||
-    route.path === '/addCorpUrl' ||
-    route.path === '/config-check' ||
-    route.path === '/addIndividualUrl' ||
-    route.path === '/config-org' ||
-    route.path === '/config-email' ||
-    route.path === '/config-cla-link' ||
-    route.path === '/config-fields'
-  ) {
-    router.push('/linkedRepo');
-  } else if (route.path === '/createManager') {
-    router.push('/managerList');
-  } else if (route.path === '/resetPassword') {
-    if (commonStore.loginInfo.userInfo.role === 'manager') {
-      router.push('/employeeList');
-    } else {
-      router.push('/managerList');
+  if (showHeaderMenu.value === 'corp') {
+    if (role.value === 'manager') {
+      return handleCommand('c')
     }
-  } else if (route.path === '/add-subemail') {
-    router.push('/subemail');
-  } else if (route.path === '/privacy') {
-    router.push('/sign-cla');
-  } else if (route.path === '/corporationManagerLogin') {
-    if (commonStore.linkId) {
-      router.replace(`${cla.SIGN_ROUTER}/${commonStore.linkId}`);
-    } else {
-      commonStore.errorCodeSet({
-        dialogVisible: true,
-        dialogMessage: $t('tips.page_error'),
-      });
+    if (role.value === 'admin') {
+      return handleCommand('b')
     }
+  } else if (showHeaderMenu.value === 'org') {
+    return handleCommand('a')
+  } if (route.name === 'Privacy') {
+    if (route.params.type === 'corp') {
+      if (role.value === 'manager') {
+        return toEmployee(route.params.linkId)
+      }
+      if (role.value === 'admin') {
+        return toManager(route.params.linkId)
+      }
+    } else if (route.params.type === 'sign') {
+      return router.push(`/sign/${route.params.linkId}`)
+    }else {
+      return router.push('/home');
+    }
+  } else if (!role.value && route.params.linkId) {
+    return router.push(`/sign/${route.params.linkId}`)
   }
+
 };
 const openOrCloseMenu = () => {
   menuVisible.value = !menuVisible.value;
 };
-const handleCommand = (command) => {
+const handleCommand = (command, linkId) => {
   switch (command) {
     case 'a':
       toHome();
@@ -151,33 +145,45 @@ const handleCommand = (command) => {
   }
 };
 const toHome = () => {
-  if (route.path !== '/linkedRepo') {
+  if (!route.path.includes('linkedRepo')) {
     router.push('/home');
   }
 };
-const toManager = () => {
-  if (route.path !== '/managerList') {
-    router.push('/managerList');
+const toManager = (linkId) => {
+  if (linkId) {
+    if (route.path !== 'ManagerList') {
+      router.push(`/corp/${linkId}/managerList`);
+    }
+  } else {
+    if (route.name !== 'ManagerList') {
+      router.push('managerList');
+    }
   }
 };
-const toEmployee = () => {
-  if (route.path !== '/employeeList') {
-    router.push('/employeeList');
+const toEmployee = (linkId) => {
+  if (linkId) {
+    if (route.path !== 'EmployeeList') {
+      router.push(`/corp/${linkId}/employeeList`);
+    }
+  } else {
+    if (route.path !== 'EmployeeList') {
+      router.push('employeeList');
+    }
   }
 };
 const toAddSubEmail = () => {
-  if (route.path !== '/subemail') {
-    router.push('/subemail');
+  if (route.name !== 'Subemail') {
+    router.push('subemail');
   }
 };
 const toCreateManager = () => {
-  if (route.path !== '/createManager') {
-    router.push('/createManager');
+  if (route.name !== 'CreateManager') {
+    router.push('createManager');
   }
 };
 const toResetPwd = () => {
-  if (route.path !== '/resetPassword') {
-    router.push('/resetPassword');
+  if (route.name !== 'resetPassword') {
+    router.push('resetPassword');
   }
 };
 const toCLA = () => {
@@ -201,7 +207,7 @@ const toCLA = () => {
     });
 };
 const loginOut = () => {
-  const loginUrl = '/corporationManagerLogin/' + commonStore.loginInfo.userInfo.link_id
+  const loginUrl = '/corporationManagerLogin/' + route.params.linkId
   util.clearManagerSession(this);
   if (loginRole.value === 'corp') {
     http({
@@ -277,9 +283,7 @@ const init = (value) => {
   }
   changeI18N(language.value);
   setLangValue(language.value);
-  if (commonStore.loginInfo.userInfo) {
-    role.value = commonStore.loginInfo.userInfo.role;
-  }
+
   showHeaderMenu.value = util.getMenuState(route);
   if (showHeaderMenu.value === 'corp' || showHeaderMenu.value === 'org') {
     loginRole.value = showHeaderMenu.value;

@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import NewHeader from '@/components/NewHeader.vue';
 import NewFooter from '@/components/NewFooter.vue';
-import * as util from '../util/util';
+import * as util from '../util/util.js';
 
 import { ref, provide, onMounted, nextTick } from 'vue';
 

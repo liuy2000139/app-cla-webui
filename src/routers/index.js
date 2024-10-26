@@ -50,7 +50,6 @@ export const routes = [
       },
     ],
   },
-
   {
     path: '/home',
     component: () => import('../views/Home.vue'),
@@ -189,15 +188,11 @@ export const routes = [
     ],
   },
   {
-    path: '/signedRepo',
-    component: () => import('../views/SignedRepo.vue'),
+    path: '/corp/:linkId',
+    component: () => import('../views/Corp.vue'),
     children: [
       {
-        path: '',
-        redirect: '/employeeList',
-      },
-      {
-        path: '/employeeList',
+        path: 'employeeList',
         name: 'EmployeeList',
         meta: {
           title: 'employee list',
@@ -205,18 +200,8 @@ export const routes = [
         },
         component: () => import('../views/EmployeeList.vue'),
       },
-    ],
-  },
-  {
-    path: '/rootManager',
-    component: () => import('../views/RootManager.vue'),
-    children: [
       {
-        path: '',
-        redirect: '/managerList',
-      },
-      {
-        path: '/managerList',
+        path: 'managerList',
         name: 'ManagerList',
         meta: {
           title: 'manager list',
@@ -225,7 +210,7 @@ export const routes = [
         component: () => import('../views/ManagerList.vue'),
       },
       {
-        path: '/subemail',
+        path: 'subemail',
         name: 'Subemail',
         meta: {
           title: 'subemail',
@@ -234,7 +219,7 @@ export const routes = [
         component: () => import('../views/Subemail.vue'),
       },
       {
-        path: '/add-subemail',
+        path: 'add-subemail',
         name: 'AddSubemail',
         meta: {
           title: 'add-subemail',
@@ -243,7 +228,7 @@ export const routes = [
         component: () => import('../views/AddSubemail.vue'),
       },
       {
-        path: '/createManager',
+        path: 'createManager',
         name: 'CreateManager',
         meta: {
           title: 'create manager',
@@ -252,7 +237,7 @@ export const routes = [
         component: () => import('../views/CreateManager.vue'),
       },
       {
-        path: '/resetPassword',
+        path: 'resetPassword',
         name: 'resetPassword',
         meta: {
           title: 'reset password',
@@ -260,7 +245,25 @@ export const routes = [
         },
         component: () => import('../views/ResetPassword.vue'),
       },
-    ],
+      {
+        path: 'reset-password',
+        name: 'FindResetPassword',
+        meta: {
+          title: 'reset password',
+          pageType: 'notLogin',
+        },
+        component: () => import('../views/FindResetPassword.vue'),
+      },
+      {
+        path: 'retrieve-password',
+        name: 'ForgetAndResetPwd',
+        meta: {
+          title: 'retrieve password',
+          pageType: 'notLogin',
+        },
+        component: () => import('../views/ForgetAndSendEmail.vue'),
+      },
+    ]
   },
   {
     path: '/sign/:params',
@@ -303,7 +306,7 @@ export const routes = [
         component: () => import('../views/SignCla.vue'),
       },
       {
-        path: '/privacy',
+        path: '/privacy/:type?/:linkId?',
         name: 'Privacy',
         meta: {
           title: 'privacy',
@@ -340,24 +343,6 @@ export const routes = [
           // 这取决于你的路由配置和 Vue Router 的版本
         },
       },
-      {
-        path: '/retrieve-password/:link_id',
-        name: 'ForgetAndResetPwd',
-        meta: {
-          title: 'retrieve password',
-          pageType: 'notLogin',
-        },
-        component: () => import('../views/ForgetAndSendEmail.vue'),
-      },
-      {
-        path: '/reset-password',
-        name: 'FindResetPassword',
-        meta: {
-          title: 'reset password',
-          pageType: 'notLogin',
-        },
-        component: () => import('../views/FindResetPassword.vue'),
-      },
     ],
   },
   {
@@ -380,7 +365,7 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const commonStore = useCommonStore();
-  if (to.meta.title) {
+  if (to.meta?.title) {
     document.title = to.meta.title;
   }
   if (from.path === '/resetPassword') {
@@ -397,7 +382,7 @@ router.beforeEach((to, from, next) => {
   }
   if (
     ['SignType', 'SignType_back', 'SignCla', 'CorporationManagerLogin'].includes(to.name) ||
-    ['/index', '/platformSelect', '/orgSelect', '/verify-email', '/reset-password'].inckeys.includes(to.path)
+    ['/index', '/orgSelect', '/verify-email', '/reset-password'].includes(to.path)
   ) {
     commonStore.setShowHeaderMenu('false');
   } else if (
@@ -410,11 +395,4 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-// router.onError((error) => {
-//   const pattern = /Loading chunk (\d)+ failed/g;
-//   const isChunkLoadFailed = error.message.match(pattern);
-//   const targetPath = router.history.pending.fullPath;
-//   if (isChunkLoadFailed) {
-//     router.replace(targetPath);
-//   }
-// });
+

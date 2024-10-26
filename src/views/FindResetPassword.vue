@@ -45,22 +45,14 @@
 
 <script setup lang="ts">
 import Step from '../components/FindPwdSteps.vue';
-import http from '../util/_axios';
-import * as url from '../util/api';
-import * as util from '../util/util';
+import http from '../util/_axios.js';
+import * as url from '../util/api.js';
+import * as util from '../util/util.js';
 import ReTryDialog from '../components/ReTryDialog.vue';
-import cla from '../lang/global';
+import cla from '../lang/global.js';
 
-import {
-  ref,
-  computed,
-  inject,
-  onUpdated,
-  onMounted,
-  watch,
-  nextTick,
-} from 'vue';
-import { useCommonStore } from '../stores/common';
+import { ref, computed, watch } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -88,7 +80,7 @@ const reTryDialogVisible = computed(() => {
   return commonStore.reTryDialogVisible;
 });
 
-var validateNewPwd = (rule, value, callback) => {
+const validateNewPwd = (rule, value, callback) => {
   if (value === '') {
     callback(new Error($t('corp.input_new_pwd')));
   } else if (
@@ -109,7 +101,7 @@ var validateNewPwd = (rule, value, callback) => {
     callback();
   }
 };
-var validateNewPwdAgain = (rule, value, callback) => {
+const validateNewPwdAgain = (rule, value, callback) => {
   if (value === '') {
     callback(new Error($t('corp.input_new_pwd_again')));
   } else if (value !== ruleForm.value.newPassword) {
@@ -137,14 +129,13 @@ const rules = ref({
     },
   ],
 });
-const link_id = ref('');
+const linkId = computed(() => route.params.linkId);
 const key = ref('');
 const asciiArray = ref([]);
 
 const getParams = () => {
-  link_id.value = route.query.link_id;
   key.value = route.query.key;
-  commonStore.setLinkId(link_id.value);
+  commonStore.setLinkId(linkId.value);
 };
 const submitForm = (formName) => {
   ruleFormRef.value.validate((valid) => {
@@ -158,7 +149,7 @@ const submitForm = (formName) => {
 getParams();
 const submitReset = () => {
   http({
-    url: url.findPwdResetPwd + link_id.value,
+    url: url.findPwdResetPwd + linkId.value,
     method: 'put',
     data: {
       password: util.getAsciiArray(
@@ -176,7 +167,7 @@ const submitReset = () => {
         message: $t('tips.reset_password_success'),
         duration: 6000,
       });
-      router.push('/corporationManagerLogin');
+      router.push('corporationManagerLogin');
     })
     .catch((err) => {
       util.catchErr(err, '', this);

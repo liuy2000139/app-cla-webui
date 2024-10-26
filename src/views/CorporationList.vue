@@ -627,7 +627,7 @@ const addIndividualCla = (row) => {
 };
 const setIndividualPD = (row) => {
   setCheckInfo();
-  if (row.fields.length > 2) {
+  if (row.fields?.length > 2) {
     let data = [];
     row.fields.forEach((item, index) => {
       if (index > 1) {

@@ -16,10 +16,10 @@
 import _axios from '../util/_axios';
 import * as util from '../util/util';
 import ReTryDialog from '../components/ReTryDialog.vue';
-import claConfig from '../lang/global';
+import claConfig from '../lang/global.js';
 
 import { ref, computed, inject, onMounted, watch, defineEmits } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import Markdown from 'markdown-it';
 import { Base64 } from 'js-base64';
@@ -72,7 +72,7 @@ const getPrivacy = (obj) => {
     if (key === lang.value) {
       privacyText.value = privacyTextObj.value[key];
     
-      notExistPrivacy = false;
+      notExistPrivacy = true;
       break;
     }
   }
@@ -178,6 +178,10 @@ const init = () => {
 };
 
 init();
+
+watch(() => commonStore.lang, () => {
+  init()
+})
 
 onMounted(() => {
   setClientHeight();

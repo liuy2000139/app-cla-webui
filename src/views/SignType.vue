@@ -936,7 +936,7 @@ const clickCorpGuide = () => {
 };
 const toCorpLogin = () => {
   commonStore.setLoginType('corporationManager');
-  router.push('/corporationManagerLogin');
+  router.push('/corporationManagerLogin/' + route.params.params);
 };
 const setLangLocale = () => {
   let lang;

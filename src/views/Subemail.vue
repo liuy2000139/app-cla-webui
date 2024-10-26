@@ -68,7 +68,7 @@ const corpReTryDialogVisible = computed(() => {
 const tableData = ref([]);
 
 const addSubEmail = () => {
-  router.push('/add-subemail');
+  router.push('add-subemail');
 };
 const getEmails = () => {
   http({
@@ -92,7 +92,12 @@ getEmails();
 </script>
 
 <style scoped lang="scss">
+@import '../assets/font/css/Roboto-Regular.css';
 :deep(.el-table .el-table__cell) {
   padding: 12px 0;
+}
+:deep(.el-table--fit) {
+  border-right: 1px solid;
+  border-bottom: 1px solid;
 }
 </style>

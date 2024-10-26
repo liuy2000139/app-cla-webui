@@ -84,14 +84,14 @@
 </template>
 
 <script setup lang="ts">
-import * as url from '../util/api';
-import http from '../util/http';
-import * as util from '../util/util';
+import * as url from '../util/api.js';
+import http from '../util/http.js';
+import * as util from '../util/util.js';
 import corpReLoginDialog from '../components/CorpReLoginDialog.vue';
 import reTryDialog from '../components/ReTryDialog.vue';
 
 import { ref, computed, inject, onUpdated, onMounted } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -183,6 +183,13 @@ const createUser = () => {
       }
     }
   }
+  if (!newManagers.length) {
+    isCreate = false;
+    commonStore.errorCodeSet( {
+      dialogVisible: true,
+      dialogMessage: $t('corp.fill_complete'),
+    });
+  }
   if (isCreate) {
     for (let i = 0; i < newManagers.length; i++) {
       let flag = 0;
@@ -249,7 +256,7 @@ const createUser = () => {
       .then((res) => {
         util.successMessage(this);
         setTimeout(() => {
-          router.push('/managerList');
+          router.push('managerList');
         }, 500);
       })
       .catch((err) => {

@@ -10,6 +10,7 @@ const commonStore = useCommonStore();
 
 onMounted(() => {
   commonStore.setDomain(window.location.origin);
+  commonStore.setLang('Chinese');
 })
 </script>
 <style lang="scss">

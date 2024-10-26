@@ -287,29 +287,28 @@
 </template>
 
 <script setup lang="ts">
-import * as util from '../util/util';
-import * as url from '../util/api';
+import * as util from '../util/util.js';
+import * as url from '../util/api.js';
 
-import axios from '../util/_axios';
+import axios from '../util/_axios.js';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import ReTryDialog from '../components/ReTryDialog.vue';
 import SignSuccessDialog from '../components/SignSuccessDialog.vue';
 import SignReLoginDialog from '../components/SignReLoginDialog.vue';
 import HttpButton from '../components/HttpButton.vue';
-import cla from '../lang/global';
-import { useIsMobile } from '@/util/useIsMobile';
+import cla from '../lang/global.js';
+import { useIsMobile } from '../util/useIsMobile.js';
 import {
   ref,
   computed,
   inject,
-  onUpdated,
   onMounted,
   onUnmounted,
   watch,
   nextTick,
   defineEmits,
 } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -330,10 +329,10 @@ const pdfData = computed(() => {
   return [];
 });
 const loginType = computed(() => {
-  return route.params.loginType
+  return route.params.loginType;
 });
 const linkId = computed(() => {
-  return route.params.linkId
+  return route.params.linkId;
 });
 commonStore.setLoginType(loginType.value);
 const org = computed(() => {
@@ -388,13 +387,12 @@ watch(
         cla_hash.value = item.cla_id;
         cla_id.value = item.cla_id;
         commonStore.setClaId(item.cla_id);
-
         postIframeMessage({
           link_id: linkId.value,
           lang: lang.value,
           hash: cla_hash.value,
           pdfData: pdfData.value,
-        })
+        });
         fields.value = signPageData.value[value.value].fields;
         if (Object.keys(rules.value).length === 0) {
           setFieldsData();
@@ -402,7 +400,7 @@ watch(
       }
     });
     setSendBtText();
-    ruleFormRef.value.validate()
+    ruleFormRef.value.validate();
   }
 );
 
@@ -440,14 +438,14 @@ const ruleForm = ref({});
 const myForm = ref({});
 const rules = ref({});
 const isRead = ref(false);
-const value = ref<number|string>('');
+const value = ref<number | string>('');
 const cla_lang = ref('');
 const signingData = ref([]);
 const orgValue = ref('');
 const cla_id = ref('');
 const showInput = computed(() => {
-  commonStore.loginType
-})
+  commonStore.loginType;
+});
 const getOrg = ref(true);
 const companyName = ref('');
 const communityName = ref('');
@@ -701,6 +699,17 @@ const setData = (res, resolve) => {
     }
   }
 };
+
+watch(
+  () => commonStore.lang,
+  () => {
+    new Promise((resolve, reject) => {
+      getSignPage(resolve);
+    }).then((res) => {
+      getNowDate();
+    });
+  }
+);
 const getSignPage = (resolve) => {
   let applyTo = '';
   loginType.value === corporation.value
@@ -726,7 +735,7 @@ const getSignPage = (resolve) => {
 };
 const setClaText = (obj) => {
   nextTick(() => {
-    postIframeMessage(obj)
+    postIframeMessage(obj);
   });
 };
 const setFields = (key) => {
@@ -1078,7 +1087,7 @@ const activated = () => {
         lang: lang.value,
         hash: cla_hash.value,
         pdfData: pdfData.value,
-      })
+      });
     };
     setSendBtText();
   }
@@ -1090,36 +1099,45 @@ new Promise((resolve, reject) => {
   getNowDate();
 });
 
-const iframeLoaded = ref(false)
-const iframePostData = ref({})
+const iframeLoaded = ref(false);
+const iframePostData = ref({});
 const postIframeMessage = (data) => {
-  iframePostData.value = data
+  iframePostData.value = data;
   if (iframeLoaded.value) {
-    pdf_iframe.value?.contentWindow.postMessage({...JSON.parse(JSON.stringify(iframePostData.value)), from: 'sign-cla'}, commonStore.domain)
+    pdf_iframe.value?.contentWindow.postMessage(
+      { ...JSON.parse(JSON.stringify(iframePostData.value)), from: 'sign-cla', cla_id: commonStore.cla_id },
+      commonStore.domain
+    );
+    setSendBtText();
   }
-}
+};
 
-watch(() => iframeLoaded.value, () => {
-  if (iframeLoaded.value) {
-    postIframeMessage(iframePostData.value)
+watch(
+  () => iframeLoaded.value,
+  () => {
+    if (iframeLoaded.value) {
+      postIframeMessage(iframePostData.value);
+    }
   }
-})
+);
 
 const attachIframeLoaded = (event) => {
-    iframeLoaded.value = event.data.loaded
+  if (event.data.from === 'cla-pdf') {
+    iframeLoaded.value = event.data.loaded;
   }
+};
 const attachIframeLoadedEvent = () => {
-  window.addEventListener('message', attachIframeLoaded)
-}
+  window.addEventListener('message', attachIframeLoaded);
+};
 onMounted(() => {
   setClientHeight();
   getCommunity();
-  attachIframeLoadedEvent()
+  attachIframeLoadedEvent();
 });
 
 onUnmounted(() => {
-  window.removeEventListener('message', attachIframeLoaded)
-})
+  window.removeEventListener('message', attachIframeLoaded);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -1133,8 +1151,6 @@ onUnmounted(() => {
     margin: auto;
   }
 }
-
-
 
 .signBtBox {
   display: flex;
@@ -1205,7 +1221,6 @@ onUnmounted(() => {
   .fontSize12 {
     font-size: 1.2rem;
   }
- 
 }
 
 .marginTop3rem {
@@ -1248,7 +1263,6 @@ onUnmounted(() => {
     color: #f56c6c;
   }
 
-
   .mobileBt {
     font-family: Roboto-Light, sans-serif;
     width: 100%;
@@ -1287,7 +1301,6 @@ onUnmounted(() => {
   margin: 0 5px;
 }
 
-
 :deep(#singCla_section) {
   .form {
     .sendCodeClass {
@@ -1295,7 +1308,7 @@ onUnmounted(() => {
         position: relative;
       }
 
-     .el-button {
+      .el-button {
         position: absolute;
         top: 0;
         left: 0;
@@ -1322,7 +1335,7 @@ onUnmounted(() => {
 
     .el-input--small .el-input__inner {
       height: 2.5rem;
-      padding: 0 15px
+      padding: 0 15px;
     }
 
     .el-form-item__label {
@@ -1332,7 +1345,7 @@ onUnmounted(() => {
       display: flex;
       align-items: center;
     }
-    
+
     .el-form-item__error {
       padding-top: 4px;
     }
@@ -1404,30 +1417,29 @@ onUnmounted(() => {
   #signCla {
     #singCla_section {
       & .button {
-      font-family: Roboto-Light, sans-serif;
-      width: 15rem;
-      height: 3rem;
-      border-radius: 1.5rem;
-      border: none;
-      color: white;
-      font-size: 1.2rem;
-      cursor: pointer;
-      background: linear-gradient(to right, #97db30, #319e55);
-      margin: 1rem 0;
-    }
+        font-family: Roboto-Light, sans-serif;
+        width: 15rem;
+        height: 3rem;
+        border-radius: 1.5rem;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        background: linear-gradient(to right, #97db30, #319e55);
+        margin: 1rem 0;
+      }
 
-    & .button:focus {
-      outline: none;
-    }
+      & .button:focus {
+        outline: none;
+      }
     }
   }
 }
-
 </style>
 <style lang="scss">
 .el-popper.is-light {
   padding: 10px;
-  
+
   &.my_tooltip {
     font-size: 1rem;
     width: 30rem;
@@ -1439,8 +1451,6 @@ onUnmounted(() => {
     .el-popper__arrow::before {
       border-color: #303133;
     }
-
   }
 }
-
 </style>

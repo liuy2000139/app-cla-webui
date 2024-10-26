@@ -28,6 +28,7 @@ export default {
   not_same_corp: '电子邮件不属于该公司',
   not_ready_to_sign: '组织尚未就绪',
   system_error: '系统错误，请重试',
+  user_not_exists: '用户不存在',
   unknown_error: '未知错误，请联系社区管理员或提交 YAML',
   title_type_repeat: '填充了相同的标题或类型',
   individual_sign: '感谢你的签署',

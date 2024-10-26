@@ -15,9 +15,9 @@ import VuePdfEmbed from 'vue-pdf-embed';
 import http from '../util/_axios';
 import * as url from '../util/api';
 import * as util from '../util/util';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
 const claText = ref('');
 const numPages = ref(null);
 const commonStore = useCommonStore();
@@ -36,43 +36,19 @@ const claTextUrl = computed(() => {
   return commonStore.domain;
 });
 
-const getNumPages = (url) => {};
 const setClaText = (obj) => {
-  let dataFromParent = obj;
-  if (dataFromParent.pdfData && dataFromParent.pdfData.length) {
-    for (let i = 0; i < dataFromParent.pdfData.length; i++) {
-      if (
-        Object.prototype.hasOwnProperty.call(
-          dataFromParent.pdfData[i],
-          dataFromParent.lang
-        )
-      ) {
-        claText.value && window.URL.revokeObjectURL(claText.value);
-        claText.value = window.URL.createObjectURL(
-          dataFromParent.pdfData[i][dataFromParent.lang]
-        );
-        getNumPages(claText.value);
-        return;
-      }
-    }
-  }
-  if (!Object.prototype.hasOwnProperty.call(dataFromParent, 'pdfData')) {
-    return;
-  }
-
   http({
-    url: `${url.getCLAPdf}/${dataFromParent.link_id}/${commonStore.cla_id}`,
+    url: `${url.getCLAPdf}/${obj.link_id}/${obj.cla_id || commonStore.cla_id}`,
     responseType: 'blob',
   })
     .then((res) => {
       if (res && res.data) {
         let blob = new Blob([res.data], { type: 'application/pdf' });
-        let data = dataFromParent.pdfData;
-        data.push({ [dataFromParent.lang]: blob });
+        let data = obj.pdfData;
+        data.push({ [obj.lang]: blob });
         window.parent.postMessage(data, claTextUrl.value);
         window.URL.revokeObjectURL(claText.value);
         claText.value = window.URL.createObjectURL(blob);
-        getNumPages(claText.value);
       }
     })
     .catch((err) => {
@@ -92,9 +68,12 @@ const getData = () => {
     false
   );
 };
-getData();
+
 onMounted(() => {
-  window.parent.postMessage({loaded: true}, commonStore.domain);
+  getData();
+  nextTick(() => {
+    window.parent.postMessage({loaded: true, from: 'cla-pdf'}, commonStore.domain);
+  })
 })
 </script>
 

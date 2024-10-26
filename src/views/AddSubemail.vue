@@ -202,7 +202,7 @@ const submitSubEmail = () => {
   })
     .then((res) => {
       util.successMessage(this);
-      router.push('/subemail');
+      router.push('subemail');
     })
     .catch((err) => {
       util.catchErr(err, 'errorSet', this);

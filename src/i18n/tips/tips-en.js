@@ -29,6 +29,7 @@ export default {
   not_same_corp: 'Email does not belong to the corporation.',
   not_ready_to_sign: 'The organization is not ready.',
   system_error: 'System error, please try again',
+  user_not_exists: 'User not exists',
   unknown_error:
     'Unknown error,please contact the community administrator or submit yaml',
   title_type_repeat: 'Same titles or types are filled.',

@@ -44,13 +44,14 @@ import claConfig from '../lang/global';
 import { ref, computed, inject, onUpdated, onMounted, watch } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
 const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
 const route = useRoute();
+const router = useRouter();
 
 watch(
   () => {
@@ -72,7 +73,7 @@ const ruleForm = ref({ email: '' });
 const ruleFormRef = ref();
 
 const getLinkId = () => {
-  commonStore.setLinkId(route.params.link_id);
+  commonStore.setLinkId(route.params.linkId);
 };
 const verifyFormEmail = async (rule, value, callback) => {
   let email = value.trim();
@@ -125,6 +126,7 @@ const sendEmail = () => {
         duration: 6000,
       });
       ruleFormRef.value.resetFields();
+      router.push('reset-password')
     })
     .catch((err) => {
       util.catchErr(err, '', route);

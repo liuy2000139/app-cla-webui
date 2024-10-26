@@ -411,10 +411,17 @@ export const catchErr = (err, commit, route) => {
           dialogMessage: $t('tips.system_error'),
         });
         break;
+      case 'cla.user_not_exists':
+        commonStore.errorCodeSet({
+          dialogVisible: true,
+          dialogMessage: $t('tips.user_not_exists'),
+        });
+        break;
       default:
         commonStore.errorCodeSet({
           dialogVisible: true,
-          dialogMessage: $t('tips.unknown_error'),
+          dialogMessage:
+            err.response.data?.data.error_message || $t('tips.unknown_error'),
         });
         break;
     }
@@ -426,8 +433,18 @@ export const catchErr = (err, commit, route) => {
   }
 };
 export const toPrivacy = (route, router) => {
-  if (route.path !== '/privacy') {
-    router.push('/privacy');
+  const linkId = route.params.linkId || commonStore.linkId || ''
+  let type = ''
+  if (linkId) {
+    if (commonStore.loginInfo) {
+      type = 'corp'
+    } else {
+      type = 'sign'
+    }
+  }
+
+  if (route.name !== 'Privacy') {
+    router.push(`/privacy${type ? '/' + type : ''}${linkId ? '/' + linkId : ''}`);
   }
 };
 export const upperFirstCase = (word) => {
@@ -605,7 +622,6 @@ export const setComponentHeight = (_this, id) => {
 export const getLoading = (_this, langText) => {
   return ElLoading.service({
     lock: true,
-    text: 'hhhhh',
     spinner: 'el-icon-loading',
     customClass: 'loading_class',
     background: 'rgba(0, 0, 0, 0.7)',

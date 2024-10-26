@@ -55,14 +55,14 @@
 </template>
 
 <script setup lang="ts">
-import * as url from '../util/api';
-import http from '../util/http';
-import * as util from '../util/util';
+import * as url from '../util/api.js';
+import http from '../util/http.js';
+import * as util from '../util/util.js';
 import reTryDialog from '../components/ReTryDialog.vue';
 import HttpButton from '../components/HttpButton.vue';
 
 import { ref, computed, inject, onUpdated, onMounted } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';
 const route = useRoute();
@@ -129,7 +129,7 @@ const pressEnter = () => {
   submitForm();
 };
 const findPwd = () => {
-  router.push(`/password/${commonStore.linkId}`);
+  router.push(`/corp/${route.params.linkId}/retrieve-password`);
 };
 const login = (userName, pwd) => {
   let linkId = route.params.linkId;
@@ -174,12 +174,12 @@ const login = (userName, pwd) => {
             commonStore.setLoginInfo(userInfo);
             if (data.initial_pw_changed) {
               if (data.role === 'admin') {
-                router.push('/rootManager');
+                router.push('/corp/' + linkId + '/managerList');
               } else {
-                router.push('/signedRepo');
+                router.push('/corp/' + linkId + '/employeeList');
               }
             } else {
-              router.push('/resetPassword');
+              router.push(`/corp/${route.params.linkId}/resetPassword`);
             }
             resolve('completed');
           });
