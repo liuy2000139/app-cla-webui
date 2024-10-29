@@ -326,26 +326,6 @@ export const routes = [
     component: () => import('../views/ClaPdf.vue'),
   },
   {
-    path: '/password/:link_id',
-    meta: {
-      title: 'password',
-      pageType: 'notLogin',
-    },
-    component: () => import('../views/ForgetPassword.vue'),
-    children: [
-      {
-        path: '',
-        redirect: (to) => {
-          // 'to' 是一个路由位置对象，包含了很多有用的信息，比如 params, query, name, path 等
-          // 但对于动态段，我们需要从 parent 中获取
-          return { path: `/retrieve-password/${to.params.link_id}` };
-          // 注意：在某些情况下，你可能需要使用 to.match.params 而不是 to.params
-          // 这取决于你的路由配置和 Vue Router 的版本
-        },
-      },
-    ],
-  },
-  {
     path: '/:catchAll(.*)',
     name: 'ErrorPath',
     meta: {
@@ -368,7 +348,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta?.title) {
     document.title = to.meta.title;
   }
-  if (from.path === '/resetPassword') {
+  if (from.name === 'resetPassword') {
     if (to.name === 'CorporationManagerLogin') {
       next();
     } else {

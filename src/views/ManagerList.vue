@@ -135,7 +135,7 @@ const cancelDeleteManager = () => {
   deleteUserVisible.value = false;
 };
 const createManager = () => {
-  router.push('/createManager');
+  router.push('createManager');
 };
 const cancel = () => {
   multipleTable.value.clearSelection();

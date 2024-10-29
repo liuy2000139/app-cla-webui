@@ -64,7 +64,7 @@ const getUserInfo= () => {
       commonStore.setPwdIsChanged(data.initial_pw_changed);
       commonStore.setLoginInfo(userInfo);
       if (!data.initial_pw_changed) {
-        router.push('/resetPassword');
+        router.push('resetPassword');
       }
     } else {
       commonStore.errorCodeSet({

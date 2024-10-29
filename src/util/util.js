@@ -324,7 +324,7 @@ export const catchErr = (err, commit, route) => {
       case 'cla.no_db_record':
         if (route.path === '/corporationManagerLogin') {
           message = $t('tips.id_pwd_err');
-        } else if (route.path === '/resetPassword') {
+        } else if (route.name === 'resetPassword') {
           message = $t('tips.invalid_account_or_pw');
         }
         commonStore.errorCodeSet({
