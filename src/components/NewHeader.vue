@@ -48,6 +48,10 @@ const updateLangOptions = (data) => {
 
 
 const getUserInfo= () => {
+  if (route.meta.pageType !== 'corp') {
+    init()
+    return
+  }
   http({
     url: url.getCorpManagerInfo,
     method: 'get',

@@ -41,14 +41,13 @@
 </template>
 
 <script setup lang="ts">
-import _cookie from 'js-cookie';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import ReTryDialog from '../components/ReTryDialog.vue';
 import ConfigEmailSelect from './ConfigEmailSelect.vue';
-import claConfig from '../lang/global';
+import claConfig from '../lang/global.js';
 
-import { ref, computed, inject, onUpdated, onMounted } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { ref, computed, inject, onMounted } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -96,25 +95,25 @@ const toNextPage = () => {
   }
 };
 const getCookieData = () => {
-  if (document.cookie !== '') {
-    let cookieArr = document.cookie.split(';');
-    let email = '';
-    cookieArr.forEach((item) => {
-      let arr = item.split('=');
-      let name = arr[0].trim();
-      let value = arr[1].trim();
-      if (name === 'email') {
-        email = value;
-      } else if (name === claConfig.EMAIL_ERROR) {
-        commonStore.errorCodeSet({
-          dialogVisible: true,
-          dialogMessage: $t('tips.email_system_error'),
-        });
-      }
-    });
-    email ? commonStore.setIsEmail(true) : commonStore.setIsEmail(false);
-    commonStore.setEmail(email);
-  }
+  // if (document.cookie !== '') {
+  //   let cookieArr = document.cookie.split(';');
+  //   let email = '';
+  //   cookieArr.forEach((item) => {
+  //     let arr = item.split('=');
+  //     let name = arr[0].trim();
+  //     let value = arr[1].trim();
+  //     if (name === 'email') {
+  //       email = value;
+  //     } else if (name === claConfig.EMAIL_ERROR) {
+  //       commonStore.errorCodeSet({
+  //         dialogVisible: true,
+  //         dialogMessage: $t('tips.email_system_error'),
+  //       });
+  //     }
+  //   });
+  //   email ? commonStore.setIsEmail(true) : commonStore.setIsEmail(false);
+  //   commonStore.setEmail(email);
+  // }
 };
 const toAuthorizedEmail = () => {
   emailDialogVisible.value = true;

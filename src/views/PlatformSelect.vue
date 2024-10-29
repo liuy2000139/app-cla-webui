@@ -83,6 +83,7 @@ const setClientHeight = inject('setClientHeight');
 const getLoginUrl = (platform) => {
   if (platform) {
     commonStore.setPlatform(platform);
+    sessionStorage.setItem('platform', platform);
     if (platform === 'gitee') {
       giteeLoginButtonDisable.value = true;
       giteeLoginText.value = 'logining';

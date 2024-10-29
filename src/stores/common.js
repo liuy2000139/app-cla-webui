@@ -146,9 +146,9 @@ export const useCommonStore = defineStore('common', {
       this.access_token = data.access_token;
       this.refresh_token = data.refresh_token;
       this.platform_token = data.platform_token;
-      sessionStorage.setItem('token', data.access_token);
-      sessionStorage.setItem('refresh_token', data.refresh_token);
-      sessionStorage.setItem('platform_token', data.platform_token);
+      // sessionStorage.setItem('token', data.access_token);
+      // sessionStorage.setItem('refresh_token', data.refresh_token);
+      // sessionStorage.setItem('platform_token', data.platform_token);
       data.resolve('complete');
     },
     setPlatform(platform) {

@@ -427,7 +427,7 @@ const newBinding = () => {
       obj = {
         repo_id: repo.value,
         org_email: email.value,
-        platform: platform.value,
+        platform: platform.value || sessionStorage.getItem('platform'),
         org_id: org.value,
         org_alias: orgAlias.value,
         individual_cla: individualCla,
@@ -436,7 +436,7 @@ const newBinding = () => {
     } else {
       obj = {
         org_email: email.value,
-        platform: platform.value,
+        platform: platform.value || sessionStorage.getItem('platform'),
         org_id: org.value,
         org_alias: orgAlias.value,
         individual_cla: individualCla,
@@ -448,7 +448,7 @@ const newBinding = () => {
       obj = {
         repo_id: repo.value,
         org_email: email.value,
-        platform: platform.value,
+        platform: platform.value || sessionStorage.getItem('platform'),
         org_id: org.value,
         org_alias: orgAlias.value,
         individual_cla: individualCla,
@@ -456,7 +456,7 @@ const newBinding = () => {
     } else {
       obj = {
         org_email: email.value,
-        platform: platform.value,
+        platform: platform.value || sessionStorage.getItem('platform'),
         org_id: org.value,
         org_alias: orgAlias.value,
         individual_cla: individualCla,
