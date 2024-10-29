@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import _axios from '../util/_axios';
-import * as util from '../util/util';
+import _axios from '../util/_axios.js';
+import * as util from '../util/util.js';
 import ReTryDialog from '../components/ReTryDialog.vue';
 import claConfig from '../lang/global.js';
 
@@ -28,7 +28,6 @@ const mkit = new Markdown({ html: true });
 
 const privacyData = ref(claConfig.PRIVACY_POLICY_DATA);
 const value = ref(0);
-const langOptions = ref([]);
 const privacyText = ref('');
 const lang = ref('English');
 

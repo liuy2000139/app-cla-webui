@@ -440,6 +440,9 @@ export const toPrivacy = (route, router) => {
       type = 'sign'
     }
   }
+  if (['PlatformSelect'].includes(route.name)) {
+    type = route.name
+  }
 
   if (route.name !== 'Privacy') {
     router.push(`/privacy${type ? '/' + type : ''}${linkId ? '/' + linkId : ''}`);

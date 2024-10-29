@@ -96,13 +96,16 @@ const toIndex = () => {
     if (route.params.type === 'corp') {
       if (role.value === 'manager') {
         return toEmployee(route.params.linkId)
-      }
-      if (role.value === 'admin') {
+      } else if (role.value === 'admin') {
         return toManager(route.params.linkId)
+      } else {
+        return router.push('/sign/' + route.params.linkId);
       }
     } else if (route.params.type === 'sign') {
       return router.push(`/sign/${route.params.linkId}`)
-    }else {
+    } else if (route.params.type === 'PlatformSelect') {
+      return router.push('/index');
+    } else {
       return router.push('/home');
     }
   } else if (!role.value && route.params.linkId) {

@@ -8,7 +8,7 @@ instance.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
     const token = Cookies.get('csrf_token');
-    if (token) {
+    if (token && !config.url.includes('api.github.com')) {
       config.headers['token'] = token;
     }
     return config;

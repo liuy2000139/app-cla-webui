@@ -237,7 +237,7 @@
                   <el-checkbox v-model="isRead"
                     ><span
                       >{{ $t('signPage.checkBoxText1')
-                      }}<span class="privacy" @click="previewPrivacy()">{{
+                      }}<span class="privacy" @click="previewPrivacy">{{
                         $t('signPage.privacy')
                       }}</span
                       >{{ $t('signPage.checkBoxText2')
@@ -478,7 +478,7 @@ const setIframeEventListener = () => {
   );
 };
 const previewPrivacy = () => {
-  util.toPrivacy(this);
+  util.toPrivacy(route, router);
 };
 const requireVerifyTel = async (rule, value, callback) => {
   if (value) {
