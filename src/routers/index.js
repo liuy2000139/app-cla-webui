@@ -266,6 +266,38 @@ export const routes = [
     ]
   },
   {
+    path: '/retrieve-password/:linkId',
+    name: 'RetrievePasswordFromEmail',
+    meta: {
+      title: 'retrieve password',
+      pageType: 'notLogin',
+    },
+    children: [{
+      path: '',
+      redirect: (from) => {
+        return `/corp/${from.params.linkId}/retrieve-password`
+      }
+    }]
+  },
+  {
+    path: '/reset-password',
+    name: 'ResetPasswordFromEmail',
+    meta: {
+      title: 'reset password',
+      pageType: 'notLogin',
+    },
+    children: [{
+      path: '',
+      redirect: (from) => {
+        console.log(from);
+        return {
+          path: `/corp/${from.query.link_id}/reset-password`,
+          query: from.query
+        }
+      }
+    }]
+  },
+  {
     path: '/sign/:params',
     name: 'SignType',
     meta: {
