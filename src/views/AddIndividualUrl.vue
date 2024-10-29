@@ -27,9 +27,8 @@
           <el-row class="margin-top-1rem">
             <el-col>
               <el-input
-                clearable=""
+                clearable
                 :placeholder="$t('org.config_cla_url_placeholder')"
-                size="medium"
                 v-model="cla_link_individual"
               >
               </el-input>
@@ -44,7 +43,6 @@
                 v-model="individualClaLanguageValue"
                 :placeholder="$t('org.config_cla_select_lang')"
                 style="width: 100%"
-                size="medium"
                 clearable
                 filterable
                 @change="changeIndividualLanguage"
@@ -114,26 +112,23 @@
               >
                 <el-col :span="5">
                   <el-input
-                    disabled=""
+                    disabled
                     v-model="item.title"
-                    size="medium"
-                    readonly=""
+                    readonly
                   >
                   </el-input>
                 </el-col>
                 <el-col :span="5">
                   <el-input
-                    disabled=""
+                    disabled
                     v-model="item.type"
-                    size="medium"
                     readonly
                   ></el-input>
                 </el-col>
                 <el-col :span="5">
                   <el-input
-                    disabled=""
+                    disabled
                     v-model="item.description"
-                    size="medium"
                     readonly
                   ></el-input>
                 </el-col>
@@ -154,20 +149,18 @@
               >
                 <el-col :span="5">
                   <el-input
-                    disabled=""
+                    disabled
                     v-model="item.title"
-                    size="medium"
                     :placeholder="$t('org.config_cla_fields_title_placeholder')"
                   >
                   </el-input>
                 </el-col>
                 <el-col :span="5">
                   <el-select
-                    disabled=""
+                    disabled
                     style="width: 100%"
                     v-model="item.type"
                     :placeholder="$t('org.config_cla_fields_type_placeholder')"
-                    size="medium"
                   >
                     <el-option
                       v-for="i in dataTypeOptions"
@@ -180,9 +173,8 @@
                 </el-col>
                 <el-col :span="5" style="height: 100%">
                   <el-input
-                    disabled=""
+                    disabled
                     v-model="item.description"
-                    size="medium"
                     :placeholder="$t('org.config_cla_fields_desc_placeholder')"
                   ></el-input>
                 </el-col>

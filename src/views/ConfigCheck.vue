@@ -20,14 +20,11 @@
       <div class="margin-top-half-rem">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-input disabled="" size="medium" v-model="org"></el-input>
+            <el-input disabled v-model="org"></el-input>
           </el-col>
           <el-col :span="8">
-            <el-input disabled="" size="medium" v-model="orgAlias"></el-input>
+            <el-input disabled v-model="orgAlias"></el-input>
           </el-col>
-          <!-- <el-col :span="8">
-                        <el-input disabled="" size="medium" v-model="repo"></el-input>
-                    </el-col> -->
         </el-row>
       </div>
     </div>
@@ -36,7 +33,7 @@
         ②{{ $t('org.config_cla_check_email_title') }}
       </div>
       <div class="margin-top-1rem">
-        <el-input disabled="" size="medium" class="emailInput" v-model="email">
+        <el-input disabled class="emailInput" v-model="email">
         </el-input>
       </div>
     </div>
@@ -58,13 +55,12 @@
         <div class="margin-top-half-rem">
           <el-row :gutter="20">
             <el-col :span="18">
-              <el-input disabled="" size="medium" v-model="cla_link_individual">
+              <el-input disabled v-model="cla_link_individual">
               </el-input>
             </el-col>
             <el-col :span="6">
               <el-input
-                disabled=""
-                size="medium"
+                disabled
                 v-model="individualClaLanguageValue"
               >
               </el-input>
@@ -87,16 +83,14 @@
           <el-row :gutter="20">
             <el-col :span="18">
               <el-input
-                disabled=""
-                size="medium"
+                disabled
                 v-model="cla_link_corporation"
               >
               </el-input>
             </el-col>
             <el-col :span="6">
               <el-input
-                disabled=""
-                size="medium"
+                disabled
                 v-model="corpClaLanguageValue"
               >
               </el-input>
@@ -145,26 +139,23 @@
             >
               <el-col :span="5">
                 <el-input
-                  disabled=""
+                  disabled
                   v-model="item.title"
-                  size="medium"
-                  readonly=""
+                  readonly
                 >
                 </el-input>
               </el-col>
               <el-col :span="5">
                 <el-input
-                  disabled=""
+                  disabled
                   v-model="item.type"
-                  size="medium"
                   readonly
                 ></el-input>
               </el-col>
               <el-col :span="5">
                 <el-input
-                  disabled=""
+                  disabled
                   v-model="item.description"
-                  size="medium"
                   readonly
                 ></el-input>
               </el-col>
@@ -211,24 +202,21 @@
                 <el-input
                   disabled=""
                   v-model="item.title"
-                  size="medium"
-                  readonly=""
+                  readonly
                 >
                 </el-input>
               </el-col>
               <el-col :span="5">
                 <el-input
-                  disabled=""
+                  disabled
                   v-model="item.type"
-                  size="medium"
                   readonly
                 ></el-input>
               </el-col>
               <el-col :span="5">
                 <el-input
-                  disabled=""
+                  disabled
                   v-model="item.description"
-                  size="medium"
                   readonly
                 ></el-input>
               </el-col>
@@ -262,17 +250,16 @@
 </template>
 
 <script setup lang="ts">
-import * as url from '../util/api';
-import http from '../util/http';
-import * as util from '../util/util';
+import * as url from '../util/api.js';
+import http from '../util/http.js';
+import * as util from '../util/util.js';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import ReTryDialog from '../components/ReTryDialog.vue';
 
-import { ref, computed, inject, onUpdated, onMounted } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { ref, computed, inject, onUpdated, watch } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
 
 const { t, locale } = useI18n();
 const $t = t;
@@ -288,15 +275,7 @@ const reLoginDialogVisible = computed(() => {
 const reLoginMsg = computed(() => {
   return commonStore.dialogMessage;
 });
-const orgChoose = computed(() => {
-  return `${commonStore.orgChoose}` === 'true';
-});
-const isEmail = computed(() => {
-  return `${commonStore.isEmail}` === 'true';
-});
-const repositoryChoose = computed(() => {
-  return `${commonStore.repositoryChoose}` === 'true';
-});
+
 const email = computed(() => {
   return commonStore.email;
 });
@@ -346,12 +325,6 @@ const platform = computed(() => {
 });
 
 const loading = ref(false);
-const isVerify = ref(false);
-const previewShow = ref(false);
-const loginType = ref(commonStore.loginType);
-const access_token = ref(commonStore.access_token);
-const refresh_token = ref(commonStore.refresh_token);
-const platform_token = ref(commonStore.platform_token);
 
 const setClientHeight = inject('setClientHeight');
 
@@ -386,17 +359,7 @@ const editMetadata = (metadata) => {
     return false;
   }
 };
-const dataURLtoFile = (dataurl, filename) => {
-  let arr = dataurl.split(','),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new File([u8arr], filename, { type: mime });
-};
+
 const binding = () => {
   if (commonStore.bindType === 'add-bind') {
     addBinding();
@@ -436,7 +399,7 @@ const addBinding = () => {
       loading.value.close();
       util.successMessage(this);
       util.clearSession(this);
-      router.push('/corporationList');
+      router.push('/corporationList/' + commonStore.corpItem.link_id);
     })
     .catch((err) => {
       loading.value.close();

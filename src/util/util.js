@@ -286,9 +286,7 @@ export const catchErr = (err, commit, route) => {
       case 'cla.cla_exists':
         commonStore.errorCodeSet({
           dialogVisible: true,
-          dialogMessage: $t('tips.cla_exists', {
-            lang: commonStore.state.addLang,
-          }),
+          dialogMessage: $t('tips.cla_exists'),
         });
         break;
       case 'cla.wrong_verification_code':
