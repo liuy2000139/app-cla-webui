@@ -43,16 +43,10 @@
             </el-table-column>
             <el-table-column :label="$t('corp.operation')" align="center">
               <template #default="scope">
-                <el-row class="mySwitch">
-                  <el-col :offset="4" :span="8">
+                <el-row class="mySwitch mySwitch-row">
+                  <el-col :span="16">
                     <el-switch
-                      @change="
-                        changeActive(
-                          scope.row.id,
-                          scope.row.email,
-                          scope.row.enabled
-                        )
-                      "
+                      @change="() => changeActive(scope.row.id, scope.row.email, scope.row.enabled)"
                       v-model="scope.row.enabled"
                       class="mySwitch"
                       :disabled="scope.row.enabled"
@@ -135,8 +129,8 @@
             <el-table-column prop="email" :label="$t('corp.email')">
             </el-table-column>
             <el-table-column :label="$t('corp.operation')" align="center">
-              <template slot-scope="scope">
-                <el-row class="mySwitch">
+              <template #default="scope">
+                <el-row class="mySwitch mySwitch-row" justify="center">
                   <el-switch
                     @change="
                       changeActive(
@@ -579,6 +573,10 @@ getEmployee();
     margin-bottom: 1rem;
     user-select: none;
     height: 40px;
+  }
+
+  .mySwitch-row {
+    display: flex;
   }
 }
 :deep(.el-input__wrapper) {

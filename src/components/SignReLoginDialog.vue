@@ -25,16 +25,19 @@
 </template>
 
 <script setup lang="ts">
-import * as util from '../util/util';
 import cla from '../lang/global';
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useIsMobile } from '@/util/useIsMobile';
 import { useCommonStore } from '../stores/common';
+import { useI18n } from 'vue-i18n';
 const commonStore = useCommonStore();
 const router = useRouter();
 
 const { IS_MOBILE } = useIsMobile();
+
+const { t, locale } = useI18n();
+const $t = t;
 
 const props = defineProps({
   dialogVisible: {
@@ -61,7 +64,7 @@ const dialogMessage = computed(() => {
     return 'dialogMessage';
   }
 });
-
+const route = useRoute();
 const domain = ref(commonStore.domain);
 const chinese = ref('Chinese');
 const english = ref('English');
@@ -75,7 +78,7 @@ const clickGoHome = () => {
     let path = cla.SIGN_ROUTER;
     router.replace(path);
   } else {
-    let path = `${cla.SIGN_ROUTER}/${commonStore.linkId}`;
+    let path = `${cla.SIGN_ROUTER}/${commonStore.linkId||route.params.linkId}`;
     router.replace(path);
   }
 };

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     signType: {
         corp: 'Corporation',
         emp: 'Employee',

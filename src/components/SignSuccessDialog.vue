@@ -30,7 +30,7 @@ import cla from '../lang/global';
 import { ref, computed, inject, onUpdated, onMounted } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useIsMobile } from '@/util/useIsMobile';
 
@@ -70,6 +70,7 @@ const dialogMessage = computed(() => {
 const domain = ref(commonStore.domain);
 const chinese = ref('Chinese');
 const english = ref('English');
+const route = useRoute();
 
 const clickGoHome = () => {
   commonStore.setSignSuccess({
@@ -81,7 +82,7 @@ const clickGoHome = () => {
     let path = cla.SIGN_ROUTER;
     router.replace(path);
   } else {
-    let path = `${cla.SIGN_ROUTER}/${commonStore.linkId}`;
+    let path = `${cla.SIGN_ROUTER}/${commonStore.linkId || route.params.linkId}`;
     router.replace(path);
   }
 };

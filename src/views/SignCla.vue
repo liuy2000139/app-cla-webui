@@ -3,25 +3,27 @@
     <div id="singCla_section">
       <el-row class="content">
         <el-col>
-          <p class="contentTitle" v-if="showInput === 'employee'">
-            {{ $t('signPage.claContentTitle') }}
+          <p class="contentTitle" v-if="loginType === 'employee'">
+            {{ t('signPage.claContentTitle') }}
           </p>
           <p class="contentTitle" v-else>{{ $t('signPage.claTitle') }}</p>
-          <el-row class="marginTop3rem form" v-if="showInput === 'employee'">
+          <div class="marginTop3rem form" v-if="loginType === 'employee'">
             <h3 style="text-align: center">
-              {{ $t('signPage.claContentSTitle') }}
+              {{ t('signPage.claContentSTitle') }}
             </h3>
-            {{ $t('signPage.claContent1')
-            }}<span class="title">{{ companyName }}</span
-            >{{ $t('signPage.claContent2', { name: communityName })
-            }}<span class="title">{{ myForm.email }}</span>
-            {{ $t('signPage.claContent3', { name: communityName })
-            }}<span class="title">{{ companyName }}</span>
+            {{ $t('signPage.claContent1') }}
+            <span class="title">{{ companyName }}</span>
+            {{ $t('signPage.claContent2', { name: communityName }) }}
+            <span class="title">{{ myForm.email }}</span>
+            {{ $t('signPage.claContent3', { name: communityName }) }}
+            <span class="title">{{ companyName }}</span>
             {{ $t('signPage.claS') }}
             <br />
-            <h3 style="display: inline-block">{{ $t('signPage.claZ') }}</h3>
-            {{ $t('signPage.claContentT') }}</el-row
-          >
+            <div class="tip-wrapper">
+              <h3 style="display: inline-block">{{ $t('signPage.claZ') }}</h3>
+              <span>{{ $t('signPage.claContentT') }}</span>
+            </div>
+          </div>
           <el-row class="marginTop3rem" id="claBox" v-else>
             <iframe
               id="pdf_iframe"
@@ -64,7 +66,7 @@
                     v-else
                     v-model="ruleForm[item.id]"
                     :placeholder="
-                      item.type === 'email' && showInput === 'employee'
+                      item.type === 'email' && loginType === 'employee'
                         ? $t('signPage.claHolder')
                         : $t('signPage.holder', { title: item.title })
                     "
@@ -74,7 +76,7 @@
                 </el-form-item>
                 <el-form-item
                   :label="$t('signPage.corp')"
-                  v-if="showInput === 'employee'"
+                  v-if="loginType === 'employee'"
                   required
                 >
                   <el-select
@@ -171,7 +173,7 @@
                     v-else
                     v-model="ruleForm[item.id]"
                     :placeholder="
-                      item.type === 'email' && showInput === 'employee'
+                      item.type === 'email' && loginType === 'employee'
                         ? $t('signPage.claHolder')
                         : $t('signPage.holder', { title: item.title })
                     "
@@ -181,7 +183,7 @@
                 </el-form-item>
                 <el-form-item
                   :label="$t('signPage.corp')"
-                  v-if="showInput === 'employee'"
+                  v-if="loginType === 'employee'"
                   required
                 >
                   <el-select
@@ -334,7 +336,7 @@ const loginType = computed(() => {
 const linkId = computed(() => {
   return route.params.linkId;
 });
-commonStore.setLoginType(loginType.value);
+
 const org = computed(() => {
   let org = commonStore.repoInfo.org_id;
   if (org.length > 1) {
@@ -443,9 +445,6 @@ const cla_lang = ref('');
 const signingData = ref([]);
 const orgValue = ref('');
 const cla_id = ref('');
-const showInput = computed(() => {
-  commonStore.loginType;
-});
 const getOrg = ref(true);
 const companyName = ref('');
 const communityName = ref('');
@@ -996,8 +995,9 @@ const submitForm = (formName) => {
 };
 //拉取公司列表
 const orgVisibleChange = (visible) => {
+  console.log(visible);
   if (visible) {
-    getOrg.valuesInfo();
+    getOrgsInfo();
   }
 };
 const getOrgsInfo = () => {
@@ -1130,6 +1130,7 @@ const attachIframeLoadedEvent = () => {
   window.addEventListener('message', attachIframeLoaded);
 };
 onMounted(() => {
+  commonStore.setLoginType(loginType.value);
   setClientHeight();
   getCommunity();
   attachIframeLoadedEvent();
@@ -1221,6 +1222,11 @@ onUnmounted(() => {
   .fontSize12 {
     font-size: 1.2rem;
   }
+
+  .tip-wrapper {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .marginTop3rem {
@@ -1299,6 +1305,7 @@ onUnmounted(() => {
   color: #002fa7;
   text-align: center;
   margin: 0 5px;
+  height: 1em;
 }
 
 :deep(#singCla_section) {
@@ -1433,6 +1440,17 @@ onUnmounted(() => {
         outline: none;
       }
     }
+  }
+}
+:deep(.el-select) {
+  .el-input.is-focus .el-input__wrapper {
+    box-shadow: none !important;
+  }
+  .el-input__wrapper.is-focus {
+    box-shadow: none !important;
+  }
+  .el-input__suffix {
+    transform: translateX(-100%);
   }
 }
 </style>

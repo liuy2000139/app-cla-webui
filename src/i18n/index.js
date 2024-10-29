@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n';
-
+import Lang_Zh from './lang/zh-cn';
+import Lang_En from './lang/en-us';
 import header from './header';
 import org from './org';
 import corp from './corp';
@@ -17,6 +18,7 @@ const messages = {
     signPage: signPage.zh,
     signType: signType.zh,
     index: index.zh,
+    ...Lang_Zh,
   },
   en: {
     header: header.en,
@@ -26,6 +28,7 @@ const messages = {
     signPage: signPage.en,
     signType: signType.en,
     index: index.en,
+    ...Lang_En
   },
 };
 

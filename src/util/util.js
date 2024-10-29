@@ -72,7 +72,7 @@ export const setI18nLang = () => {
     }
   }
 };
-export const clearManagerSession = (_this) => {
+export const clearManagerSession = () => {
   commonStore.setManagerList('');
   commonStore.setUserLimit('');
   commonStore.setCorpToken('');
@@ -81,7 +81,7 @@ export const clearManagerSession = (_this) => {
 
   sessionStorage.removeItem('token');
 };
-export const successMessage = (_this) => {
+export const successMessage = () => {
   ElMessage.closeAll();
   ElMessage.success($t('tips.successTitle'));
 };
@@ -139,11 +139,11 @@ export const catchErr = (err, commit, route) => {
         });
         break;
       case 'cla.no_cla_binding':
-        if (commonStore.loginType === _this.corporation) {
+        if (commonStore.loginType === 'corporation') {
           message = $t('tips.no_cla_binding_corp');
-        } else if (commonStore.loginType === _this.employee) {
+        } else if (commonStore.loginType === 'employee') {
           message = $t('tips.no_cla_binding_emp');
-        } else if (commonStore.loginType === _this.individual) {
+        } else if (commonStore.loginType === 'individual') {
           message = $t('tips.no_cla_binding_individual');
         }
         commonStore[commit]({
@@ -603,7 +603,7 @@ export const getAsciiArray = (str, val) => {
   }
   return str;
 };
-export const verifyMsgChangeLang = (ruleForm, _this) => {
+export const verifyMsgChangeLang = (ruleForm) => {
   ruleForm.value &&
     ruleForm.value.fields.forEach((item) => {
       if (item.validateState === 'error') {
@@ -611,18 +611,11 @@ export const verifyMsgChangeLang = (ruleForm, _this) => {
       }
     });
 };
-export const setComponentHeight = (_this, id) => {
-  nextTick(() => {
-    let offsetHeight = document.getElementById(id).offsetHeight;
-    let clientHeight = getClientHeight();
-    document.getElementById(id).style.minHeight = '0px';
-    document.getElementById(id).style.minHeight =
-      clientHeight > offsetHeight ? clientHeight + 'px' : offsetHeight + 'px';
-  });
-};
-export const getLoading = (_this, langText) => {
+
+export const getLoading = (_, langText = 'tips.loading') => {
   return ElLoading.service({
     lock: true,
+    text: $t(langText),
     spinner: 'el-icon-loading',
     customClass: 'loading_class',
     background: 'rgba(0, 0, 0, 0.7)',
