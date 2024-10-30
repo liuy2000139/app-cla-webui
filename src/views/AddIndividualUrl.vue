@@ -46,6 +46,7 @@
                 clearable
                 filterable
                 @change="changeIndividualLanguage"
+                :no-data-text="$t('corp.no_data')"
               >
                 <el-option
                   v-for="item in languageOptions"
@@ -161,6 +162,7 @@
                     style="width: 100%"
                     v-model="item.type"
                     :placeholder="$t('org.config_cla_fields_type_placeholder')"
+                    :no-data-text="$t('corp.no_data')"
                   >
                     <el-option
                       v-for="i in dataTypeOptions"

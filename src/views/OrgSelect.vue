@@ -13,9 +13,10 @@
               <el-select
                 value=""
                 v-model="orgValue"
-                clearable=""
-                filterable=""
+                clearable
+                filterable
                 class="select"
+                :no-data-text="$t('corp.no_data')"
                 :placeholder="$t('corp.select_placeholder')"
                 @change="changeOrg"
               >

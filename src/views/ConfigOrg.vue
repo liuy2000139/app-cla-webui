@@ -15,6 +15,7 @@
             filterable
             @visible-change="orgVisibleChange"
             @change="changeOrg"
+            :no-data-text="$t('corp.no_data')"
           >
             <el-option
               v-for="item in orgOptions"

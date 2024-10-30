@@ -44,7 +44,7 @@
                 v-model="corpClaLanguageValue"
                 :placeholder="$t('org.config_cla_select_lang')"
                 style="width: 100%"
-                size="medium"
+                :no-data-text="$t('corp.no_data')"
                 clearable
                 filterable
                 @change="changeCorpLanguage"
@@ -159,7 +159,7 @@
                     v-model="item.title"
                     :placeholder="$t('org.config_cla_fields_title_placeholder')"
                     @change="changeCorpTitle($event, item)"
-                    size="medium"
+                    :no-data-text="$t('corp.no_data')"
                   >
                     <el-option
                       v-for="i in corpTitleOptions"

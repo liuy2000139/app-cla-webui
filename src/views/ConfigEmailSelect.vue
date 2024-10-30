@@ -28,6 +28,7 @@
                   </template>
                   <el-select
                     class="my-select"
+                    :no-data-text="$t('corp.no_data')"
                     :placeholder="
                       $t('org.config_cla_email_platform_select_placeholder')
                     "

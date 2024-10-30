@@ -94,6 +94,13 @@ export const getMenuState = (route) => {
   }
 };
 export const catchErr = (err, commit, route) => {
+  if (err.response?.status === 401) {
+    commonStore[commit]({
+      dialogVisible: true,
+      dialogMessage: $t('tips.unknown_token'),
+    });
+    return false
+  }
   if (
     err.response?.data &&
     Object.prototype.hasOwnProperty.call(err.response?.data, 'data')
@@ -176,7 +183,7 @@ export const catchErr = (err, commit, route) => {
         });
         break;
       case 'cla.resigned':
-        if (commonStore.loginType === _this.corporation) {
+        if (commonStore.loginType === 'corporation') {
           message = $t('tips.corp_has_signed');
         } else {
           message = $t('tips.has_signed');

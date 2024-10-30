@@ -16,7 +16,7 @@
     <el-row :gutter="20" class="table-back">
       <el-col :span="5" class="orgTableStyle tableStyle">
         <el-table
-          empty-text="No data"
+          :empty-text="$t('corp.no_data')"
           :data="orgTableData"
           align="center"
           class="tableClass"
@@ -30,7 +30,7 @@
       </el-col>
       <el-col :span="19" class="tableStyle">
         <el-table
-          empty-text="No data"
+          :empty-text="$t('corp.no_data')"
           :data="boundTableData"
           class="tableClass"
           style="width: 100%"

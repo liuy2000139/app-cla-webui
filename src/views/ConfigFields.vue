@@ -164,7 +164,7 @@
                   v-model="item.title"
                   :placeholder="$t('org.config_cla_fields_title_placeholder')"
                   @change="changeCorpTitle($event, item)"
-                  size="medium"
+                  :no-data-text="$t('corp.no_data')"
                 >
                   <el-option
                     v-for="i in corpTitleOptions"

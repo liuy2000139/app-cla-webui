@@ -87,6 +87,7 @@
                     clearable
                     filterable
                     @visible-change="orgVisibleChange"
+                    :no-data-text="$t('corp.no_data')"
                     :disabled="getOrg"
                   >
                     <el-option
@@ -194,6 +195,7 @@
                     clearable
                     filterable
                     @visible-change="orgVisibleChange"
+                    :no-data-text="$t('corp.no_data')"
                     :disabled="getOrg"
                   >
                     <el-option

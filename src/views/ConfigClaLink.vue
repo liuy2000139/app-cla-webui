@@ -44,7 +44,7 @@
                 v-model="individualClaLanguageValue"
                 :placeholder="$t('org.config_cla_select_lang')"
                 style="width: 100%"
-                size="medium"
+                :empty-text="$t('corp.no_data')"
                 clearable
                 filterable
                 @change="changeIndividualLanguage"
@@ -96,7 +96,7 @@
                 v-model="corpClaLanguageValue"
                 :placeholder="$t('org.config_cla_select_lang')"
                 style="width: 100%"
-                size="medium"
+                :no-data-text="$t('corp.no_data')"
                 clearable
                 filterable
                 @change="changeCorpLanguage"
