@@ -55,6 +55,12 @@
           </el-table-column>
           <el-table-column
             min-width="30"
+            prop="org_alias"
+            :label="$t('corp.alias')"
+          >
+          </el-table-column>
+          <el-table-column
+            min-width="30"
             prop="org_email"
             :label="$t('corp.email')"
           >

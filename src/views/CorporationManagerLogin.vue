@@ -179,7 +179,7 @@ const login = (userName, pwd) => {
                 router.push('/corp/' + linkId + '/employeeList');
               }
             } else {
-              router.push(`/corp/${route.params.linkId}/resetPassword`);
+              router.push(`/corp/${linkId}/resetPassword`);
             }
             resolve('completed');
           });

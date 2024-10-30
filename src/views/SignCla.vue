@@ -1443,6 +1443,11 @@ onUnmounted(() => {
   }
 }
 :deep(.el-select) {
+  .el-select__wrapper {
+    height: 2.5rem;
+    padding: 0 15px;
+    font-size: 1.2rem;
+  }
   .el-input.is-focus .el-input__wrapper {
     box-shadow: none !important;
   }

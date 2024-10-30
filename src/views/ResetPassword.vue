@@ -186,7 +186,7 @@ const resetPassword = () => {
     .then((res) => {
       commonStore.setPwdIsChanged(true);
       util.successMessage(this);
-      router.push('corporationManagerLogin/' + route.params.linkId);
+      router.push('/corporationManagerLogin/' + route.params.linkId);
       asciiOldArray.value = [];
       asciiArray.value = [];
     })

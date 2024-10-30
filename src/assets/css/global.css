@@ -195,11 +195,37 @@
 .el-select .el-input.is-focus .el-input__inner {
   border-color: #319e55;
 }
+.el-select .select-trigger .el-input.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+}
+.el-select .select-trigger .el-input .is-focus.el-input__wrapper {
+  box-shadow: none !important;
+}
 
 .el-select .el-input__inner:focus {
   border-color: #319e55;
 }
+.el-select .el-select__wrapper {
+  border: 1px solid #f3f3f3 !important;
+  border-radius: 1.25rem !important;
+  font-size: 1rem !important;
+  box-shadow: none !important;
+  background: #f3f3f3 !important;
+}
 
+.el-select .el-select__wrapper:focus {
+  border-color: #319e55 !important;
+}
+.el-select .el-select__wrapper:hover {
+  border-color: #c0c4cc !important;
+}
+
+.el-select .el-select__wrapper.is-focused {
+  border-color: #319e55 !important;
+}
+.el-select .el-select__wrapper.is-hovering {
+  border-color: #c0c4cc !important;
+}
 .el-table .mark-row-green {
   color: #319e55;
 }

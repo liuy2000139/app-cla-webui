@@ -183,6 +183,7 @@ export default {
         id: 'ID',
         name: 'Name',
         email: 'Email',
+        alias: 'Alias',
         role: 'Role',
         operation: 'Operation',
         delete: 'Delete',

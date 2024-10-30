@@ -11,7 +11,6 @@
             v-model="orgValue"
             :placeholder="$t('org.config_cla_select_org_placeholder')"
             style="width: 100%"
-            size="medium"
             clearable
             filterable
             @visible-change="orgVisibleChange"
@@ -33,19 +32,9 @@
       <div class="margin-top-1rem">
         <el-input
           v-model="org_alias"
-          size="medium"
           :placeholder="$t('org.config_cla_select_org_alias_placeholder')"
         ></el-input>
       </div>
-      <!-- <div class="margin-top-1rem">
-                {{$t('org.config_cla_select_repo')}}
-            </div>
-            <el-row class="margin-top-1rem">
-                <el-col>
-                    <el-input v-model="repo" size="medium"
-                              :placeholder="$t('org.config_cla_select_repo_placeholder')"></el-input>
-                </el-col>
-            </el-row> -->
     </div>
     <div class="orgStepBtBox">
       <button class="step_button" @click="toConfigClaLink">
@@ -71,12 +60,12 @@
 import ReTryDialog from '../components/ReTryDialog.vue';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import CustomDialog from '../components/CustomDialog.vue';
-import * as url from '../util/api';
-import _axios from '../util/_axios';
-import platform_http from '../util/platform_http';
-import claConfig from '../lang/global';
+import * as url from '../util/api.js';
+import _axios from '../util/_axios.js';
+import platform_http from '../util/platform_http.js';
+import claConfig from '../lang/global.js';
 import { ref, computed, inject, onUpdated } from 'vue';
-import { useCommonStore } from '../stores/common';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -87,7 +76,7 @@ const router = useRouter();
 
 const org_id = ref('');
 const org = ref(commonStore.chooseOrg);
-const orgValue = ref('');
+const orgValue = ref(commonStore.chooseOrg);
 const reTryMsg = computed(() => {
   return commonStore.dialogMessage;
 });
