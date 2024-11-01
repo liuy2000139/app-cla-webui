@@ -1,32 +1,72 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div id="app" class="ly-default">
+  <div id="app">
     <router-view />
   </div>
 </template>
+<script setup>
+import { onMounted } from 'vue'
+import { useCommonStore } from './stores/common';
+const commonStore = useCommonStore();
 
+onMounted(() => {
+  commonStore.setDomain(window.location.origin);
+  commonStore.setLang('Chinese');
+})
+</script>
 <style lang="scss">
-.ly-default {
-  --header-height: 80px;
-  --header-zIndex: 20;
-  --header-max-width: 1920px;
-  --header-padding: 64px;
-  --content-max-width: 1200px;
-  --content-padding: 12px;
-  --footer-height: 288px;
-  @media (min-width: 600px) and (max-width: 1680px) {
-    --header-padding: 32px;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: 18px;
   }
-  @media (min-width: 0px) and (max-width: 1200px) {
-    --header-height: 48px;
-    --footer-height: 200px;
-    --content-padding: 32px;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1920px) {
+  html {
+    font-size: 16px;
   }
-  @media (min-width: 0px) and (max-width: 600px) {
-    --content-padding: 24px;
-    --footer-height: 200px;
-    --header-padding: 24px;
+}
+
+@media screen and (min-width: 800px) and (max-width: 1024px) {
+  html {
+    font-size: 14px;
   }
+}
+
+@media screen and (max-width: 800px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media screen and (min-width: 100px) and (max-width: 768px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+#nav {
+  padding: 30px;
+}
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

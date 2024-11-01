@@ -1,52 +1,191 @@
-<script lang="ts" setup>
-import BgImg from "@/assets/images/backgroundx1.png";
-</script>
-
 <template>
-  <header><AppHeader /></header>
-  <AppContent :pcTop="0">
-    <div class="home-main" :style="{ backgroundImage: `url(${BgImg})` }">
-      <div class="home-left">
-        <div class="title">
-          <p><span>C</span>ontributor</p>
-          <p><span>L</span>icense</p>
-          <p><span>A</span>greement</p>
-        </div>
-      </div>
-      <div class="home-right">
-        <router-view></router-view>
-      </div>
-    </div>
-  </AppContent>
+  <el-row>
+    <el-col class="index" id="transparentDiv">
+      <NewHeader></NewHeader>
+      <el-row id="section">
+        <el-col>
+          <el-row class="actionBox">
+            <div class="backgroundBox">
+              <img src="../assets/images/backgroundx1.png" alt="" />
+            </div>
+            <el-col :span="14" style="height: 100%">
+              <el-row style="height: 100%">
+                <el-col class="title" style="height: 100%">
+                  <div class="name">
+                    <div>
+                      <p><span>C</span>ontributor</p>
+                      <p><span>L</span>icense</p>
+                      <p><span>A</span>greement</p>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="10" style="height: 100%">
+              <router-view></router-view>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+      <NewFooter></NewFooter>
+    </el-col>
+  </el-row>
 </template>
+<script setup lang="ts">
+import NewHeader from '@/components/NewHeader.vue';
+import NewFooter from '@/components/NewFooter.vue';
+import * as util from '../util/util.js';
 
+import { ref, provide, onMounted, nextTick } from 'vue';
+
+window.onresize = () => {
+  if (
+    util.getClientHeight() >
+    document.getElementById('transparentDiv').offsetHeight
+  ) {
+    document.getElementById('transparentDiv').style.height =
+      util.getClientHeight() + 'px';
+  }
+};
+
+const showGuide = ref(false);
+const signType = ref('corporation');
+
+const clickSignTypeGuide = (type) => {
+  signType.value = type;
+};
+const setClientHeight = () => {
+  nextTick(() => {
+    document.getElementById('transparentDiv').style.minHeight = '0px';
+    if (
+      util.getClientHeight() >
+      document.getElementById('transparentDiv').offsetHeight
+    ) {
+      document.getElementById('transparentDiv').style.minHeight =
+        util.getClientHeight() + 'px';
+    } else {
+      document.getElementById('transparentDiv').style.minHeight =
+        document.getElementById('transparentDiv').offsetHeight + 'px';
+    }
+  });
+};
+provide('setClientHeight', setClientHeight);
+onMounted(() => {
+  setClientHeight();
+});
+</script>
 <style lang="scss" scoped>
-.home-main {
-  display: flex;
-  width: 100%;
-  height: 720px;
-  background-repeat: no-repeat;
-  background-position: 80% center;
+@import '../assets/font/css/Roboto-Bold.css';
+@import '../assets/font/css/Roboto-Regular.css';
 
-  .home-left {
+@media screen and (min-width: 100px) and (max-width: 1200px) {
+  #section {
+    width: 100%;
+  }
+
+  .backgroundBox {
+    width: 66.6%;
+    left: 25%;
+
+    img {
+      width: 51rem;
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #section {
+    width: 1200px;
+    margin: auto;
+  }
+
+  .backgroundBox {
+    left: 280px;
+  }
+}
+
+.index {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  #section {
+    flex-grow: 1;
+    padding: 0 1rem;
+  }
+
+  .guideBox {
+    box-shadow: 0 10px 20px 10px #f3f3f3;
+    margin-bottom: 5rem;
+    padding-top: 4rem;
+    padding-bottom: 10rem;
+  }
+
+  .typeShadow {
+    box-shadow: 0 -10px 20px 10px #f3f3f3;
+  }
+
+  .SignTypeCol {
+    cursor: pointer;
+    height: 16rem;
+    font-size: 1.5rem;
+    font-family: Roboto-Bold, sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .SignTypeIcon {
+    width: 5rem;
+    height: 5rem;
+    margin: 1rem;
+  }
+
+  .SignTypeBox {
+  }
+
+  .guideTitle {
+    font-size: 2.5rem;
+    margin: 5rem 0;
+  }
+
+  .backgroundBox {
+    background-repeat: no-repeat;
+    position: absolute;
+    overflow: hidden;
+    top: 7.5rem;
+  }
+
+  .actionBox {
+    position: relative;
+    height: 45rem;
+  }
+
+  .title {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: left;
-    width: 58%;
-    .title {
-      font-size: 80px;
-      color: #424242;
-      font-weight: 500;
-      line-height: 100px;
+  }
+
+  .name {
+    font-family: Roboto-Regular, sans-serif;
+    color: #424242;
+    font-size: 5rem;
+    line-height: 30px;
+
+    p {
       span {
-        font-weight: 600;
+        font-family: Roboto-Bold, sans-serif;
+        font-weight: bold;
       }
     }
   }
-  .home-right{
-    flex: 1;
+
+  .description {
+    font-family: Roboto-Regular, sans-serif;
+    font-size: 1.5rem;
   }
 }
 </style>
