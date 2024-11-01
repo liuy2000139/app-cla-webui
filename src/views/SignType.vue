@@ -53,12 +53,14 @@
                           </button>
                         </div>
                         <button
+                          :disabled="!isBindIndividual"
                           class="mobile_button"
                           @click="submit('individual')"
                         >
                           {{ $t('signType.individualBt') }}
                         </button>
                         <button
+                          :disabled="!isBindCorpCLA"
                           class="mobile_button"
                           @click="submit('corporationManager')"
                         >
@@ -517,6 +519,7 @@
                             class="display-inline-block margin-1D2rem border-radius-2rem"
                           >
                             <button
+                              :disabled="!isBindIndividual"
                               class="button"
                               @click="submit('individual')"
                             >
@@ -536,6 +539,7 @@
                           >
                             <button
                               class="button"
+                              :disabled="!isBindCorpCLA"
                               @click="submit('corporationManager')"
                             >
                               {{ $t('index.corp_login') }}
@@ -852,11 +856,11 @@
 <script setup lang="ts">
 import NewHeader from '@/components/NewHeader.vue';
 import NewFooter from '@/components/NewFooter.vue';
-import * as util from '../util/util';
-import * as url from '../util/api';
-import _axios from '../util/_axios';
+import * as util from '../util/util.js';
+import * as url from '../util/api.js';
+import _axios from '../util/_axios.js';
 import ReTryDialog from '../components/ReTryDialog.vue';
-import claConfig from '../lang/global';
+import claConfig from '../lang/global.js';
 import { useIsMobile } from '@/util/useIsMobile';
 
 import {
@@ -881,6 +885,7 @@ const router = useRouter();
 const route = useRoute();
 
 const isBindCorpCLA = ref(false);
+const isBindIndividual = ref(false);
 const corpGuideIsOpen = ref(false);
 const individualGuideIsOpen = ref(false);
 const employeeGuideIsOpen = ref(false);
@@ -903,17 +908,17 @@ const corpBtTooltip = computed(() => {
 });
 const empBtTooltip = computed(() => {
   if (isBindCorpCLA.value) {
-    return `${$t('signType.empStep1_1')}${$t('signType.empBt')}${$t(
-      'signType.corpStep1_2'
-    )}`;
+    return `${$t('signType.empStep1_1')}${$t('signType.empBt')}${$t('signType.corpStep1_2')}`;
   } else {
     return $t('signType.not_support_emp');
   }
 });
 const individualBtTooltip = computed(() => {
-  return `${$t('signType.individualStep1_1')}${$t('signType.individualBt')}${$t(
-    'signType.corpStep1_2'
-  )}`;
+  if (isBindIndividual.value) {
+    return `${$t('signType.individualStep1_1')}${$t('signType.individualBt')}${$t('signType.corpStep1_2')}`;
+  } else {
+    return $t('signType.not_support_individual');
+  }
 });
 const reTryDialogVisible = computed(() => {
   return commonStore.reTryDialogVisible;
@@ -967,6 +972,7 @@ const getRepoInfo = () => {
   }
   setLangLocale();
   getSignPage(linkId, 'corporation');
+  getSignPage(linkId, 'individual');
   commonStore.setLinkId(linkId);
 };
 const getSignPage = (link_id, applyTo) => {
@@ -977,6 +983,9 @@ const getSignPage = (link_id, applyTo) => {
       if (res && res.data.data) {
         if (res.data.data.length && applyTo === 'corporation') {
           isBindCorpCLA.value = true;
+        }
+        if (res.data.data.length && applyTo === 'individual') {
+          isBindIndividual.value = true;
         }
       }
     })

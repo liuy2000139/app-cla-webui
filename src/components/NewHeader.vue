@@ -222,6 +222,8 @@ const loginOut = () => {
       method: 'put',
     }).then(() => {
       router.push(loginUrl);
+    }).catch((err) => {
+      util.catchErr(err, 'errorSet', this);
     });
   } else {
     http({
@@ -229,6 +231,8 @@ const loginOut = () => {
       method: 'put',
     }).then(() => {
       router.push('/');
+    }).catch((err) => {
+      util.catchErr(err, 'errorSet', this);
     });
   }
 };
