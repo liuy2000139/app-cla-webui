@@ -293,14 +293,14 @@ const getOrgsInfo = () => {
       }
     })
     .catch((err) => {
-      switch (err.status) {
-        case 401:
+      switch (err.status || err.response.status) {
+        case 403:
           commonStore.setOrgReLogin({
             dialogVisible: true,
             dialogMessage: $t('tips.not_authorize_group'),
           });
           break;
-        case 403:
+        case 401:
           commonStore.setOrgReLogin({
             dialogVisible: true,
             dialogMessage: $t('tips.invalid_token'),

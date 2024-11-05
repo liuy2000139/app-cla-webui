@@ -1,4 +1,3 @@
-import { nextTick, ref } from 'vue';
 import claConfig from '../lang/global';
 
 import { useCommonStore } from '../stores/common';
@@ -97,7 +96,7 @@ export const catchErr = (err, commit, route) => {
   if (err.response?.status === 401) {
     commonStore[commit]({
       dialogVisible: true,
-      dialogMessage: $t('tips.unknown_token'),
+      dialogMessage: $t('tips.invalid_token'),
     });
     return false
   }

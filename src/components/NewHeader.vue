@@ -210,12 +210,12 @@ const toCLA = () => {
       }
     })
     .catch((err) => {
-      util.catchErr(err, 'errorSet', this);
+      util.catchErr(err, 'errorSet', route);
     });
 };
 const loginOut = () => {
   const loginUrl = '/corporationManagerLogin/' + route.params.linkId
-  util.clearManagerSession(this);
+  util.clearManagerSession();
   if (loginRole.value === 'corp') {
     http({
       url: url.corporationManagerAuth,
@@ -223,7 +223,7 @@ const loginOut = () => {
     }).then(() => {
       router.push(loginUrl);
     }).catch((err) => {
-      util.catchErr(err, 'errorSet', this);
+      util.catchErr(err, 'setOrgReLogin', route);
     });
   } else {
     http({
@@ -232,7 +232,8 @@ const loginOut = () => {
     }).then(() => {
       router.push('/');
     }).catch((err) => {
-      util.catchErr(err, 'errorSet', this);
+      console.log(err);
+      util.catchErr(err, 'setOrgReLogin', route);
     });
   }
 };
