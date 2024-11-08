@@ -21,9 +21,7 @@ const title = ref('');
 const setClientHeight = inject('setClientHeight');
 
 watch(
-  () => {
-    locale;
-  },
+  () => locale.value,
   () => {
     setTitle();
   }

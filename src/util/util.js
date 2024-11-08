@@ -424,8 +424,7 @@ export const catchErr = (err, commit, route) => {
       default:
         commonStore.errorCodeSet({
           dialogVisible: true,
-          dialogMessage:
-            err.response.data?.data.error_message || $t('tips.unknown_error'),
+          dialogMessage: $t(err.response.data?.data.error_code, $t('tips.unknown_error')),
         });
         break;
     }

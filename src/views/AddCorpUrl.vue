@@ -157,7 +157,7 @@
                     :disabled="!add_bind_first"
                     style="width: 100%"
                     v-model="item.title"
-                    :placeholder="$t('org.config_cla_fields_title_placeholder')"
+                    :placeholder="$t('org.config_cla_fields_title_placeholder', 1, { locale: currentLocale })"
                     @change="changeCorpTitle($event, item)"
                     :no-data-text="$t('corp.no_data')"
                   >
@@ -172,18 +172,14 @@
                 </el-col>
                 <el-col :span="5">
                   <el-input
-                    disabled=""
                     v-model="item.type"
-                    size="medium"
-                    :placeholder="$t('org.config_cla_fields_type_placeholder')"
+                    :placeholder="$t('org.config_cla_fields_type_placeholder', 1, { locale: currentLocale })"
                   ></el-input>
                 </el-col>
                 <el-col :span="5" style="height: 100%">
                   <el-input
-                    disabled=""
                     v-model="item.description"
-                    size="medium"
-                    :placeholder="$t('org.config_cla_fields_desc_placeholder')"
+                    :placeholder="$t('org.config_cla_fields_desc_placeholder', 1, { locale: currentLocale })"
                   ></el-input>
                 </el-col>
                 <el-col :span="5" style="height: 100%">
@@ -228,9 +224,9 @@
 import ReTryDialog from '../components/ReTryDialog.vue';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import * as util from '../util/util';
-import claConfig from '../lang/global';
-import { ref, computed, inject, onUpdated, onMounted } from 'vue';
-import { useCommonStore } from '../stores/common';
+import claConfig from '../lang/global.js';
+import { ref, computed, watch } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -239,7 +235,12 @@ const { t, locale } = useI18n();
 const $t = t;
 const commonStore = useCommonStore();
 const router = useRouter();
-
+const currentLocale = computed(() => {
+  if (!corpClaLanguageValue.value) {
+    return locale.value
+  }
+  return corpClaLanguageValue.value === 'chinese' ? 'zh' : 'en';
+})
 const corpMetadata = ref([]);
 const languageOptions = ref([
   { value: 'english', label: 'English' },
@@ -250,6 +251,10 @@ const initCorpCustomMetadata = ref(
   JSON.parse(JSON.stringify(claConfig.INITCUSTOMMETADATA))
 );
 const corpTitleOptions = ref(claConfig.TITLE_OPTIONS_EN);
+watch(() => locale.value, () => {
+  corporationMetadataArr.value = ['zh-cn', 'zh'].includes(locale.value) ? claConfig.CORPORATIONMETADATAARR_ZH : claConfig.CORPORATIONMETADATAARR_EN;
+  corpTitleOptions.value = ['zh-cn', 'zh'].includes(locale.value) ? claConfig.TITLE_OPTIONS_ZH : claConfig.TITLE_OPTIONS_EN;
+}, { immediate: true });
 
 const add_bind_first = computed(() => {
   return commonStore.add_bind_first;

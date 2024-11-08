@@ -210,8 +210,8 @@
 import ReTryDialog from '../components/ReTryDialog.vue';
 import ReLoginDialog from '../components/ReLoginDialog.vue';
 import * as util from '../util/util';
-import claConfig from '../lang/global';
-import { ref, computed, inject, onUpdated, onMounted } from 'vue';
+import claConfig from '../lang/global.js';
+import { ref, computed, inject, onUpdated, onMounted, watch } from 'vue';
 import { useCommonStore } from '../stores/common';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
@@ -227,12 +227,16 @@ const languageOptions = ref([
   { value: 'english', label: 'English' },
   { value: 'chinese', label: '中文' },
 ]);
-const individualMetadataArr = ref(claConfig.INDIVIDUALMETADATAARR_EN);
+
+const individualMetadataArr = ref([]);
 const initIndividualCustomMetadata = ref(
   JSON.parse(JSON.stringify(claConfig.INITCUSTOMMETADATA))
 );
-const individualTitleOptions = ref(claConfig.TITLE_OPTIONS_EN);
-
+const individualTitleOptions = ref([]);
+watch(() => locale.value, () => {
+  individualMetadataArr.value = ['zh-cn', 'zh'].includes(locale.value) ? claConfig.INDIVIDUALMETADATAARR_ZH : claConfig.INDIVIDUALMETADATAARR_EN;
+  individualTitleOptions.value = ['zh-cn', 'zh'].includes(locale.value) ? claConfig.TITLE_OPTIONS_ZH : claConfig.TITLE_OPTIONS_EN;
+}, { immediate: true });
 const add_bind_first = computed(() => {
   return commonStore.add_bind_first;
 });

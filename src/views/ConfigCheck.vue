@@ -403,7 +403,7 @@ const addBinding = () => {
     })
     .catch((err) => {
       loading.value.close();
-      util.catchErr(err, 'setOrgReLogin', this);
+      util.catchErr(err, 'errorCodeSet', this);
     });
 };
 const newBinding = () => {
@@ -476,7 +476,7 @@ const newBinding = () => {
     })
     .catch((err) => {
       loading.value.close();
-      util.catchErr(err, 'setOrgReLogin', this);
+      util.catchErr(err, 'errorCodeSet', this);
     });
 };
 

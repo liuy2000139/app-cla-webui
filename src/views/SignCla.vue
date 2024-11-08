@@ -978,7 +978,7 @@ const sign = (myUrl, obj) => {
     .catch((err) => {
       signText.value = 'sign';
       signButtonDisable.value = false;
-      util.catchErr(err, 'setSignReLogin', this);
+      util.catchErr(err, 'errorCodeSet', this);
     });
 };
 const submitForm = (formName) => {
