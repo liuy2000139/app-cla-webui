@@ -36,13 +36,13 @@
 
 <script setup lang="ts">
 import Step from '../components/FindPwdSteps.vue';
-import http from '../util/_axios';
-import * as url from '../util/api';
-import * as util from '../util/util';
+import http from '../util/_axios.js';
+import * as url from '../util/api.js';
+import * as util from '../util/util.js';
 import ReTryDialog from '../components/ReTryDialog.vue';
-import claConfig from '../lang/global';
-import { ref, computed, inject, onUpdated, onMounted, watch } from 'vue';
-import { useCommonStore } from '../stores/common';
+import claConfig from '../lang/global.js';
+import { ref, computed, watch } from 'vue';
+import { useCommonStore } from '../stores/common.js';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
@@ -126,7 +126,6 @@ const sendEmail = () => {
         duration: 6000,
       });
       ruleFormRef.value.resetFields();
-      router.push('reset-password')
     })
     .catch((err) => {
       util.catchErr(err, '', route);

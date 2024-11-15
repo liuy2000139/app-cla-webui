@@ -167,7 +167,7 @@ const submitReset = () => {
         message: $t('tips.reset_password_success'),
         duration: 6000,
       });
-      router.push('corporationManagerLogin');
+      router.push('/corporationManagerLogin/' + route.params.linkId);
     })
     .catch((err) => {
       util.catchErr(err, '', this);

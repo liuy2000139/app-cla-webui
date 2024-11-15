@@ -2,6 +2,7 @@ export default {
   number: '序号',
   id: '账号',
   name: '姓名',
+  alias: '别名',
   email: '邮箱',
   role: '角色',
   operation: '操作',
